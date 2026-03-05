@@ -1,6 +1,6 @@
 using AosAdjutant.Api.Database;
-using Microsoft.AspNetCore.Mvc;
 using AosAdjutant.Api.Shared;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.Factions.BattleFormations;
@@ -22,10 +22,7 @@ public class BattleFormationController(ApplicationDbContext context) : Controlle
         if (isDuplicate)
             return this.ApiProblem(new AppError(ErrorCode.UniqueKeyError, "Battle formation already exists."));
 
-        var newBattleFormation = new BattleFormation
-        {
-            Name = battleFormationData.Name, FactionId = factionId,
-        };
+        var newBattleFormation = new BattleFormation { Name = battleFormationData.Name, FactionId = factionId, };
 
         // Because of race conditions this might still fail on UK/FK error
         // Ignore for now (won't occur in practice) but revisit in the future

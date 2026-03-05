@@ -18,10 +18,7 @@ public class FactionController(ApplicationDbContext context) : ControllerBase
         if (isDuplicate)
             return this.ApiProblem(new AppError(ErrorCode.UniqueKeyError, "Faction already exists."));
 
-        var newFaction = new Faction
-        {
-            Name = factionData.Name
-        };
+        var newFaction = new Faction { Name = factionData.Name };
 
         context.Factions.Add(newFaction);
         await context.SaveChangesAsync();
