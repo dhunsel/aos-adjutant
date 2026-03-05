@@ -1,8 +1,8 @@
-namespace AosAdjutant.Shared;
+namespace AosAdjutant.Api.Shared;
 
 public class Result
 {
-    protected bool IsSuccess { get; }
+    public bool IsSuccess { get; }
     protected AppError? Error { get; }
 
     protected Result(bool isSuccess, AppError? error)
@@ -14,6 +14,8 @@ public class Result
     public static Result Success() => new(true, null);
     public static Result Failure(AppError error) => new(false, error);
 
+    public AppError GetError => IsSuccess ? throw new InvalidOperationException() : Error!;
+
     public TOut Match<TOut>(Func<TOut> onSuccess,
         Func<AppError, TOut> onFailure)
     {
@@ -24,6 +26,8 @@ public class Result
 public class Result<T> : Result
 {
     protected T? Value { get; }
+
+    public T GetValue => IsSuccess ? Value! : throw new InvalidOperationException();
 
     private Result(T value)
         : base(true, null)
@@ -45,4 +49,3 @@ public class Result<T> : Result
         return IsSuccess ? onSuccess(Value!) : onFailure(Error!);
     }
 }
-

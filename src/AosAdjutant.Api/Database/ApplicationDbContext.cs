@@ -1,21 +1,22 @@
-using AosAdjutant.Database.Configuration;
-using AosAdjutant.Features.BattleFormations;
-using AosAdjutant.Features.Factions;
-using AosAdjutant.Shared;
+using AosAdjutant.Api.Database.Configuration;
+using AosAdjutant.Api.Features.Abilities;
+using AosAdjutant.Api.Features.Factions;
+using AosAdjutant.Api.Features.Factions.BattleFormations;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
-namespace AosAdjutant.Database;
+namespace AosAdjutant.Api.Database;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
     public DbSet<Faction> Factions { get; set; }
     public DbSet<BattleFormation> BattleFormations { get; set; }
+    public DbSet<Ability> Abilities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         new FactionEntityTypeConfiguration().Configure(modelBuilder.Entity<Faction>());
         new BattleFormationEntityTypeConfiguration().Configure(modelBuilder.Entity<BattleFormation>());
+        new AbilityEntityTypeConfiguration().Configure(modelBuilder.Entity<Ability>());
 
         base.OnModelCreating(modelBuilder);
     }

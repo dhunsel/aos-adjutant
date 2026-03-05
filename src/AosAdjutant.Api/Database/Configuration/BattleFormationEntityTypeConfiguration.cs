@@ -1,8 +1,8 @@
-using AosAdjutant.Features.BattleFormations;
+using AosAdjutant.Api.Features.Factions.BattleFormations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AosAdjutant.Database.Configuration;
+namespace AosAdjutant.Api.Database.Configuration;
 
 public class BattleFormationEntityTypeConfiguration : IEntityTypeConfiguration<BattleFormation>
 {
@@ -15,7 +15,7 @@ public class BattleFormationEntityTypeConfiguration : IEntityTypeConfiguration<B
 
         builder.HasKey(bf => bf.BattleFormationId);
 
-        builder.HasIndex(bf => bf.Name).IsUnique();
+        builder.HasIndex(bf => new { bf.FactionId, bf.Name }).IsUnique();
 
         builder.Property(bf => bf.Version).IsRowVersion();
     }

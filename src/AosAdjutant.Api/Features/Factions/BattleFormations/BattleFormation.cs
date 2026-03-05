@@ -1,6 +1,4 @@
-using AosAdjutant.Features.Factions;
-
-namespace AosAdjutant.Features.BattleFormations;
+namespace AosAdjutant.Api.Features.Factions.BattleFormations;
 
 public class BattleFormation
 {
@@ -9,5 +7,5 @@ public class BattleFormation
     public int FactionId { get; set; }
     public uint Version { get; set; }
 
-    public required Faction Faction { get; set; }
+    public Faction? Faction { get; set; }
 }

@@ -1,4 +1,4 @@
-namespace AosAdjutant.Shared;
+namespace AosAdjutant.Api.Shared;
 
 public enum ErrorCode
 {

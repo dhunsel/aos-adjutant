@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AosAdjutant.Migrations
+namespace AosAdjutant.Api.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

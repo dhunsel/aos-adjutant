@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="AosAdjutant/AosAdjutant.csproj" />
+    <Folder Name="/src/">
+        <Project Path="src/AosAdjutant.Api/AosAdjutant.Api.csproj"/>
+    </Folder>
 </Solution>

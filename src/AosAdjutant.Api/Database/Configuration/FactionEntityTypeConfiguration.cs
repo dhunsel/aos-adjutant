@@ -1,8 +1,8 @@
-using AosAdjutant.Features.Factions;
+using AosAdjutant.Api.Features.Factions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AosAdjutant.Database.Configuration;
+namespace AosAdjutant.Api.Database.Configuration;
 
 public class FactionEntityTypeConfiguration : IEntityTypeConfiguration<Faction>
 {

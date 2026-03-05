@@ -1,6 +1,6 @@
-using AosAdjutant.Features.BattleFormations;
+using AosAdjutant.Api.Features.Factions.BattleFormations;
 
-namespace AosAdjutant.Features.Factions;
+namespace AosAdjutant.Api.Features.Factions;
 
 public class Faction
 {
