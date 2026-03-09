@@ -1,7 +1,7 @@
 using AosAdjutant.Api.Database.Configuration;
 using AosAdjutant.Api.Features.Abilities;
 using AosAdjutant.Api.Features.Factions;
-using AosAdjutant.Api.Features.Factions.BattleFormations;
+using AosAdjutant.Api.Features.BattleFormations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Database;

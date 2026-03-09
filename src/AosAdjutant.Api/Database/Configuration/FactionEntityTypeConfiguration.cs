@@ -16,6 +16,8 @@ public class FactionEntityTypeConfiguration : IEntityTypeConfiguration<Faction>
 
         builder.HasIndex(f => f.Name).IsUnique();
 
+        builder.HasMany(f => f.BattleFormations).WithOne().HasForeignKey(bf => bf.FactionId).IsRequired();
+
         builder.HasMany(f => f.Abilities)
             .WithMany()
             .UsingEntity(fa =>

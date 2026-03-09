@@ -1,6 +1,6 @@
 using AosAdjutant.Api.Features.Abilities;
 
-namespace AosAdjutant.Api.Features.Factions.BattleFormations;
+namespace AosAdjutant.Api.Features.BattleFormations;
 
 public class BattleFormation
 {
@@ -10,6 +10,5 @@ public class BattleFormation
     public int AbilityId { get; set; }
     public uint Version { get; set; }
 
-    public Faction? Faction { get; set; }
     public ICollection<Ability> Abilities { get; } = new List<Ability>();
 }

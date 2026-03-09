@@ -1,5 +1,5 @@
 using AosAdjutant.Api.Features.Abilities;
-using AosAdjutant.Api.Features.Factions.BattleFormations;
+using AosAdjutant.Api.Features.BattleFormations;
 
 namespace AosAdjutant.Api.Features.Factions;
 

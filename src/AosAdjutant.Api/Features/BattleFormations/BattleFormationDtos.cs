@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AosAdjutant.Api.Features.Factions.BattleFormations;
+namespace AosAdjutant.Api.Features.BattleFormations;
 
 public record BattleFormationResponseDto(int BattleFormationId, string Name, int FactionId, uint Version);
 

@@ -1,5 +1,5 @@
 using AosAdjutant.Api.Database;
-using AosAdjutant.Api.Features.Abilities;
+using AosAdjutant.Api.Features.BattleFormations;
 using AosAdjutant.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ namespace AosAdjutant.Api.Features.Factions;
 
 [Route("api/factions")]
 [ApiController]
-public class FactionController(ApplicationDbContext context, AbilityService abilityService) : ControllerBase
+public class FactionController(ApplicationDbContext context) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<FactionResponseDto>> CreateFaction([FromBody] CreateFactionDto factionData)
@@ -50,110 +50,53 @@ public class FactionController(ApplicationDbContext context, AbilityService abil
             : Ok(new FactionResponseDto(faction.FactionId, faction.Name, faction.Version));
     }
 
-    [HttpPut("{factionId}")]
-    public async Task<ActionResult<FactionResponseDto>> UpdateFaction(
+    [HttpPost("{factionId}/battle-formations")]
+    public async Task<ActionResult<BattleFormationResponseDto>> CreateBattleFormation(
         [FromRoute] int factionId,
-        [FromBody] ChangeFactionDto factionData
+        [FromBody] CreateBattleFormationDto battleFormationData
     )
     {
-        var faction = await context.Factions.FindAsync(factionId);
-
-        // First check to catch duplicates/version conflicts. Race conditions could still occur, the call to saveChanges below will
-        // throw an exception in that case. Ignore for now (won't occur in practice) but revisit in the future
-        if (faction is null)
+        var factionExists = await context.Factions.AnyAsync(f => f.FactionId == factionId);
+        if (!factionExists)
             return this.ApiProblem(new AppError(ErrorCode.NotFound, "Faction not found."));
 
-        if (faction.Version != factionData.Version)
-            return this.ApiProblem(
-                new AppError(ErrorCode.ConcurrencyError, "Faction was already modified in the background.")
-            );
-
-        var isDuplicate = await context.Factions.AnyAsync(f => f.Name == factionData.Name);
+        var isDuplicate = await context.BattleFormations.AnyAsync(bf =>
+            bf.Name == battleFormationData.Name && bf.FactionId == factionId
+        );
         if (isDuplicate)
-            return this.ApiProblem(new AppError(ErrorCode.UniqueKeyError, "Faction already exists."));
+            return this.ApiProblem(new AppError(ErrorCode.UniqueKeyError, "Battle formation already exists."));
 
-        // context.Entry(faction).Property(f => f.Version).OriginalValue = factionData.Version; Check above guarantees that versions are equal
-        faction.Name = factionData.Name;
-        await context.SaveChangesAsync();
+        var newBattleFormation = new BattleFormation { Name = battleFormationData.Name, FactionId = factionId, };
 
-        return Ok(new FactionResponseDto(faction.FactionId, faction.Name, faction.Version));
-    }
-
-    [HttpDelete("{factionId}")]
-    public async Task<ActionResult> DeleteFaction([FromRoute] int factionId)
-    {
-        var faction = await context.Factions.FindAsync(factionId);
-
-        if (faction is null)
-            return this.ApiProblem(new AppError(ErrorCode.NotFound, "Faction not found."));
-
-        context.Factions.Remove(faction);
-        await context.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    [HttpPost("{factionId}/abilities")]
-    public async Task<ActionResult<AbilityResponseDto>> CreateAbility(
-        [FromRoute] int factionId,
-        [FromBody] CreateAbilityDto abilityData
-    )
-    {
-        var faction = await context.Factions.FindAsync(factionId);
-
-        if (faction is null)
-            return this.ApiProblem(new AppError(ErrorCode.NotFound, "Faction not found."));
-
-        var newAbilityResult = abilityService.CreateAbility(abilityData);
-
-        if (!newAbilityResult.IsSuccess) return this.ApiProblem(newAbilityResult.GetError);
-
-        var newAbility = newAbilityResult.GetValue;
-        faction.Abilities.Add(newAbility);
+        // Because of race conditions this might still fail on UK/FK error
+        // Ignore for now (won't occur in practice) but revisit in the future
+        context.BattleFormations.Add(newBattleFormation);
         await context.SaveChangesAsync();
 
         return Created(
-            $"api/abilities/{newAbility.AbilityId}",
-            new AbilityResponseDto(
-                newAbility.AbilityId,
-                newAbility.Name,
-                newAbility.Reaction,
-                newAbility.Declaration,
-                newAbility.Effect,
-                newAbility.Phase,
-                newAbility.Restriction,
-                newAbility.Turn,
-                newAbility.Version
+            $"api/factions/{factionId}/battle-formations/{newBattleFormation.BattleFormationId}",
+            new BattleFormationResponseDto(
+                newBattleFormation.BattleFormationId,
+                newBattleFormation.Name,
+                newBattleFormation.FactionId,
+                newBattleFormation.Version
             )
         );
     }
 
-    [HttpGet("{factionId}/abilities")]
-    public async Task<ActionResult<List<AbilityResponseDto>>> GetAbilities([FromRoute] int factionId)
+    [HttpGet("{factionId}/battle-formations")]
+    public async Task<ActionResult<List<BattleFormationResponseDto>>> GetBattleFormations([FromRoute] int factionId)
     {
-        //var faction = await context.Factions.FindAsync(factionId);
-        var faction = await context.Factions
-            .AsNoTracking()
-            .Include(f => f.Abilities)
-            .FirstOrDefaultAsync(f => f.FactionId == factionId);
-
-        if (faction is null)
+        var factionExists = await context.Factions.AnyAsync(f => f.FactionId == factionId);
+        if (!factionExists)
             return this.ApiProblem(new AppError(ErrorCode.NotFound, "Faction not found."));
 
-        return Ok(
-            faction.Abilities.Select(a => new AbilityResponseDto(
-                    a.AbilityId,
-                    a.Name,
-                    a.Reaction,
-                    a.Declaration,
-                    a.Effect,
-                    a.Phase,
-                    a.Restriction,
-                    a.Turn,
-                    a.Version
-                )
-            )
-        );
+        var battleFormations = await context.BattleFormations
+            .AsNoTracking()
+            .Where(bf => bf.FactionId == factionId)
+            .Select(bf => new BattleFormationResponseDto(bf.BattleFormationId, bf.Name, bf.FactionId, bf.Version))
+            .ToListAsync();
+        return Ok(battleFormations);
     }
 
     [HttpGet("/throw")]
