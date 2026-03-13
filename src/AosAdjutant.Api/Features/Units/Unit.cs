@@ -1,4 +1,5 @@
 using AosAdjutant.Api.Features.Abilities;
+using AosAdjutant.Api.Features.AttackProfiles;
 
 namespace AosAdjutant.Api.Features.Units;
 
@@ -15,4 +16,5 @@ public class Unit
     public uint Version { get; set; }
 
     public ICollection<Ability> Abilities { get; } = new List<Ability>();
+    public ICollection<AttackProfile> AttackProfiles { get; } = new List<AttackProfile>();
 }

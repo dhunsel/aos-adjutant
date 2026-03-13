@@ -22,6 +22,8 @@ public class UnitEntityTypeConfiguration : IEntityTypeConfiguration<Unit>
 
         builder.HasIndex(u => new { u.FactionId, u.Name }).IsUnique();
 
+        builder.HasMany(u => u.AttackProfiles).WithOne().HasForeignKey(ap => ap.UnitId).IsRequired();
+
         builder.HasMany(u => u.Abilities)
             .WithMany()
             .UsingEntity(ua =>
