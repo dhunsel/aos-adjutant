@@ -54,7 +54,9 @@ public class AttackProfileController(ApplicationDbContext context) : ControllerB
     {
         // Both Create and Update should perform validations but are part of different classes.
         // -> Reason to introduce service class which both controller classes call?
-        var attackProfile = await context.AttackProfiles.FindAsync(attackProfileId);
+        var attackProfile = await context.AttackProfiles
+            .Include(ap => ap.WeaponEffects)
+            .FirstOrDefaultAsync(ap => ap.AttackProfileId == attackProfileId);
 
         if (attackProfile is null)
             return this.ApiProblem(new AppError(ErrorCode.NotFound, "Attack profile not found."));
@@ -71,6 +73,12 @@ public class AttackProfileController(ApplicationDbContext context) : ControllerB
         if (isDuplicate)
             return this.ApiProblem(new AppError(ErrorCode.UniqueKeyError, "Attack profile already exists."));
 
+        // Validation
+        if (attackProfileData is { IsRanged: true, Range: null } or { IsRanged: false, Range: not null } ||
+            attackProfileData.ToHit < 2 || attackProfileData.ToHit > 7 || attackProfileData.ToWound < 2 ||
+            attackProfileData.ToWound > 7)
+            return this.ApiProblem(new AppError(ErrorCode.ValidationError, "Invalid attack profile."));
+
         attackProfile.Name = attackProfileData.Name;
         attackProfile.IsRanged = attackProfileData.IsRanged;
         attackProfile.Range = attackProfileData.Range;
@@ -79,6 +87,12 @@ public class AttackProfileController(ApplicationDbContext context) : ControllerB
         attackProfile.ToWound = attackProfileData.ToWound;
         attackProfile.Rend = attackProfileData.Rend;
         attackProfile.Damage = attackProfileData.Damage;
+
+        attackProfile.WeaponEffects.Clear();
+        foreach (var we in (await context.WeaponEffects
+                     .Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
+                     .ToListAsync()))
+            attackProfile.WeaponEffects.Add(we);
 
         await context.SaveChangesAsync();
 
@@ -95,7 +109,7 @@ public class AttackProfileController(ApplicationDbContext context) : ControllerB
                 attackProfile.Damage,
                 attackProfile.UnitId,
                 attackProfile.Version,
-                new List<WeaponEffectResponseDto>()
+                attackProfile.WeaponEffects.Select(wp => new WeaponEffectResponseDto(wp.Key, wp.Name)).ToList()
             )
         );
     }

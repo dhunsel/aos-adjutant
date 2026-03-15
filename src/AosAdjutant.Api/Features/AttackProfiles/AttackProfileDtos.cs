@@ -39,5 +39,6 @@ public record ChangeAttackProfileDto(
     int ToWound,
     int? Rend,
     [StringLength(100, MinimumLength = 1)] string Damage,
-    uint Version
+    uint Version,
+    List<string> WeaponEffects
 );

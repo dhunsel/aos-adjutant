@@ -120,6 +120,12 @@ public class UnitController(ApplicationDbContext context) : ControllerBase
         if (isDuplicate)
             return this.ApiProblem(new AppError(ErrorCode.UniqueKeyError, "Attack profile already exists."));
 
+        // Validation
+        if (attackProfileData is { IsRanged: true, Range: null } or { IsRanged: false, Range: not null } ||
+            attackProfileData.ToHit < 2 || attackProfileData.ToHit > 7 || attackProfileData.ToWound < 2 ||
+            attackProfileData.ToWound > 7)
+            return this.ApiProblem(new AppError(ErrorCode.ValidationError, "Invalid attack profile."));
+
         var newAttackProfile = new AttackProfile
         {
             Name = attackProfileData.Name,
