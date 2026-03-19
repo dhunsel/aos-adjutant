@@ -1,16 +1,13 @@
-using AosAdjutant.Api.Database;
 using AosAdjutant.Api.Features.Abilities;
 using AosAdjutant.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.BattleFormations;
 
 [Route("api/battle-formations/{battleFormationId}/abilities")]
 [ApiController]
 [Tags("Battle Formations")]
-public class BattleFormationAbilityController(ApplicationDbContext context, AbilityService abilityService)
-    : ControllerBase
+public class BattleFormationAbilityController(BattleFormationService battleFormationService) : ControllerBase
 {
     [HttpPost]
     [EndpointSummary("Create an ability for a battle formation")]
@@ -22,60 +19,11 @@ public class BattleFormationAbilityController(ApplicationDbContext context, Abil
         [FromBody] CreateAbilityDto abilityData
     )
     {
-        var battleFormation = await context.BattleFormations.FindAsync(battleFormationId);
-
-        if (battleFormation is null)
-            return this.ApiProblem(new AppError(ErrorCode.NotFound, "Battle formation not found."));
-
-        var newAbilityResult = Ability.Create(
-            abilityData.Name,
-            abilityData.Reaction,
-            abilityData.Declaration,
-            abilityData.Effect,
-            abilityData.Phase,
-            abilityData.Restriction,
-            abilityData.Turn,
-            false
-        );
-
-        if (!newAbilityResult.IsSuccess) return this.ApiProblem(newAbilityResult.GetError);
-
-        var newAbility = newAbilityResult.GetValue;
-        battleFormation.Abilities.Add(newAbility);
-        await context.SaveChangesAsync();
-
-        return Created(
-            $"api/abilities/{newAbility.AbilityId}",
-            new AbilityResponseDto(
-                newAbility.AbilityId,
-                newAbility.Name,
-                newAbility.Reaction,
-                newAbility.Declaration,
-                newAbility.Effect,
-                newAbility.Phase,
-                newAbility.Restriction,
-                newAbility.Turn,
-                newAbility.Version
-            )
-        );
-    }
-
-    [HttpGet]
-    [EndpointSummary("Get all abilities for a battle formation")]
-    [ProducesResponseType<List<AbilityResponseDto>>(StatusCodes.Status200OK)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<AbilityResponseDto>>> GetAbilities([FromRoute] int battleFormationId)
-    {
-        var battleFormation = await context.BattleFormations
-            .AsNoTracking()
-            .Include(bf => bf.Abilities)
-            .FirstOrDefaultAsync(bf => bf.BattleFormationId == battleFormationId);
-
-        if (battleFormation is null)
-            return this.ApiProblem(new AppError(ErrorCode.NotFound, "Battle formation not found."));
-
-        return Ok(
-            battleFormation.Abilities.Select(a => new AbilityResponseDto(
+        var abilityResult = await battleFormationService.CreateBattleFormationAbility(battleFormationId, abilityData);
+        return abilityResult.Match(
+            a => Created(
+                $"api/abilities/{a.AbilityId}",
+                new AbilityResponseDto(
                     a.AbilityId,
                     a.Name,
                     a.Reaction,
@@ -86,7 +34,34 @@ public class BattleFormationAbilityController(ApplicationDbContext context, Abil
                     a.Turn,
                     a.Version
                 )
-            )
+            ),
+            this.ApiProblem
+        );
+    }
+
+    [HttpGet]
+    [EndpointSummary("Get all abilities for a battle formation")]
+    [ProducesResponseType<List<AbilityResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<AbilityResponseDto>>> GetAbilities([FromRoute] int battleFormationId)
+    {
+        var abilitiesResult = await battleFormationService.GetBattleFormationAbilities(battleFormationId);
+        return abilitiesResult.Match(
+            abilities => Ok(
+                abilities.Select(a => new AbilityResponseDto(
+                        a.AbilityId,
+                        a.Name,
+                        a.Reaction,
+                        a.Declaration,
+                        a.Effect,
+                        a.Phase,
+                        a.Restriction,
+                        a.Turn,
+                        a.Version
+                    )
+                )
+            ),
+            this.ApiProblem
         );
     }
 }

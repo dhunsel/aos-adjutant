@@ -1,4 +1,5 @@
 using AosAdjutant.Api.Database;
+using AosAdjutant.Api.Features.Abilities;
 using AosAdjutant.Api.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -98,5 +99,44 @@ public class BattleFormationService(ApplicationDbContext context)
         await context.SaveChangesAsync();
 
         return Result.Success();
+    }
+
+    public async Task<Result<Ability>> CreateBattleFormationAbility(int battleFormationId, CreateAbilityDto abilityData)
+    {
+        var battleFormation = await context.BattleFormations.FindAsync(battleFormationId);
+
+        if (battleFormation is null)
+            return Result<Ability>.Failure(new AppError(ErrorCode.NotFound, "Battle formation not found."));
+
+        var newAbilityResult = Ability.Create(
+            abilityData.Name,
+            abilityData.Reaction,
+            abilityData.Declaration,
+            abilityData.Effect,
+            abilityData.Phase,
+            abilityData.Restriction,
+            abilityData.Turn,
+            false
+        );
+
+        if (!newAbilityResult.IsSuccess) return Result<Ability>.Failure(newAbilityResult.GetError);
+
+        var newAbility = newAbilityResult.GetValue;
+        battleFormation.Abilities.Add(newAbility);
+        await context.SaveChangesAsync();
+
+        return Result<Ability>.Success(newAbility);
+    }
+
+    public async Task<Result<List<Ability>>> GetBattleFormationAbilities(int battleFormationId)
+    {
+        var battleFormation = await context.BattleFormations
+            .AsNoTracking()
+            .Include(bf => bf.Abilities)
+            .FirstOrDefaultAsync(bf => bf.BattleFormationId == battleFormationId);
+
+        return battleFormation is null
+            ? Result<List<Ability>>.Failure(new AppError(ErrorCode.NotFound, "Battle formation not found."))
+            : Result<List<Ability>>.Success(battleFormation.Abilities.ToList());
     }
 }

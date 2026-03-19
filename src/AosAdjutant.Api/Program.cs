@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using AosAdjutant.Api.Database;
 using AosAdjutant.Api.Features.Abilities;
+using AosAdjutant.Api.Features.BattleFormations;
 using AosAdjutant.Api.Features.Factions;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -14,6 +15,7 @@ builder.Services
     );
 
 builder.Services.AddScoped<FactionService, FactionService>();
+builder.Services.AddScoped<BattleFormationService, BattleFormationService>();
 builder.Services.AddScoped<AbilityService, AbilityService>();
 
 builder.Services.AddProblemDetails();
