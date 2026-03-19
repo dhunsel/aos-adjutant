@@ -1,10 +1,11 @@
 using AosAdjutant.Api.Database;
+using AosAdjutant.Api.Features.Abilities;
 using AosAdjutant.Api.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.Factions;
 
-public class FactionService(ApplicationDbContext context)
+public class FactionService(ApplicationDbContext context, AbilityService abilityService)
 {
     public async Task<Result<Faction>> CreateFaction(CreateFactionDto factionData)
     {
@@ -69,5 +70,35 @@ public class FactionService(ApplicationDbContext context)
         await context.SaveChangesAsync();
 
         return Result.Success();
+    }
+
+    public async Task<Result<Ability>> CreateFactionAbility(int factionId, CreateAbilityDto abilityData)
+    {
+        var faction = await context.Factions.FindAsync(factionId);
+
+        if (faction is null)
+            return Result<Ability>.Failure(new AppError(ErrorCode.NotFound, "Faction not found."));
+
+        var newAbilityResult = abilityService.CreateAbility(abilityData);
+
+        if (!newAbilityResult.IsSuccess) return Result<Ability>.Failure(newAbilityResult.GetError);
+
+        var newAbility = newAbilityResult.GetValue;
+        faction.Abilities.Add(newAbility);
+        await context.SaveChangesAsync();
+
+        return Result<Ability>.Success(newAbility);
+    }
+
+    public async Task<Result<List<Ability>>> GetFactionAbilities(int factionId)
+    {
+        var faction = await context.Factions
+            .AsNoTracking()
+            .Include(f => f.Abilities)
+            .FirstOrDefaultAsync(f => f.FactionId == factionId);
+
+        return faction is null
+            ? Result<List<Ability>>.Failure(new AppError(ErrorCode.NotFound, "Faction not found."))
+            : Result<List<Ability>>.Success(faction.Abilities.ToList());
     }
 }
