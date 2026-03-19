@@ -73,26 +73,25 @@ public class AttackProfileController(ApplicationDbContext context) : ControllerB
         if (isDuplicate)
             return this.ApiProblem(new AppError(ErrorCode.UniqueKeyError, "Attack profile already exists."));
 
-        // Validation
-        if (attackProfileData is { IsRanged: true, Range: null } or { IsRanged: false, Range: not null } ||
-            attackProfileData.ToHit < 2 || attackProfileData.ToHit > 7 || attackProfileData.ToWound < 2 ||
-            attackProfileData.ToWound > 7)
-            return this.ApiProblem(new AppError(ErrorCode.ValidationError, "Invalid attack profile."));
+        var changeResult = attackProfile.Change(
+            attackProfileData.Name,
+            attackProfileData.IsRanged,
+            attackProfileData.Range,
+            attackProfileData.Attacks,
+            attackProfileData.ToHit,
+            attackProfileData.ToWound,
+            attackProfileData.Rend,
+            attackProfileData.Damage
+            //WeaponEffects = context.WeaponEffects.Where(we => attackProfileData.WeaponEffects.Contains(we.Key)).ToList()
+        );
 
-        attackProfile.Name = attackProfileData.Name;
-        attackProfile.IsRanged = attackProfileData.IsRanged;
-        attackProfile.Range = attackProfileData.Range;
-        attackProfile.Attacks = attackProfileData.Attacks;
-        attackProfile.ToHit = attackProfileData.ToHit;
-        attackProfile.ToWound = attackProfileData.ToWound;
-        attackProfile.Rend = attackProfileData.Rend;
-        attackProfile.Damage = attackProfileData.Damage;
+        if (!changeResult.IsSuccess) return this.ApiProblem(changeResult.GetError);
 
-        attackProfile.WeaponEffects.Clear();
-        foreach (var we in (await context.WeaponEffects
-                     .Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
-                     .ToListAsync()))
-            attackProfile.WeaponEffects.Add(we);
+        //attackProfile.WeaponEffects.Clear();
+        //foreach (var we in (await context.WeaponEffects
+        //             .Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
+        //             .ToListAsync()))
+        //    attackProfile.WeaponEffects.Add(we);
 
         await context.SaveChangesAsync();
 

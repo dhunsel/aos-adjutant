@@ -31,29 +31,22 @@ public class UnitAttackProfileController(ApplicationDbContext context) : Control
         if (isDuplicate)
             return this.ApiProblem(new AppError(ErrorCode.UniqueKeyError, "Attack profile already exists."));
 
-        // Validation
-        if (attackProfileData is { IsRanged: true, Range: null } or { IsRanged: false, Range: not null } ||
-            attackProfileData.ToHit < 2 || attackProfileData.ToHit > 7 || attackProfileData.ToWound < 2 ||
-            attackProfileData.ToWound > 7)
-            return this.ApiProblem(new AppError(ErrorCode.ValidationError, "Invalid attack profile."));
+        var newAttackProfileResult = AttackProfile.Create(
+            attackProfileData.Name,
+            attackProfileData.IsRanged,
+            attackProfileData.Range,
+            attackProfileData.Attacks,
+            attackProfileData.ToHit,
+            attackProfileData.ToWound,
+            attackProfileData.Rend,
+            attackProfileData.Damage,
+            unitId
+            //WeaponEffects = context.WeaponEffects.Where(we => attackProfileData.WeaponEffects.Contains(we.Key)).ToList()
+        );
 
-        var newAttackProfile = new AttackProfile
-        {
-            Name = attackProfileData.Name,
-            IsRanged = attackProfileData.IsRanged,
-            Range = attackProfileData.Range,
-            Attacks = attackProfileData.Attacks,
-            ToHit = attackProfileData.ToHit,
-            ToWound = attackProfileData.ToWound,
-            Rend = attackProfileData.Rend,
-            Damage = attackProfileData.Damage,
-            UnitId = unitId,
-            WeaponEffects = context.WeaponEffects
-                .Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
-                .ToList()
-        };
+        if (!newAttackProfileResult.IsSuccess) return this.ApiProblem(newAttackProfileResult.GetError);
 
-
+        var newAttackProfile = newAttackProfileResult.GetValue;
         // Because of race conditions this might still fail on UK/FK error
         // Ignore for now (won't occur in practice) but revisit in the future
         context.AttackProfiles.Add(newAttackProfile);
