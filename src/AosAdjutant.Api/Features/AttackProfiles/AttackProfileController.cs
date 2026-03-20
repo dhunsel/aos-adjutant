@@ -1,15 +1,13 @@
-using AosAdjutant.Api.Database;
 using AosAdjutant.Api.Features.AttackProfiles.WeaponEffects;
 using AosAdjutant.Api.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.AttackProfiles;
 
 [Route("api/attack-profiles")]
 [ApiController]
 [Tags("Attack Profiles")]
-public class AttackProfileController(ApplicationDbContext context) : ControllerBase
+public class AttackProfileController(AttackProfileService attackProfileService) : ControllerBase
 {
     [HttpGet("{attackProfileId}")]
     [EndpointSummary("Get an attack profile by ID")]
@@ -17,29 +15,26 @@ public class AttackProfileController(ApplicationDbContext context) : ControllerB
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AttackProfileResponseDto>> GetAttackProfile([FromRoute] int attackProfileId)
     {
-        var attackProfile = await context.AttackProfiles
-            .AsNoTracking()
-            .Include(ap => ap.WeaponEffects)
-            .FirstOrDefaultAsync(ap => ap.AttackProfileId == attackProfileId);
-
-        return attackProfile is null
-            ? this.ApiProblem(new AppError(ErrorCode.NotFound, "Attack profile not found."))
-            : Ok(
+        var attackProfileResult = await attackProfileService.GetAttackProfile(attackProfileId);
+        return attackProfileResult.Match(
+            ap => Ok(
                 new AttackProfileResponseDto(
-                    attackProfile.AttackProfileId,
-                    attackProfile.Name,
-                    attackProfile.IsRanged,
-                    attackProfile.Range,
-                    attackProfile.Attacks,
-                    attackProfile.ToHit,
-                    attackProfile.ToWound,
-                    attackProfile.Rend,
-                    attackProfile.Damage,
-                    attackProfile.UnitId,
-                    attackProfile.Version,
-                    attackProfile.WeaponEffects.Select(wp => new WeaponEffectResponseDto(wp.Key, wp.Name)).ToList()
+                    ap.AttackProfileId,
+                    ap.Name,
+                    ap.IsRanged,
+                    ap.Range,
+                    ap.Attacks,
+                    ap.ToHit,
+                    ap.ToWound,
+                    ap.Rend,
+                    ap.Damage,
+                    ap.UnitId,
+                    ap.Version,
+                    ap.WeaponEffects.Select(wp => new WeaponEffectResponseDto(wp.Key, wp.Name)).ToList()
                 )
-            );
+            ),
+            this.ApiProblem
+        );
     }
 
     [HttpPut("{attackProfileId}")]
@@ -52,65 +47,25 @@ public class AttackProfileController(ApplicationDbContext context) : ControllerB
         [FromBody] ChangeAttackProfileDto attackProfileData
     )
     {
-        // Both Create and Update should perform validations but are part of different classes.
-        // -> Reason to introduce service class which both controller classes call?
-        var attackProfile = await context.AttackProfiles
-            .Include(ap => ap.WeaponEffects)
-            .FirstOrDefaultAsync(ap => ap.AttackProfileId == attackProfileId);
-
-        if (attackProfile is null)
-            return this.ApiProblem(new AppError(ErrorCode.NotFound, "Attack profile not found."));
-
-        if (attackProfile.Version != attackProfileData.Version)
-            return this.ApiProblem(
-                new AppError(ErrorCode.ConcurrencyError, "Attack profile was already modified in the background.")
-            );
-
-        var isDuplicate = await context.AttackProfiles.AnyAsync(ap =>
-            ap.Name == attackProfileData.Name && ap.UnitId == attackProfile.UnitId &&
-            ap.AttackProfileId != attackProfileId
-        );
-        if (isDuplicate)
-            return this.ApiProblem(new AppError(ErrorCode.UniqueKeyError, "Attack profile already exists."));
-
-        // Validation
-        if (attackProfileData is { IsRanged: true, Range: null } or { IsRanged: false, Range: not null } ||
-            attackProfileData.ToHit < 2 || attackProfileData.ToHit > 7 || attackProfileData.ToWound < 2 ||
-            attackProfileData.ToWound > 7)
-            return this.ApiProblem(new AppError(ErrorCode.ValidationError, "Invalid attack profile."));
-
-        attackProfile.Name = attackProfileData.Name;
-        attackProfile.IsRanged = attackProfileData.IsRanged;
-        attackProfile.Range = attackProfileData.Range;
-        attackProfile.Attacks = attackProfileData.Attacks;
-        attackProfile.ToHit = attackProfileData.ToHit;
-        attackProfile.ToWound = attackProfileData.ToWound;
-        attackProfile.Rend = attackProfileData.Rend;
-        attackProfile.Damage = attackProfileData.Damage;
-
-        attackProfile.WeaponEffects.Clear();
-        foreach (var we in (await context.WeaponEffects
-                     .Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
-                     .ToListAsync()))
-            attackProfile.WeaponEffects.Add(we);
-
-        await context.SaveChangesAsync();
-
-        return Ok(
-            new AttackProfileResponseDto(
-                attackProfile.AttackProfileId,
-                attackProfile.Name,
-                attackProfile.IsRanged,
-                attackProfile.Range,
-                attackProfile.Attacks,
-                attackProfile.ToHit,
-                attackProfile.ToWound,
-                attackProfile.Rend,
-                attackProfile.Damage,
-                attackProfile.UnitId,
-                attackProfile.Version,
-                attackProfile.WeaponEffects.Select(wp => new WeaponEffectResponseDto(wp.Key, wp.Name)).ToList()
-            )
+        var attackProfileResult = await attackProfileService.UpdateAttackProfile(attackProfileId, attackProfileData);
+        return attackProfileResult.Match(
+            ap => Ok(
+                new AttackProfileResponseDto(
+                    ap.AttackProfileId,
+                    ap.Name,
+                    ap.IsRanged,
+                    ap.Range,
+                    ap.Attacks,
+                    ap.ToHit,
+                    ap.ToWound,
+                    ap.Rend,
+                    ap.Damage,
+                    ap.UnitId,
+                    ap.Version,
+                    ap.WeaponEffects.Select(wp => new WeaponEffectResponseDto(wp.Key, wp.Name)).ToList()
+                )
+            ),
+            this.ApiProblem
         );
     }
 
@@ -120,14 +75,7 @@ public class AttackProfileController(ApplicationDbContext context) : ControllerB
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteAttackProfile([FromRoute] int attackProfileId)
     {
-        var attackProfile = await context.AttackProfiles.FindAsync(attackProfileId);
-
-        if (attackProfile is null)
-            return this.ApiProblem(new AppError(ErrorCode.NotFound, "Attack profile not found."));
-
-        context.AttackProfiles.Remove(attackProfile);
-        await context.SaveChangesAsync();
-
-        return NoContent();
+        var deleteResult = await attackProfileService.DeleteAttackProfile(attackProfileId);
+        return deleteResult.Match(NoContent, this.ApiProblem);
     }
 }
