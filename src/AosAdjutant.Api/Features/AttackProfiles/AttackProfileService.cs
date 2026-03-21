@@ -1,4 +1,5 @@
 using AosAdjutant.Api.Database;
+using AosAdjutant.Api.Features.AttackProfiles.WeaponEffects;
 using AosAdjutant.Api.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,12 +30,24 @@ public class AttackProfileService(ApplicationDbContext context)
             attackProfileData.Rend,
             attackProfileData.Damage,
             unitId
-            //WeaponEffects = context.WeaponEffects.Where(we => attackProfileData.WeaponEffects.Contains(we.Key)).ToList()
         );
 
         if (!newAttackProfileResult.IsSuccess) return newAttackProfileResult;
 
         var newAttackProfile = newAttackProfileResult.GetValue;
+
+        var weaponEffects = await context.WeaponEffects
+            .Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
+            .ToListAsync();
+
+        if (weaponEffects.Count != attackProfileData.WeaponEffects.Count)
+            return Result<AttackProfile>.Failure(
+                new AppError(ErrorCode.ValidationError, "One or more weapon effect keys invalid.")
+            );
+
+        foreach (var weaponEffect in weaponEffects)
+            newAttackProfile.WeaponEffects.Add(weaponEffect);
+
         // Because of race conditions this might still fail on UK/FK error
         // Ignore for now (won't occur in practice) but revisit in the future
         context.AttackProfiles.Add(newAttackProfile);
@@ -70,8 +83,6 @@ public class AttackProfileService(ApplicationDbContext context)
         ChangeAttackProfileDto attackProfileData
     )
     {
-        // Both Create and Update should perform validations but are part of different classes.
-        // -> Reason to introduce service class which both controller classes call?
         var attackProfile = await context.AttackProfiles
             .Include(ap => ap.WeaponEffects)
             .FirstOrDefaultAsync(ap => ap.AttackProfileId == attackProfileId);
@@ -102,16 +113,21 @@ public class AttackProfileService(ApplicationDbContext context)
             attackProfileData.ToWound,
             attackProfileData.Rend,
             attackProfileData.Damage
-            //WeaponEffects = context.WeaponEffects.Where(we => attackProfileData.WeaponEffects.Contains(we.Key)).ToList()
         );
 
         if (!changeResult.IsSuccess) return Result<AttackProfile>.Failure(changeResult.GetError);
 
-        //attackProfile.WeaponEffects.Clear();
-        //foreach (var we in (await context.WeaponEffects
-        //             .Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
-        //             .ToListAsync()))
-        //    attackProfile.WeaponEffects.Add(we);
+        var weaponEffects = await context.WeaponEffects
+            .Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
+            .ToListAsync();
+
+        if (weaponEffects.Count != attackProfileData.WeaponEffects.Count)
+            return Result<AttackProfile>.Failure(
+                new AppError(ErrorCode.ValidationError, "One or more weapon effect keys invalid.")
+            );
+
+        foreach (var weaponEffect in weaponEffects)
+            attackProfile.WeaponEffects.Add(weaponEffect);
 
         await context.SaveChangesAsync();
 
