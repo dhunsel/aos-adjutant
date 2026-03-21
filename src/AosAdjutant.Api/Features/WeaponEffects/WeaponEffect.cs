@@ -1,9 +1,8 @@
-namespace AosAdjutant.Api.Features.AttackProfiles.WeaponEffects;
+namespace AosAdjutant.Api.Features.WeaponEffects;
 
 public class WeaponEffect
 {
     public int WeaponEffectId { get; set; }
     public required string Key { get; set; }
     public required string Name { get; set; }
-    public uint Version { get; set; }
 }
