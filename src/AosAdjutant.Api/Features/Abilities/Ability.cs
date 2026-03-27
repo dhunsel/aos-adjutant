@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using AosAdjutant.Api.Shared;
+using AosAdjutant.Api.Common;
 
 namespace AosAdjutant.Api.Features.Abilities;
 
@@ -40,7 +40,7 @@ public enum PlayerTurn
     [Display(Name = "Any")] AnyTurn
 }
 
-public class Ability
+public sealed class Ability
 {
     public int AbilityId { get; set; }
     public required string Name { get; set; }

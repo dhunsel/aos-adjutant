@@ -1,5 +1,5 @@
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.AttackProfiles;
-using AosAdjutant.Api.Shared;
 
 namespace AosAdjutant.UnitTests.Features.AttackProfiles;
 

@@ -254,3 +254,15 @@ dotnet_naming_rule.constants_should_be_pascal_case.severity = suggestion
 
 dotnet_naming_symbols.constants.applicable_kinds = field, local
 dotnet_naming_symbols.constants.required_modifiers = const
+
+# EF Core generated migrations — suppress all analysis
+[**/Migrations/**.cs]
+generated_code = true
+dotnet_analyzer_diagnostic.severity = none
+
+[*.cs]
+dotnet_diagnostic.CA2007.severity = none
+dotnet_diagnostic.CA1812.severity = none
+dotnet_diagnostic.CA1515.severity = none
+dotnet_diagnostic.CA1062.severity = none
+dotnet_diagnostic.CA1002.severity = none

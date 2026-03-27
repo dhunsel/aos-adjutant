@@ -2,7 +2,7 @@ using AosAdjutant.Api.Features.Abilities;
 
 namespace AosAdjutant.Api.Features.BattleFormations;
 
-public class BattleFormation
+public sealed class BattleFormation
 {
     public int BattleFormationId { get; set; }
     public required string Name { get; set; }

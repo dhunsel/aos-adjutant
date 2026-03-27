@@ -1,10 +1,10 @@
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Database;
-using AosAdjutant.Api.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.Abilities;
 
-public class AbilityService(ApplicationDbContext context)
+public sealed class AbilityService(ApplicationDbContext context)
 {
     public async Task<Result<Ability>> CreateGenericAbility(CreateAbilityDto abilityData)
     {

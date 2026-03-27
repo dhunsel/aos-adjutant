@@ -3,7 +3,7 @@ using AosAdjutant.Api.Features.AttackProfiles;
 
 namespace AosAdjutant.Api.Features.Units;
 
-public class Unit
+public sealed class Unit
 {
     public int UnitId { get; set; }
     public required string Name { get; set; }

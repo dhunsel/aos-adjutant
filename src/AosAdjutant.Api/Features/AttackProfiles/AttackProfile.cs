@@ -1,9 +1,9 @@
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.WeaponEffects;
-using AosAdjutant.Api.Shared;
 
 namespace AosAdjutant.Api.Features.AttackProfiles;
 
-public class AttackProfile
+public sealed class AttackProfile
 {
     public int AttackProfileId { get; set; }
     public required string Name { get; set; }

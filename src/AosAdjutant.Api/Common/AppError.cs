@@ -1,4 +1,4 @@
-namespace AosAdjutant.Api.Shared;
+namespace AosAdjutant.Api.Common;
 
 public enum ErrorCode
 {
@@ -8,7 +8,7 @@ public enum ErrorCode
     UniqueKeyError
 }
 
-public class AppError(ErrorCode code, string message)
+public sealed class AppError(ErrorCode code, string message)
 {
     public ErrorCode Code { get; } = code;
     public string Message { get; } = message;

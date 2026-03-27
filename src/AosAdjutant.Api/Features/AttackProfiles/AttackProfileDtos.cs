@@ -3,7 +3,7 @@ using AosAdjutant.Api.Features.WeaponEffects;
 
 namespace AosAdjutant.Api.Features.AttackProfiles;
 
-public record AttackProfileResponseDto(
+public sealed record AttackProfileResponseDto(
     int AttackProfileId,
     string Name,
     bool IsRanged,
@@ -18,7 +18,7 @@ public record AttackProfileResponseDto(
     List<WeaponEffectResponseDto> WeaponEffects
 );
 
-public record CreateAttackProfileDto(
+public sealed record CreateAttackProfileDto(
     [StringLength(100, MinimumLength = 1)] string Name,
     bool IsRanged,
     int? Range,
@@ -30,7 +30,7 @@ public record CreateAttackProfileDto(
     List<string> WeaponEffects
 );
 
-public record ChangeAttackProfileDto(
+public sealed record ChangeAttackProfileDto(
     [StringLength(100, MinimumLength = 1)] string Name,
     bool IsRanged,
     int? Range,

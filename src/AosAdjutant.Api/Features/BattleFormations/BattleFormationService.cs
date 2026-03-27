@@ -1,11 +1,11 @@
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Database;
 using AosAdjutant.Api.Features.Abilities;
-using AosAdjutant.Api.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.BattleFormations;
 
-public class BattleFormationService(ApplicationDbContext context)
+public sealed class BattleFormationService(ApplicationDbContext context)
 {
     public async Task<Result<BattleFormation>> CreateBattleFormation(
         int factionId,

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AosAdjutant.Api.Features.Abilities;
 
-public record AbilityResponseDto(
+public sealed record AbilityResponseDto(
     int AbilityId,
     string Name,
     string? Reaction,
@@ -14,7 +14,7 @@ public record AbilityResponseDto(
     uint Version
 );
 
-public record CreateAbilityDto(
+public sealed record CreateAbilityDto(
     [StringLength(100, MinimumLength = 1)] string Name,
     [StringLength(100, MinimumLength = 1)] string? Reaction,
     [StringLength(100, MinimumLength = 1)] string? Declaration,
@@ -24,7 +24,7 @@ public record CreateAbilityDto(
     PlayerTurn? Turn
 );
 
-public record ChangeAbilityDto(
+public sealed record ChangeAbilityDto(
     [StringLength(100, MinimumLength = 1)] string Name,
     [StringLength(100, MinimumLength = 1)] string? Reaction,
     [StringLength(100, MinimumLength = 1)] string? Declaration,

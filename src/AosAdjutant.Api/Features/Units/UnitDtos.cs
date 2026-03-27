@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AosAdjutant.Api.Features.Units;
 
-public record UnitResponseDto(
+public sealed record UnitResponseDto(
     int UnitId,
     string Name,
     int Health,
@@ -14,7 +14,7 @@ public record UnitResponseDto(
     uint Version
 );
 
-public record CreateUnitDto(
+public sealed record CreateUnitDto(
     [StringLength(100, MinimumLength = 1)] string Name,
     int Health,
     [StringLength(100, MinimumLength = 1)] string Move,
@@ -23,7 +23,7 @@ public record CreateUnitDto(
     int? WardSave
 );
 
-public record ChangeUnitDto(
+public sealed record ChangeUnitDto(
     [StringLength(100, MinimumLength = 1)] string Name,
     int Health,
     [StringLength(100, MinimumLength = 1)] string Move,

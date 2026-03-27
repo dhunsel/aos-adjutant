@@ -1,11 +1,11 @@
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Database;
 using AosAdjutant.Api.Features.Abilities;
-using AosAdjutant.Api.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.Units;
 
-public class UnitService(ApplicationDbContext context)
+public sealed class UnitService(ApplicationDbContext context)
 {
     public async Task<Result<Unit>> CreateUnit(int factionId, CreateUnitDto unitData)
     {

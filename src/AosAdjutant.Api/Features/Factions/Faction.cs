@@ -4,7 +4,7 @@ using AosAdjutant.Api.Features.Units;
 
 namespace AosAdjutant.Api.Features.Factions;
 
-public class Faction
+public sealed class Faction
 {
     public int FactionId { get; set; }
     public required string Name { get; set; }
