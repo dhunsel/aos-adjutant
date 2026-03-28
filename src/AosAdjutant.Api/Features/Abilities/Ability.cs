@@ -65,7 +65,7 @@ public sealed class Ability
         bool isGeneric
     )
     {
-        var validationResult = ValidateAbility(name, reaction, declaration, effect, phase, restriction, turn);
+        var validationResult = ValidateAbility(reaction, declaration, phase, restriction, turn);
 
         if (!validationResult.IsSuccess) return Result<Ability>.Failure(validationResult.GetError);
 
@@ -94,7 +94,7 @@ public sealed class Ability
         PlayerTurn? turn
     )
     {
-        var validationResult = ValidateAbility(name, reaction, declaration, effect, phase, restriction, turn);
+        var validationResult = ValidateAbility(reaction, declaration, phase, restriction, turn);
 
         if (!validationResult.IsSuccess) return Result.Failure(validationResult.GetError);
 
@@ -110,10 +110,8 @@ public sealed class Ability
     }
 
     private static Result ValidateAbility(
-        string name,
         string? reaction,
         string? declaration,
-        string effect,
         TurnPhase phase,
         ActivationRestriction? restriction,
         PlayerTurn? turn

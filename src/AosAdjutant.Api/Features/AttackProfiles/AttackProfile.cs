@@ -31,7 +31,7 @@ public sealed class AttackProfile
         int unitId
     )
     {
-        var validationResult = ValidateAttackProfile(name, isRanged, range, attacks, toHit, toWound, rend, damage);
+        var validationResult = ValidateAttackProfile(isRanged, range, toHit, toWound);
 
         if (!validationResult.IsSuccess) return Result<AttackProfile>.Failure(validationResult.GetError);
 
@@ -62,7 +62,7 @@ public sealed class AttackProfile
         string damage
     )
     {
-        var validationResult = ValidateAttackProfile(name, isRanged, range, attacks, toHit, toWound, rend, damage);
+        var validationResult = ValidateAttackProfile(isRanged, range, toHit, toWound);
 
         if (!validationResult.IsSuccess) return Result.Failure(validationResult.GetError);
 
@@ -78,16 +78,7 @@ public sealed class AttackProfile
         return Result.Success();
     }
 
-    private static Result ValidateAttackProfile(
-        string name,
-        bool isRanged,
-        int? range,
-        string attacks,
-        int toHit,
-        int toWound,
-        int? rend,
-        string damage
-    )
+    private static Result ValidateAttackProfile(bool isRanged, int? range, int toHit, int toWound)
     {
         if (isRanged && range is null)
             return Result.Failure(
