@@ -1,3 +1,5 @@
+#pragma warning disable MA0048
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.Abilities;
 using AosAdjutant.Api.Features.AttackProfiles;
 
@@ -17,4 +19,15 @@ public sealed class Unit
 
     public ICollection<Ability> Abilities { get; } = new List<Ability>();
     public ICollection<AttackProfile> AttackProfiles { get; } = new List<AttackProfile>();
+}
+
+public static class UnitErrors
+{
+    public static readonly AppError NotFound = new(ErrorCode.NotFound, "Unit not found.");
+    public static readonly AppError AlreadyExists = new(ErrorCode.UniqueKeyError, "Unit already exists.");
+
+    public static readonly AppError Concurrency = new(
+        ErrorCode.ConcurrencyError,
+        "Unit was already modified in the background."
+    );
 }
