@@ -39,8 +39,7 @@ public sealed class BattleFormationService(ApplicationDbContext context)
         if (!factionExists)
             return Result<List<BattleFormation>>.Failure(FactionErrors.NotFound);
 
-        var battleFormations = await context.BattleFormations
-            .AsNoTracking()
+        var battleFormations = await context.BattleFormations.AsNoTracking()
             .Where(bf => bf.FactionId == factionId)
             .ToListAsync();
         return Result<List<BattleFormation>>.Success(battleFormations);
@@ -48,8 +47,7 @@ public sealed class BattleFormationService(ApplicationDbContext context)
 
     public async Task<Result<BattleFormation>> GetBattleFormation(int battleFormationId)
     {
-        var battleFormation = await context.BattleFormations
-            .AsNoTracking()
+        var battleFormation = await context.BattleFormations.AsNoTracking()
             .FirstOrDefaultAsync(bf => bf.BattleFormationId == battleFormationId);
 
         return battleFormation is null
@@ -128,8 +126,7 @@ public sealed class BattleFormationService(ApplicationDbContext context)
 
     public async Task<Result<List<Ability>>> GetBattleFormationAbilities(int battleFormationId)
     {
-        var battleFormation = await context.BattleFormations
-            .AsNoTracking()
+        var battleFormation = await context.BattleFormations.AsNoTracking()
             .Include(bf => bf.Abilities)
             .FirstOrDefaultAsync(bf => bf.BattleFormationId == battleFormationId);
 

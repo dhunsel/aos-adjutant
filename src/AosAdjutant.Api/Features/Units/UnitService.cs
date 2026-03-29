@@ -127,8 +127,7 @@ public sealed class UnitService(ApplicationDbContext context)
 
     public async Task<Result<List<Ability>>> GetUnitAbilities(int unitId)
     {
-        var unit = await context.Units
-            .AsNoTracking()
+        var unit = await context.Units.AsNoTracking()
             .Include(u => u.Abilities)
             .FirstOrDefaultAsync(u => u.UnitId == unitId);
 

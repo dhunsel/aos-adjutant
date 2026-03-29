@@ -37,8 +37,7 @@ public sealed class AttackProfileService(ApplicationDbContext context)
 
         var newAttackProfile = newAttackProfileResult.GetValue;
 
-        var weaponEffects = await context.WeaponEffects
-            .Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
+        var weaponEffects = await context.WeaponEffects.Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
             .ToListAsync();
 
         if (weaponEffects.Count != attackProfileData.WeaponEffects.Count)
@@ -69,8 +68,7 @@ public sealed class AttackProfileService(ApplicationDbContext context)
 
     public async Task<Result<AttackProfile>> GetAttackProfile(int attackProfileId)
     {
-        var attackProfile = await context.AttackProfiles
-            .AsNoTracking()
+        var attackProfile = await context.AttackProfiles.AsNoTracking()
             .Include(ap => ap.WeaponEffects)
             .FirstOrDefaultAsync(ap => ap.AttackProfileId == attackProfileId);
 
@@ -84,8 +82,7 @@ public sealed class AttackProfileService(ApplicationDbContext context)
         ChangeAttackProfileDto attackProfileData
     )
     {
-        var attackProfile = await context.AttackProfiles
-            .Include(ap => ap.WeaponEffects)
+        var attackProfile = await context.AttackProfiles.Include(ap => ap.WeaponEffects)
             .FirstOrDefaultAsync(ap => ap.AttackProfileId == attackProfileId);
 
         if (attackProfile is null)
@@ -118,8 +115,7 @@ public sealed class AttackProfileService(ApplicationDbContext context)
 
         if (!changeResult.IsSuccess) return Result<AttackProfile>.Failure(changeResult.GetError);
 
-        var weaponEffects = await context.WeaponEffects
-            .Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
+        var weaponEffects = await context.WeaponEffects.Where(we => attackProfileData.WeaponEffects.Contains(we.Key))
             .ToListAsync();
 
         if (weaponEffects.Count != attackProfileData.WeaponEffects.Count)

@@ -100,8 +100,7 @@ public sealed class FactionService(ApplicationDbContext context)
 
     public async Task<Result<List<Ability>>> GetFactionAbilities(int factionId)
     {
-        var faction = await context.Factions
-            .AsNoTracking()
+        var faction = await context.Factions.AsNoTracking()
             .Include(f => f.Abilities)
             .FirstOrDefaultAsync(f => f.FactionId == factionId);
 

@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json.Serialization;
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Database;
 using AosAdjutant.Api.Features.Abilities;
 using AosAdjutant.Api.Features.AttackProfiles;
@@ -9,12 +10,10 @@ using AosAdjutant.Api.Features.Units;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
-using Serilog.Events;
 
 // Bootstrap logger to log errors during startup
 // Replaced at a later step with a fully-featured logger
-Log.Logger = new LoggerConfiguration().WriteTo
-    .Console(formatProvider: CultureInfo.InvariantCulture)
+Log.Logger = new LoggerConfiguration().WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
     .CreateBootstrapLogger();
 
 Log.Information("Starting the application");
@@ -25,14 +24,11 @@ try
 
     builder.Services.AddSerilog((services, lc) => lc.ReadFrom
         .Configuration(builder.Configuration)
-        .ReadFrom
-        .Services(services)
-        .Enrich
-        .FromLogContext()
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
     );
 
-    builder.Services
-        .AddControllers()
+    builder.Services.AddControllers()
         .AddJsonOptions(opts =>
             opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false))
         );
@@ -52,6 +48,8 @@ try
     );
 
     var app = builder.Build();
+
+    app.UseMiddleware<CorrelationIdMiddleware>();
 
     app.UseSerilogRequestLogging(opts =>
         {
