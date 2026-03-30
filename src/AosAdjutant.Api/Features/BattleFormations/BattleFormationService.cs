@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.BattleFormations;
 
-public sealed class BattleFormationService(ApplicationDbContext context)
+public sealed class BattleFormationService(ApplicationDbContext context, ILogger<BattleFormationService> logger)
 {
     public async Task<Result<BattleFormation>> CreateBattleFormation(
         int factionId,
@@ -29,6 +29,8 @@ public sealed class BattleFormationService(ApplicationDbContext context)
         // Ignore for now (won't occur in practice) but revisit in the future
         context.BattleFormations.Add(newBattleFormation);
         await context.SaveChangesAsync();
+
+        logger.Log_BattleFormationCreated(newBattleFormation.BattleFormationId, factionId);
 
         return Result<BattleFormation>.Success(newBattleFormation);
     }
@@ -66,7 +68,10 @@ public sealed class BattleFormationService(ApplicationDbContext context)
             return Result<BattleFormation>.Failure(BattleFormationErrors.NotFound);
 
         if (battleFormation.Version != battleFormationData.Version)
+        {
+            logger.Log_BattleFormationConcurrencyError(battleFormationId, battleFormationData.Version);
             return Result<BattleFormation>.Failure(BattleFormationErrors.Concurrency);
+        }
 
         var isDuplicate = await context.BattleFormations.AnyAsync(bf =>
             bf.Name == battleFormationData.Name && bf.FactionId == battleFormation.FactionId &&
@@ -77,6 +82,8 @@ public sealed class BattleFormationService(ApplicationDbContext context)
 
         battleFormation.Name = battleFormationData.Name;
         await context.SaveChangesAsync();
+
+        logger.Log_BattleFormationUpdated(battleFormationId, battleFormation.FactionId);
 
         return Result<BattleFormation>.Success(battleFormation);
     }
@@ -90,6 +97,8 @@ public sealed class BattleFormationService(ApplicationDbContext context)
 
         context.BattleFormations.Remove(battleFormation);
         await context.SaveChangesAsync();
+
+        logger.Log_BattleFormationDeleted(battleFormationId);
 
         return Result.Success();
     }
@@ -111,7 +120,7 @@ public sealed class BattleFormationService(ApplicationDbContext context)
                 Phase = abilityData.Phase,
                 Restriction = abilityData.Restriction,
                 Turn = abilityData.Turn,
-                IsGeneric = false
+                IsGeneric = false,
             }
         );
 
@@ -120,6 +129,8 @@ public sealed class BattleFormationService(ApplicationDbContext context)
         var newAbility = newAbilityResult.GetValue;
         battleFormation.Abilities.Add(newAbility);
         await context.SaveChangesAsync();
+
+        logger.Log_ScopedAbilityCreated(newAbility.AbilityId, nameof(BattleFormation), battleFormationId);
 
         return Result<Ability>.Success(newAbility);
     }

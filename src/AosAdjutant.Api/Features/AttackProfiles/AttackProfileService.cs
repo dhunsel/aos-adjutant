@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.AttackProfiles;
 
-public sealed class AttackProfileService(ApplicationDbContext context)
+public sealed class AttackProfileService(ApplicationDbContext context, ILogger<AttackProfileService> logger)
 {
     public async Task<Result<AttackProfile>> CreateAttackProfile(int unitId, CreateAttackProfileDto attackProfileData)
     {
@@ -29,7 +29,7 @@ public sealed class AttackProfileService(ApplicationDbContext context)
                 ToWound = attackProfileData.ToWound,
                 Rend = attackProfileData.Rend,
                 Damage = attackProfileData.Damage,
-                UnitId = unitId
+                UnitId = unitId,
             }
         );
 
@@ -52,6 +52,8 @@ public sealed class AttackProfileService(ApplicationDbContext context)
         // Ignore for now (won't occur in practice) but revisit in the future
         context.AttackProfiles.Add(newAttackProfile);
         await context.SaveChangesAsync();
+
+        logger.Log_AttackProfileCreated(newAttackProfile.AttackProfileId, unitId);
 
         return Result<AttackProfile>.Success(newAttackProfile);
     }
@@ -89,7 +91,10 @@ public sealed class AttackProfileService(ApplicationDbContext context)
             return Result<AttackProfile>.Failure(AttackProfileErrors.NotFound);
 
         if (attackProfile.Version != attackProfileData.Version)
+        {
+            logger.Log_AttackProfileConcurrencyError(attackProfileId, attackProfileData.Version);
             return Result<AttackProfile>.Failure(AttackProfileErrors.Concurrency);
+        }
 
         var isDuplicate = await context.AttackProfiles.AnyAsync(ap =>
             ap.Name == attackProfileData.Name && ap.UnitId == attackProfile.UnitId &&
@@ -109,7 +114,7 @@ public sealed class AttackProfileService(ApplicationDbContext context)
                 ToWound = attackProfileData.ToWound,
                 Rend = attackProfileData.Rend,
                 Damage = attackProfileData.Damage,
-                UnitId = attackProfile.UnitId
+                UnitId = attackProfile.UnitId,
             }
         );
 
@@ -128,6 +133,8 @@ public sealed class AttackProfileService(ApplicationDbContext context)
 
         await context.SaveChangesAsync();
 
+        logger.Log_AttackProfileUpdated(attackProfileId, attackProfile.UnitId);
+
         return Result<AttackProfile>.Success(attackProfile);
     }
 
@@ -140,6 +147,8 @@ public sealed class AttackProfileService(ApplicationDbContext context)
 
         context.AttackProfiles.Remove(attackProfile);
         await context.SaveChangesAsync();
+
+        logger.Log_AttackProfileDeleted(attackProfileId);
 
         return Result.Success();
     }
