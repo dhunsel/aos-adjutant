@@ -25,6 +25,45 @@ services:
     volumes:
       - seq-data:/data
 
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - --web.enable-otlp-receiver
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    volumes:
+      - ./observability/prometheus/:/etc/prometheus/
+      - prometheus-data:/prometheus
+
+  tempo:
+    image: grafana/tempo:2.4.0
+    command: "-config.file=/etc/tempo.yaml"
+    volumes:
+      - ./observability/tempo/tempo.yaml:/etc/tempo.yaml
+      - tempo-data:/var/tempo
+    ports:
+      - 3200:3200
+      - 4317:4317
+      - 4318:4318
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./observability/grafana/provisioning/:/etc/grafana/provisioning/
+    depends_on:
+      - prometheus
+      - tempo
+
 volumes:
   postgres-data:
   seq-data:
+  prometheus-data:
+  grafana-data:
+  tempo-data:

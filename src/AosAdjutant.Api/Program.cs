@@ -8,6 +8,7 @@ using AosAdjutant.Api.Features.BattleFormations;
 using AosAdjutant.Api.Features.Factions;
 using AosAdjutant.Api.Features.Units;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -43,9 +44,11 @@ try
             )
         )
         .WithMetrics(metrics => metrics.AddAspNetCoreInstrumentation()
-            .AddOtlpExporter(opts =>
+            .AddOtlpExporter((exporterOptions, metricReaderOptions) =>
                 {
-                    opts.Endpoint = new Uri(builder.Configuration["Metrics:Endpoint"]!);
+                    exporterOptions.Endpoint = new Uri(builder.Configuration["Metrics:Endpoint"]!);
+                    exporterOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
+                    metricReaderOptions.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds = 5000;
                 }
             )
         );
