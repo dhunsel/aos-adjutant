@@ -36,7 +36,6 @@ try
         .ConfigureResource(resource => resource.AddService(serviceName: "AosAdjutantApi", serviceVersion: "0.0.1"))
         .WithTracing(tracing => tracing.AddAspNetCoreInstrumentation()
             .AddEntityFrameworkCoreInstrumentation()
-            .AddSource("AosAdjutantApi.FactionService")
             .AddOtlpExporter(opts =>
                 {
                     opts.Endpoint = new Uri(builder.Configuration["OTLP:Endpoint"]!);
@@ -44,11 +43,13 @@ try
             )
         )
         .WithMetrics(metrics => metrics.AddAspNetCoreInstrumentation()
+            .SetExemplarFilter(ExemplarFilterType.TraceBased)
             .AddOtlpExporter((exporterOptions, metricReaderOptions) =>
                 {
                     exporterOptions.Endpoint = new Uri(builder.Configuration["Metrics:Endpoint"]!);
                     exporterOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
-                    metricReaderOptions.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds = 5000;
+                    metricReaderOptions.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds =
+                        builder.Configuration.GetValue<int>("Metrics:ExportIntervalMilliseconds");
                 }
             )
         );

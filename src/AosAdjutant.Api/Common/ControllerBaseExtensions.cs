@@ -18,9 +18,7 @@ public static class ControllerBaseExtensions
 
         var problemDetails = new ProblemDetails
         {
-            Title = error.Code.ToString(),
-            Detail = error.Message,
-            Status = statusCode
+            Title = error.Code.ToString(), Detail = error.Message, Status = statusCode
         };
 
         var traceId = Activity.Current?.Id;

@@ -15,20 +15,20 @@ services:
       interval: 5s
       timeout: 5s
 
-  seq:
-    image: datalust/seq:latest
-    environment:
-      ACCEPT_EULA: Y
-      SEQ_PASSWORD: ${SEQ_PASSWORD}
+  loki:
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/loki-config.yaml
     ports:
-      - 5341:80
+      - 3100:3100
     volumes:
-      - seq-data:/data
+      - ./observability/loki/loki-config.yaml:/etc/loki/loki-config.yaml
+      - loki-data:/loki
 
   prometheus:
     image: prom/prometheus:latest
     command:
       - --web.enable-otlp-receiver
+      - --enable-feature=exemplar-storage
       - --config.file=/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
@@ -57,13 +57,10 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
       - ./observability/grafana/provisioning/:/etc/grafana/provisioning/
-    depends_on:
-      - prometheus
-      - tempo
 
 volumes:
   postgres-data:
-  seq-data:
+  loki-data:
   prometheus-data:
   grafana-data:
   tempo-data:
