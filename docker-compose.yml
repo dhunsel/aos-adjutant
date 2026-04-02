@@ -1,7 +1,6 @@
 services:
   postgres:
     image: postgres:18.1
-    env_file: .env
     environment:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_USER: ${DATABASE_USER}
@@ -11,12 +10,12 @@ services:
     ports:
       - 5432:5432
     healthcheck:
-      test: ["CMD", "pg_ready", "-U", "{DATABSE_USER}"]
+      test: ["CMD", "pg_ready", "-U", "${DATABASE_USER}"]
       interval: 5s
       timeout: 5s
 
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:3
     command: -config.file=/etc/loki/loki-config.yaml
     ports:
       - 3100:3100
@@ -25,7 +24,7 @@ services:
       - loki-data:/loki
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3
     command:
       - --web.enable-otlp-receiver
       - --enable-feature=exemplar-storage
@@ -48,7 +47,7 @@ services:
       - 4318:4318
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:12.4
     environment:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
