@@ -1,0 +1,12 @@
+# Editor / OS
+.idea/
+.vs/
+.vscode/
+*.user
+*.suo
+.DS_Store
+
+# Claude Code local state
+.agents/
+.claude/
+skills-lock.json
