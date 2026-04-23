@@ -64,6 +64,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: backend/coverage/**/coverage.cobertura.xml
+          flags: backend
           fail_ci_if_error: true
 
   docker:
