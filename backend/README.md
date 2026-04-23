@@ -5,7 +5,7 @@
 
 A REST API for managing Age of Sigmar army data. Allows clients to browse and manage factions, units, attack profiles,
 weapon effects, abilities, and battle formations.
-Currently incomplete and very basic CRUD. Further completion of the features is necessary and afterwards a list
+Currently incomplete and very basic CRUD. After completion of the current features a list
 builder + play mode are planned.
 
 ## Tech Stack
