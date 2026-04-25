@@ -22,7 +22,7 @@ public sealed class FactionController(FactionService factionService) : Controlle
                 CreatedAtAction(
                     nameof(GetFaction),
                     new { factionId = f.FactionId },
-                    new FactionResponseDto(f.FactionId, f.Name, f.Version)
+                    new FactionResponseDto(f.FactionId, f.Name, f.GrandAlliance, f.Version)
                 ),
             this.ApiProblem
         );
@@ -34,7 +34,14 @@ public sealed class FactionController(FactionService factionService) : Controlle
     public async Task<ActionResult<List<FactionResponseDto>>> GetFactions()
     {
         var factions = await factionService.GetFactions();
-        return Ok(factions.Select(f => new FactionResponseDto(f.FactionId, f.Name, f.Version)));
+        return Ok(
+            factions.Select(f => new FactionResponseDto(
+                f.FactionId,
+                f.Name,
+                f.GrandAlliance,
+                f.Version
+            ))
+        );
     }
 
     [HttpGet("{factionId:int}")]
@@ -45,7 +52,7 @@ public sealed class FactionController(FactionService factionService) : Controlle
     {
         var factionResult = await factionService.GetFaction(factionId);
         return factionResult.Match(
-            f => Ok(new FactionResponseDto(f.FactionId, f.Name, f.Version)),
+            f => Ok(new FactionResponseDto(f.FactionId, f.Name, f.GrandAlliance, f.Version)),
             this.ApiProblem
         );
     }
@@ -62,7 +69,7 @@ public sealed class FactionController(FactionService factionService) : Controlle
     {
         var factionResult = await factionService.ChangeFaction(factionId, factionData);
         return factionResult.Match(
-            f => Ok(new FactionResponseDto(f.FactionId, f.Name, f.Version)),
+            f => Ok(new FactionResponseDto(f.FactionId, f.Name, f.GrandAlliance, f.Version)),
             this.ApiProblem
         );
     }

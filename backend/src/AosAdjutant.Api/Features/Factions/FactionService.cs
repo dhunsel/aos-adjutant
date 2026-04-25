@@ -15,7 +15,11 @@ public sealed class FactionService(ApplicationDbContext context, ILogger<Faction
         if (isDuplicate)
             return Result<Faction>.Failure(FactionErrors.AlreadyExists);
 
-        var newFaction = new Faction { Name = factionData.Name };
+        var newFaction = new Faction
+        {
+            Name = factionData.Name,
+            GrandAlliance = factionData.GrandAlliance,
+        };
 
         context.Factions.Add(newFaction);
         await context.SaveChangesAsync();
@@ -61,6 +65,7 @@ public sealed class FactionService(ApplicationDbContext context, ILogger<Faction
             return Result<Faction>.Failure(FactionErrors.AlreadyExists);
 
         faction.Name = factionData.Name;
+        faction.GrandAlliance = factionData.GrandAlliance;
         await context.SaveChangesAsync();
 
         logger.Log_FactionUpdated(factionId);
