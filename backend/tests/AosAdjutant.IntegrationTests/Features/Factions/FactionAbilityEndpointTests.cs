@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.Abilities;
 using AosAdjutant.Api.Features.Factions;
 using AosAdjutant.IntegrationTests.Fixture;
@@ -24,8 +25,8 @@ public class FactionAbilityEndpointTests(ApiFactory factory) : EndpointTestsBase
             Name = "TestAbility",
             Declaration = "TestDeclaration",
             Effect = "TestEffect",
-            Phase = TurnPhase.Hero,
-            Turn = PlayerTurn.YourTurn,
+            Phase = Phase.Hero,
+            Turn = Turn.YourTurn,
         };
 
     // --- POST /api/factions/{factionId}/abilities ---
@@ -76,8 +77,10 @@ public class FactionAbilityEndpointTests(ApiFactory factory) : EndpointTestsBase
         var response = await Client.GetAsync($"/api/factions/{faction.FactionId}/abilities");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<List<AbilityResponseDto>>(JsonOptions);
+        var body = await response.Content.ReadFromJsonAsync<PaginatedResponse<AbilityResponseDto>>(
+            JsonOptions
+        );
         Assert.NotNull(body);
-        Assert.Single(body);
+        Assert.Single(body.Items);
     }
 }

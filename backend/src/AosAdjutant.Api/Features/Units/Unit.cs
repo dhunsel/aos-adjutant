@@ -21,6 +21,13 @@ public sealed class Unit
     public ICollection<AttackProfile> AttackProfiles { get; } = new List<AttackProfile>();
 }
 
+public enum UnitSortBy
+{
+    Name,
+}
+
+public sealed record UnitQuery : PagedQuery<UnitSortBy> { }
+
 public static class UnitErrors
 {
     public static readonly AppError NotFound = new(ErrorCode.NotFound, "Unit not found.");

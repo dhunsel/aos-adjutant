@@ -4,1683 +4,1821 @@
  */
 
 export interface paths {
-    "/api/weapon-effects": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get all weapon effects */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["WeaponEffectResponseDto"][];
-                        "application/json": components["schemas"]["WeaponEffectResponseDto"][];
-                        "text/json": components["schemas"]["WeaponEffectResponseDto"][];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  "/api/weapon-effects": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/units/{unitId}/abilities": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Get all weapon effects */
+    get: {
+      parameters: {
+        query?: {
+          Page?: number;
+          PageSize?: number;
+          SortBy?: components["schemas"]["WeaponEffectSortBy"];
+          SortDirection?: components["schemas"]["SortDirection"];
         };
-        /** Get all abilities for a unit */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    unitId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AbilityResponseDto"][];
-                        "application/json": components["schemas"]["AbilityResponseDto"][];
-                        "text/json": components["schemas"]["AbilityResponseDto"][];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["PaginatedResponseOfWeaponEffectResponseDto"];
+            "application/json": components["schemas"]["PaginatedResponseOfWeaponEffectResponseDto"];
+            "text/json": components["schemas"]["PaginatedResponseOfWeaponEffectResponseDto"];
+          };
         };
-        put?: never;
-        /** Create an ability for a unit */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    unitId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateAbilityDto"];
-                    "text/json": components["schemas"]["CreateAbilityDto"];
-                    "application/*+json": components["schemas"]["CreateAbilityDto"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AbilityResponseDto"];
-                        "application/json": components["schemas"]["AbilityResponseDto"];
-                        "text/json": components["schemas"]["AbilityResponseDto"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/units/{unitId}/attack-profiles": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get all attack profiles for a unit */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    unitId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AttackProfileResponseDto"][];
-                        "application/json": components["schemas"]["AttackProfileResponseDto"][];
-                        "text/json": components["schemas"]["AttackProfileResponseDto"][];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Create an attack profile under a unit */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    unitId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateAttackProfileDto"];
-                    "text/json": components["schemas"]["CreateAttackProfileDto"];
-                    "application/*+json": components["schemas"]["CreateAttackProfileDto"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AttackProfileResponseDto"];
-                        "application/json": components["schemas"]["AttackProfileResponseDto"];
-                        "text/json": components["schemas"]["AttackProfileResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/units/{unitId}/abilities": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/units/{unitId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Get all abilities for a unit */
+    get: {
+      parameters: {
+        query?: {
+          Phase?: components["schemas"]["Phase"];
+          Page?: number;
+          PageSize?: number;
+          SortBy?: components["schemas"]["AbilitySortBy"];
+          SortDirection?: components["schemas"]["SortDirection"];
         };
-        /** Get a unit by ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    unitId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["UnitResponseDto"];
-                        "application/json": components["schemas"]["UnitResponseDto"];
-                        "text/json": components["schemas"]["UnitResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        header?: never;
+        path: {
+          unitId: number;
         };
-        /** Update a unit */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    unitId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ChangeUnitDto"];
-                    "text/json": components["schemas"]["ChangeUnitDto"];
-                    "application/*+json": components["schemas"]["ChangeUnitDto"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["UnitResponseDto"];
-                        "application/json": components["schemas"]["UnitResponseDto"];
-                        "text/json": components["schemas"]["UnitResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+            "application/json": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+            "text/json": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+          };
         };
-        post?: never;
-        /** Delete a unit */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    unitId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
         };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/factions/{factionId}/abilities": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    put?: never;
+    /** Create an ability for a unit */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          unitId: number;
         };
-        /** Get all abilities for a faction */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    factionId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AbilityResponseDto"][];
-                        "application/json": components["schemas"]["AbilityResponseDto"][];
-                        "text/json": components["schemas"]["AbilityResponseDto"][];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CreateAbilityDto"];
+          "text/json": components["schemas"]["CreateAbilityDto"];
+          "application/*+json": components["schemas"]["CreateAbilityDto"];
         };
-        put?: never;
-        /** Create an ability for a faction */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    factionId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateAbilityDto"];
-                    "text/json": components["schemas"]["CreateAbilityDto"];
-                    "application/*+json": components["schemas"]["CreateAbilityDto"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AbilityResponseDto"];
-                        "application/json": components["schemas"]["AbilityResponseDto"];
-                        "text/json": components["schemas"]["AbilityResponseDto"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["AbilityResponseDto"];
+            "application/json": components["schemas"]["AbilityResponseDto"];
+            "text/json": components["schemas"]["AbilityResponseDto"];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
     };
-    "/api/factions/{factionId}/battle-formations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get all battle formations for a faction */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    factionId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["BattleFormationResponseDto"][];
-                        "application/json": components["schemas"]["BattleFormationResponseDto"][];
-                        "text/json": components["schemas"]["BattleFormationResponseDto"][];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Create a battle formation under a faction */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    factionId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateBattleFormationDto"];
-                    "text/json": components["schemas"]["CreateBattleFormationDto"];
-                    "application/*+json": components["schemas"]["CreateBattleFormationDto"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["BattleFormationResponseDto"];
-                        "application/json": components["schemas"]["BattleFormationResponseDto"];
-                        "text/json": components["schemas"]["BattleFormationResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/units/{unitId}/attack-profiles": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/factions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Get all attack profiles for a unit */
+    get: {
+      parameters: {
+        query?: {
+          IsRanged?: boolean;
+          Page?: number;
+          PageSize?: number;
+          SortBy?: components["schemas"]["AttackProfileSortBy"];
+          SortDirection?: components["schemas"]["SortDirection"];
         };
-        /** Get all factions */
-        get: {
-            parameters: {
-                query?: {
-                    GrandAlliance?: components["schemas"]["GrandAlliance"];
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["FactionResponseDto"][];
-                        "application/json": components["schemas"]["FactionResponseDto"][];
-                        "text/json": components["schemas"]["FactionResponseDto"][];
-                    };
-                };
-            };
+        header?: never;
+        path: {
+          unitId: number;
         };
-        put?: never;
-        /** Create a faction */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateFactionDto"];
-                    "text/json": components["schemas"]["CreateFactionDto"];
-                    "application/*+json": components["schemas"]["CreateFactionDto"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["FactionResponseDto"];
-                        "application/json": components["schemas"]["FactionResponseDto"];
-                        "text/json": components["schemas"]["FactionResponseDto"];
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["PaginatedResponseOfAttackProfileResponseDto"];
+            "application/json": components["schemas"]["PaginatedResponseOfAttackProfileResponseDto"];
+            "text/json": components["schemas"]["PaginatedResponseOfAttackProfileResponseDto"];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
     };
-    "/api/factions/{factionId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    put?: never;
+    /** Create an attack profile under a unit */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          unitId: number;
         };
-        /** Get a faction by ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    factionId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["FactionResponseDto"];
-                        "application/json": components["schemas"]["FactionResponseDto"];
-                        "text/json": components["schemas"]["FactionResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CreateAttackProfileDto"];
+          "text/json": components["schemas"]["CreateAttackProfileDto"];
+          "application/*+json": components["schemas"]["CreateAttackProfileDto"];
         };
-        /** Update a faction */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    factionId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ChangeFactionDto"];
-                    "text/json": components["schemas"]["ChangeFactionDto"];
-                    "application/*+json": components["schemas"]["ChangeFactionDto"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["FactionResponseDto"];
-                        "application/json": components["schemas"]["FactionResponseDto"];
-                        "text/json": components["schemas"]["FactionResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["AttackProfileResponseDto"];
+            "application/json": components["schemas"]["AttackProfileResponseDto"];
+            "text/json": components["schemas"]["AttackProfileResponseDto"];
+          };
         };
-        post?: never;
-        /** Delete a faction */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    factionId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
         };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
     };
-    "/api/factions/{factionId}/units": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get all units for a faction */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    factionId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["UnitResponseDto"][];
-                        "application/json": components["schemas"]["UnitResponseDto"][];
-                        "text/json": components["schemas"]["UnitResponseDto"][];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Create a unit under a faction */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    factionId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateUnitDto"];
-                    "text/json": components["schemas"]["CreateUnitDto"];
-                    "application/*+json": components["schemas"]["CreateUnitDto"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["UnitResponseDto"];
-                        "application/json": components["schemas"]["UnitResponseDto"];
-                        "text/json": components["schemas"]["UnitResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/units/{unitId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/battle-formations/{battleFormationId}/abilities": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Get a unit by ID */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          unitId: number;
         };
-        /** Get all abilities for a battle formation */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    battleFormationId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AbilityResponseDto"][];
-                        "application/json": components["schemas"]["AbilityResponseDto"][];
-                        "text/json": components["schemas"]["AbilityResponseDto"][];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["UnitResponseDto"];
+            "application/json": components["schemas"]["UnitResponseDto"];
+            "text/json": components["schemas"]["UnitResponseDto"];
+          };
         };
-        put?: never;
-        /** Create an ability for a battle formation */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    battleFormationId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateAbilityDto"];
-                    "text/json": components["schemas"]["CreateAbilityDto"];
-                    "application/*+json": components["schemas"]["CreateAbilityDto"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AbilityResponseDto"];
-                        "application/json": components["schemas"]["AbilityResponseDto"];
-                        "text/json": components["schemas"]["AbilityResponseDto"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/battle-formations/{battleFormationId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Update a unit */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          unitId: number;
         };
-        /** Get a battle formation by ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    battleFormationId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["BattleFormationResponseDto"];
-                        "application/json": components["schemas"]["BattleFormationResponseDto"];
-                        "text/json": components["schemas"]["BattleFormationResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ChangeUnitDto"];
+          "text/json": components["schemas"]["ChangeUnitDto"];
+          "application/*+json": components["schemas"]["ChangeUnitDto"];
         };
-        /** Update a battle formation */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    battleFormationId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ChangeBattleFormationDto"];
-                    "text/json": components["schemas"]["ChangeBattleFormationDto"];
-                    "application/*+json": components["schemas"]["ChangeBattleFormationDto"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["BattleFormationResponseDto"];
-                        "application/json": components["schemas"]["BattleFormationResponseDto"];
-                        "text/json": components["schemas"]["BattleFormationResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["UnitResponseDto"];
+            "application/json": components["schemas"]["UnitResponseDto"];
+            "text/json": components["schemas"]["UnitResponseDto"];
+          };
         };
-        post?: never;
-        /** Delete a battle formation */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    battleFormationId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
         };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
     };
-    "/api/attack-profiles/{attackProfileId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    post?: never;
+    /** Delete a unit */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          unitId: number;
         };
-        /** Get an attack profile by ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    attackProfileId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AttackProfileResponseDto"];
-                        "application/json": components["schemas"]["AttackProfileResponseDto"];
-                        "text/json": components["schemas"]["AttackProfileResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        /** Update an attack profile */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    attackProfileId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ChangeAttackProfileDto"];
-                    "text/json": components["schemas"]["ChangeAttackProfileDto"];
-                    "application/*+json": components["schemas"]["ChangeAttackProfileDto"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AttackProfileResponseDto"];
-                        "application/json": components["schemas"]["AttackProfileResponseDto"];
-                        "text/json": components["schemas"]["AttackProfileResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
         };
-        post?: never;
-        /** Delete an attack profile */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    attackProfileId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/abilities": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get all generic abilities */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AbilityResponseDto"][];
-                        "application/json": components["schemas"]["AbilityResponseDto"][];
-                        "text/json": components["schemas"]["AbilityResponseDto"][];
-                    };
-                };
-            };
-        };
-        put?: never;
-        /** Create a generic ability */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["CreateAbilityDto"];
-                    "text/json": components["schemas"]["CreateAbilityDto"];
-                    "application/*+json": components["schemas"]["CreateAbilityDto"];
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AbilityResponseDto"];
-                        "application/json": components["schemas"]["AbilityResponseDto"];
-                        "text/json": components["schemas"]["AbilityResponseDto"];
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/factions/{factionId}/abilities": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/abilities/{abilityId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Get all abilities for a faction */
+    get: {
+      parameters: {
+        query?: {
+          Phase?: components["schemas"]["Phase"];
+          Page?: number;
+          PageSize?: number;
+          SortBy?: components["schemas"]["AbilitySortBy"];
+          SortDirection?: components["schemas"]["SortDirection"];
         };
-        /** Get an ability by ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    abilityId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AbilityResponseDto"];
-                        "application/json": components["schemas"]["AbilityResponseDto"];
-                        "text/json": components["schemas"]["AbilityResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        header?: never;
+        path: {
+          factionId: number;
         };
-        /** Update an ability */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    abilityId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ChangeAbilityDto"];
-                    "text/json": components["schemas"]["ChangeAbilityDto"];
-                    "application/*+json": components["schemas"]["ChangeAbilityDto"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["AbilityResponseDto"];
-                        "application/json": components["schemas"]["AbilityResponseDto"];
-                        "text/json": components["schemas"]["AbilityResponseDto"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+            "application/json": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+            "text/json": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+          };
         };
-        post?: never;
-        /** Delete an ability */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    abilityId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ProblemDetails"];
-                        "application/json": components["schemas"]["ProblemDetails"];
-                        "text/json": components["schemas"]["ProblemDetails"];
-                    };
-                };
-            };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
         };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
+    put?: never;
+    /** Create an ability for a faction */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          factionId: number;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CreateAbilityDto"];
+          "text/json": components["schemas"]["CreateAbilityDto"];
+          "application/*+json": components["schemas"]["CreateAbilityDto"];
+        };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["AbilityResponseDto"];
+            "application/json": components["schemas"]["AbilityResponseDto"];
+            "text/json": components["schemas"]["AbilityResponseDto"];
+          };
+        };
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/factions/{factionId}/battle-formations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get all battle formations for a faction */
+    get: {
+      parameters: {
+        query?: {
+          Page?: number;
+          PageSize?: number;
+          SortBy?: components["schemas"]["BattleFormationSortBy"];
+          SortDirection?: components["schemas"]["SortDirection"];
+        };
+        header?: never;
+        path: {
+          factionId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["PaginatedResponseOfBattleFormationResponseDto"];
+            "application/json": components["schemas"]["PaginatedResponseOfBattleFormationResponseDto"];
+            "text/json": components["schemas"]["PaginatedResponseOfBattleFormationResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Create a battle formation under a faction */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          factionId: number;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CreateBattleFormationDto"];
+          "text/json": components["schemas"]["CreateBattleFormationDto"];
+          "application/*+json": components["schemas"]["CreateBattleFormationDto"];
+        };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["BattleFormationResponseDto"];
+            "application/json": components["schemas"]["BattleFormationResponseDto"];
+            "text/json": components["schemas"]["BattleFormationResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/factions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get all factions */
+    get: {
+      parameters: {
+        query?: {
+          GrandAlliance?: components["schemas"]["GrandAlliance"];
+          Page?: number;
+          PageSize?: number;
+          SortBy?: components["schemas"]["FactionSortBy"];
+          SortDirection?: components["schemas"]["SortDirection"];
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["PaginatedResponseOfFactionResponseDto"];
+            "application/json": components["schemas"]["PaginatedResponseOfFactionResponseDto"];
+            "text/json": components["schemas"]["PaginatedResponseOfFactionResponseDto"];
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Create a faction */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CreateFactionDto"];
+          "text/json": components["schemas"]["CreateFactionDto"];
+          "application/*+json": components["schemas"]["CreateFactionDto"];
+        };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["FactionResponseDto"];
+            "application/json": components["schemas"]["FactionResponseDto"];
+            "text/json": components["schemas"]["FactionResponseDto"];
+          };
+        };
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/factions/{factionId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get a faction by ID */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          factionId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["FactionResponseDto"];
+            "application/json": components["schemas"]["FactionResponseDto"];
+            "text/json": components["schemas"]["FactionResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    /** Update a faction */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          factionId: number;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ChangeFactionDto"];
+          "text/json": components["schemas"]["ChangeFactionDto"];
+          "application/*+json": components["schemas"]["ChangeFactionDto"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["FactionResponseDto"];
+            "application/json": components["schemas"]["FactionResponseDto"];
+            "text/json": components["schemas"]["FactionResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    post?: never;
+    /** Delete a faction */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          factionId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/factions/{factionId}/units": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get all units for a faction */
+    get: {
+      parameters: {
+        query?: {
+          Page?: number;
+          PageSize?: number;
+          SortBy?: components["schemas"]["UnitSortBy"];
+          SortDirection?: components["schemas"]["SortDirection"];
+        };
+        header?: never;
+        path: {
+          factionId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["PaginatedResponseOfUnitResponseDto"];
+            "application/json": components["schemas"]["PaginatedResponseOfUnitResponseDto"];
+            "text/json": components["schemas"]["PaginatedResponseOfUnitResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Create a unit under a faction */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          factionId: number;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CreateUnitDto"];
+          "text/json": components["schemas"]["CreateUnitDto"];
+          "application/*+json": components["schemas"]["CreateUnitDto"];
+        };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["UnitResponseDto"];
+            "application/json": components["schemas"]["UnitResponseDto"];
+            "text/json": components["schemas"]["UnitResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/battle-formations/{battleFormationId}/abilities": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get all abilities for a battle formation */
+    get: {
+      parameters: {
+        query?: {
+          Phase?: components["schemas"]["Phase"];
+          Page?: number;
+          PageSize?: number;
+          SortBy?: components["schemas"]["AbilitySortBy"];
+          SortDirection?: components["schemas"]["SortDirection"];
+        };
+        header?: never;
+        path: {
+          battleFormationId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+            "application/json": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+            "text/json": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Create an ability for a battle formation */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          battleFormationId: number;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CreateAbilityDto"];
+          "text/json": components["schemas"]["CreateAbilityDto"];
+          "application/*+json": components["schemas"]["CreateAbilityDto"];
+        };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["AbilityResponseDto"];
+            "application/json": components["schemas"]["AbilityResponseDto"];
+            "text/json": components["schemas"]["AbilityResponseDto"];
+          };
+        };
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/battle-formations/{battleFormationId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get a battle formation by ID */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          battleFormationId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["BattleFormationResponseDto"];
+            "application/json": components["schemas"]["BattleFormationResponseDto"];
+            "text/json": components["schemas"]["BattleFormationResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    /** Update a battle formation */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          battleFormationId: number;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ChangeBattleFormationDto"];
+          "text/json": components["schemas"]["ChangeBattleFormationDto"];
+          "application/*+json": components["schemas"]["ChangeBattleFormationDto"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["BattleFormationResponseDto"];
+            "application/json": components["schemas"]["BattleFormationResponseDto"];
+            "text/json": components["schemas"]["BattleFormationResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    post?: never;
+    /** Delete a battle formation */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          battleFormationId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/attack-profiles/{attackProfileId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get an attack profile by ID */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          attackProfileId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["AttackProfileResponseDto"];
+            "application/json": components["schemas"]["AttackProfileResponseDto"];
+            "text/json": components["schemas"]["AttackProfileResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    /** Update an attack profile */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          attackProfileId: number;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ChangeAttackProfileDto"];
+          "text/json": components["schemas"]["ChangeAttackProfileDto"];
+          "application/*+json": components["schemas"]["ChangeAttackProfileDto"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["AttackProfileResponseDto"];
+            "application/json": components["schemas"]["AttackProfileResponseDto"];
+            "text/json": components["schemas"]["AttackProfileResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    post?: never;
+    /** Delete an attack profile */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          attackProfileId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/abilities": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get all generic abilities */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+            "application/json": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+            "text/json": components["schemas"]["PaginatedResponseOfAbilityResponseDto"];
+          };
+        };
+      };
+    };
+    put?: never;
+    /** Create a generic ability */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CreateAbilityDto"];
+          "text/json": components["schemas"]["CreateAbilityDto"];
+          "application/*+json": components["schemas"]["CreateAbilityDto"];
+        };
+      };
+      responses: {
+        /** @description Created */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["AbilityResponseDto"];
+            "application/json": components["schemas"]["AbilityResponseDto"];
+            "text/json": components["schemas"]["AbilityResponseDto"];
+          };
+        };
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/abilities/{abilityId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get an ability by ID */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          abilityId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["AbilityResponseDto"];
+            "application/json": components["schemas"]["AbilityResponseDto"];
+            "text/json": components["schemas"]["AbilityResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    /** Update an ability */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          abilityId: number;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ChangeAbilityDto"];
+          "text/json": components["schemas"]["ChangeAbilityDto"];
+          "application/*+json": components["schemas"]["ChangeAbilityDto"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["AbilityResponseDto"];
+            "application/json": components["schemas"]["AbilityResponseDto"];
+            "text/json": components["schemas"]["AbilityResponseDto"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    post?: never;
+    /** Delete an ability */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          abilityId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description No Content */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["ProblemDetails"];
+            "application/json": components["schemas"]["ProblemDetails"];
+            "text/json": components["schemas"]["ProblemDetails"];
+          };
+        };
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        AbilityResponseDto: {
-            /** Format: int32 */
-            abilityId: number;
-            name: string;
-            reaction: null | string;
-            declaration: null | string;
-            effect: string;
-            phase: components["schemas"]["TurnPhase"];
-            restriction: null | components["schemas"]["ActivationRestriction"];
-            turn: null | components["schemas"]["PlayerTurn"];
-            /** Format: uint32 */
-            version: number;
-        };
-        /** @enum {unknown} */
-        ActivationRestriction: "OnceTurnArmy" | "OnceRoundArmy" | "OnceBattleArmy" | "OnceRound" | "OnceBattle" | null;
-        AttackProfileResponseDto: {
-            /** Format: int32 */
-            attackProfileId: number;
-            name: string;
-            isRanged: boolean;
-            /** Format: int32 */
-            range: null | number;
-            attacks: string;
-            /** Format: int32 */
-            toHit: number;
-            /** Format: int32 */
-            toWound: number;
-            /** Format: int32 */
-            rend: null | number;
-            damage: string;
-            /** Format: int32 */
-            unitId: number;
-            /** Format: uint32 */
-            version: number;
-            weaponEffects: components["schemas"]["WeaponEffectResponseDto"][];
-        };
-        BattleFormationResponseDto: {
-            /** Format: int32 */
-            battleFormationId: number;
-            name: string;
-            /** Format: int32 */
-            factionId: number;
-            /** Format: uint32 */
-            version: number;
-        };
-        ChangeAbilityDto: {
-            name: string;
-            reaction?: null | string;
-            declaration?: null | string;
-            effect: string;
-            phase: components["schemas"]["TurnPhase"];
-            restriction?: null | components["schemas"]["ActivationRestriction"];
-            turn?: null | components["schemas"]["PlayerTurn"];
-            /** Format: uint32 */
-            version: number;
-        };
-        ChangeAttackProfileDto: {
-            name: string;
-            isRanged: boolean;
-            /** Format: int32 */
-            range?: null | number;
-            attacks: string;
-            /** Format: int32 */
-            toHit: number;
-            /** Format: int32 */
-            toWound: number;
-            /** Format: int32 */
-            rend?: null | number;
-            damage: string;
-            weaponEffects: string[];
-            /** Format: uint32 */
-            version: number;
-        };
-        ChangeBattleFormationDto: {
-            name: string;
-            /** Format: uint32 */
-            version: number;
-        };
-        ChangeFactionDto: {
-            name: string;
-            grandAlliance: components["schemas"]["GrandAlliance"];
-            /** Format: uint32 */
-            version: number;
-        };
-        ChangeUnitDto: {
-            name: string;
-            /** Format: int32 */
-            health: number;
-            move: string;
-            /** Format: int32 */
-            save: number;
-            /** Format: int32 */
-            control: number;
-            /** Format: int32 */
-            wardSave?: null | number;
-            /** Format: uint32 */
-            version: number;
-        };
-        CreateAbilityDto: {
-            name: string;
-            reaction?: null | string;
-            declaration?: null | string;
-            effect: string;
-            phase: components["schemas"]["TurnPhase"];
-            restriction?: null | components["schemas"]["ActivationRestriction"];
-            turn?: null | components["schemas"]["PlayerTurn"];
-        };
-        CreateAttackProfileDto: {
-            name: string;
-            isRanged: boolean;
-            /** Format: int32 */
-            range?: null | number;
-            attacks: string;
-            /** Format: int32 */
-            toHit: number;
-            /** Format: int32 */
-            toWound: number;
-            /** Format: int32 */
-            rend?: null | number;
-            damage: string;
-            weaponEffects: string[];
-        };
-        CreateBattleFormationDto: {
-            name: string;
-        };
-        CreateFactionDto: {
-            name: string;
-            grandAlliance: components["schemas"]["GrandAlliance"];
-        };
-        CreateUnitDto: {
-            name: string;
-            /** Format: int32 */
-            health: number;
-            move: string;
-            /** Format: int32 */
-            save: number;
-            /** Format: int32 */
-            control: number;
-            /** Format: int32 */
-            wardSave?: null | number;
-        };
-        FactionResponseDto: {
-            /** Format: int32 */
-            factionId: number;
-            name: string;
-            grandAlliance: components["schemas"]["GrandAlliance"];
-            /** Format: uint32 */
-            version: number;
-        };
-        /** @enum {unknown} */
-        GrandAlliance: "Order" | "Death" | "Chaos" | "Destruction";
-        /** @enum {unknown} */
-        PlayerTurn: "YourTurn" | "EnemyTurn" | "AnyTurn" | null;
-        ProblemDetails: {
-            type?: null | string;
-            title?: null | string;
-            /** Format: int32 */
-            status?: null | number;
-            detail?: null | string;
-            instance?: null | string;
-        };
-        /** @enum {unknown} */
-        TurnPhase: "Deployment" | "Start" | "Hero" | "Movement" | "Shooting" | "Charge" | "Combat" | "End" | "Passive";
-        UnitResponseDto: {
-            /** Format: int32 */
-            unitId: number;
-            name: string;
-            /** Format: int32 */
-            health: number;
-            move: string;
-            /** Format: int32 */
-            save: number;
-            /** Format: int32 */
-            control: number;
-            /** Format: int32 */
-            wardSave: null | number;
-            /** Format: int32 */
-            factionId: number;
-            /** Format: uint32 */
-            version: number;
-        };
-        WeaponEffectResponseDto: {
-            key: string;
-            name: string;
-        };
+  schemas: {
+    AbilityResponseDto: {
+      /** Format: int32 */
+      abilityId: number;
+      name: string;
+      reaction: null | string;
+      declaration: null | string;
+      effect: string;
+      phase: components["schemas"]["Phase"];
+      restriction: null | components["schemas"]["Restriction"];
+      turn: null | components["schemas"]["Turn"];
+      /** Format: uint32 */
+      version: number;
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    /** @enum {unknown} */
+    AbilitySortBy: "Name" | "Phase" | null;
+    AttackProfileResponseDto: {
+      /** Format: int32 */
+      attackProfileId: number;
+      name: string;
+      isRanged: boolean;
+      /** Format: int32 */
+      range: null | number;
+      attacks: string;
+      /** Format: int32 */
+      toHit: number;
+      /** Format: int32 */
+      toWound: number;
+      /** Format: int32 */
+      rend: null | number;
+      damage: string;
+      /** Format: int32 */
+      unitId: number;
+      /** Format: uint32 */
+      version: number;
+      weaponEffects: components["schemas"]["WeaponEffectResponseDto"][];
+    };
+    /** @enum {unknown} */
+    AttackProfileSortBy: "Name" | "IsRanged" | null;
+    BattleFormationResponseDto: {
+      /** Format: int32 */
+      battleFormationId: number;
+      name: string;
+      /** Format: int32 */
+      factionId: number;
+      /** Format: uint32 */
+      version: number;
+    };
+    /** @enum {unknown} */
+    BattleFormationSortBy: "Name" | null;
+    ChangeAbilityDto: {
+      name: string;
+      reaction?: null | string;
+      declaration?: null | string;
+      effect: string;
+      phase: components["schemas"]["Phase"];
+      restriction?: null | components["schemas"]["Restriction"];
+      turn?: null | components["schemas"]["Turn"];
+      /** Format: uint32 */
+      version: number;
+    };
+    ChangeAttackProfileDto: {
+      name: string;
+      isRanged: boolean;
+      /** Format: int32 */
+      range?: null | number;
+      attacks: string;
+      /** Format: int32 */
+      toHit: number;
+      /** Format: int32 */
+      toWound: number;
+      /** Format: int32 */
+      rend?: null | number;
+      damage: string;
+      weaponEffects: string[];
+      /** Format: uint32 */
+      version: number;
+    };
+    ChangeBattleFormationDto: {
+      name: string;
+      /** Format: uint32 */
+      version: number;
+    };
+    ChangeFactionDto: {
+      name: string;
+      grandAlliance: components["schemas"]["GrandAlliance"];
+      /** Format: uint32 */
+      version: number;
+    };
+    ChangeUnitDto: {
+      name: string;
+      /** Format: int32 */
+      health: number;
+      move: string;
+      /** Format: int32 */
+      save: number;
+      /** Format: int32 */
+      control: number;
+      /** Format: int32 */
+      wardSave?: null | number;
+      /** Format: uint32 */
+      version: number;
+    };
+    CreateAbilityDto: {
+      name: string;
+      reaction?: null | string;
+      declaration?: null | string;
+      effect: string;
+      phase: components["schemas"]["Phase"];
+      restriction?: null | components["schemas"]["Restriction"];
+      turn?: null | components["schemas"]["Turn"];
+    };
+    CreateAttackProfileDto: {
+      name: string;
+      isRanged: boolean;
+      /** Format: int32 */
+      range?: null | number;
+      attacks: string;
+      /** Format: int32 */
+      toHit: number;
+      /** Format: int32 */
+      toWound: number;
+      /** Format: int32 */
+      rend?: null | number;
+      damage: string;
+      weaponEffects: string[];
+    };
+    CreateBattleFormationDto: {
+      name: string;
+    };
+    CreateFactionDto: {
+      name: string;
+      grandAlliance: components["schemas"]["GrandAlliance"];
+    };
+    CreateUnitDto: {
+      name: string;
+      /** Format: int32 */
+      health: number;
+      move: string;
+      /** Format: int32 */
+      save: number;
+      /** Format: int32 */
+      control: number;
+      /** Format: int32 */
+      wardSave?: null | number;
+    };
+    FactionResponseDto: {
+      /** Format: int32 */
+      factionId: number;
+      name: string;
+      grandAlliance: components["schemas"]["GrandAlliance"];
+      /** Format: uint32 */
+      version: number;
+    };
+    /** @enum {unknown} */
+    FactionSortBy: "Name" | "GrandAlliance" | null;
+    /** @enum {unknown} */
+    GrandAlliance: "Order" | "Death" | "Chaos" | "Destruction";
+    PaginatedResponseOfAbilityResponseDto: {
+      items: components["schemas"]["AbilityResponseDto"][];
+      /** Format: int32 */
+      totalCount: number;
+      /** Format: int32 */
+      page: number;
+      /** Format: int32 */
+      pageSize: number;
+      /** Format: int32 */
+      totalPages: number;
+    };
+    PaginatedResponseOfAttackProfileResponseDto: {
+      items: components["schemas"]["AttackProfileResponseDto"][];
+      /** Format: int32 */
+      totalCount: number;
+      /** Format: int32 */
+      page: number;
+      /** Format: int32 */
+      pageSize: number;
+      /** Format: int32 */
+      totalPages: number;
+    };
+    PaginatedResponseOfBattleFormationResponseDto: {
+      items: components["schemas"]["BattleFormationResponseDto"][];
+      /** Format: int32 */
+      totalCount: number;
+      /** Format: int32 */
+      page: number;
+      /** Format: int32 */
+      pageSize: number;
+      /** Format: int32 */
+      totalPages: number;
+    };
+    PaginatedResponseOfFactionResponseDto: {
+      items: components["schemas"]["FactionResponseDto"][];
+      /** Format: int32 */
+      totalCount: number;
+      /** Format: int32 */
+      page: number;
+      /** Format: int32 */
+      pageSize: number;
+      /** Format: int32 */
+      totalPages: number;
+    };
+    PaginatedResponseOfUnitResponseDto: {
+      items: components["schemas"]["UnitResponseDto"][];
+      /** Format: int32 */
+      totalCount: number;
+      /** Format: int32 */
+      page: number;
+      /** Format: int32 */
+      pageSize: number;
+      /** Format: int32 */
+      totalPages: number;
+    };
+    PaginatedResponseOfWeaponEffectResponseDto: {
+      items: components["schemas"]["WeaponEffectResponseDto"][];
+      /** Format: int32 */
+      totalCount: number;
+      /** Format: int32 */
+      page: number;
+      /** Format: int32 */
+      pageSize: number;
+      /** Format: int32 */
+      totalPages: number;
+    };
+    /** @enum {unknown} */
+    Phase:
+      | "Deployment"
+      | "Start"
+      | "Hero"
+      | "Movement"
+      | "Shooting"
+      | "Charge"
+      | "Combat"
+      | "End"
+      | "Passive";
+    ProblemDetails: {
+      type?: null | string;
+      title?: null | string;
+      /** Format: int32 */
+      status?: null | number;
+      detail?: null | string;
+      instance?: null | string;
+    };
+    /** @enum {unknown} */
+    Restriction:
+      | "OnceTurnArmy"
+      | "OnceRoundArmy"
+      | "OnceBattleArmy"
+      | "OnceRound"
+      | "OnceBattle"
+      | null;
+    /** @enum {unknown} */
+    SortDirection: "Asc" | "Desc";
+    /** @enum {unknown} */
+    Turn: "YourTurn" | "EnemyTurn" | "AnyTurn" | null;
+    UnitResponseDto: {
+      /** Format: int32 */
+      unitId: number;
+      name: string;
+      /** Format: int32 */
+      health: number;
+      move: string;
+      /** Format: int32 */
+      save: number;
+      /** Format: int32 */
+      control: number;
+      /** Format: int32 */
+      wardSave: null | number;
+      /** Format: int32 */
+      factionId: number;
+      /** Format: uint32 */
+      version: number;
+    };
+    /** @enum {unknown} */
+    UnitSortBy: "Name" | null;
+    WeaponEffectResponseDto: {
+      key: string;
+      name: string;
+    };
+    /** @enum {unknown} */
+    WeaponEffectSortBy: "Name" | null;
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;

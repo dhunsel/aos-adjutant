@@ -29,9 +29,13 @@ public sealed class FactionService(ApplicationDbContext context, ILogger<Faction
         return Result<Faction>.Success(newFaction);
     }
 
-    public async Task<List<Faction>> GetFactions(FactionQueryFilter factionQueryFilter)
+    public async Task<PaginatedResponse<Faction>> GetFactions(FactionQuery factionQuery)
     {
-        return await context.Factions.AsNoTracking().ApplyFilters(factionQueryFilter).ToListAsync();
+        return await context
+            .Factions.AsNoTracking()
+            .ApplyFilters(factionQuery)
+            .ApplySorting(factionQuery)
+            .ToPaginatedReponse(factionQuery);
     }
 
     public async Task<Result<Faction>> GetFaction(int factionId)
@@ -124,15 +128,24 @@ public sealed class FactionService(ApplicationDbContext context, ILogger<Faction
         return Result<Ability>.Success(newAbility);
     }
 
-    public async Task<Result<List<Ability>>> GetFactionAbilities(int factionId)
+    public async Task<Result<PaginatedResponse<Ability>>> GetFactionAbilities(
+        int factionId,
+        AbilityQuery abilityQuery
+    )
     {
-        var faction = await context
-            .Factions.AsNoTracking()
-            .Include(f => f.Abilities)
-            .FirstOrDefaultAsync(f => f.FactionId == factionId);
+        var exists = await context.Factions.AnyAsync(f => f.FactionId == factionId);
 
-        return faction is null
-            ? Result<List<Ability>>.Failure(FactionErrors.NotFound)
-            : Result<List<Ability>>.Success(faction.Abilities.ToList());
+        if (!exists)
+            return Result<PaginatedResponse<Ability>>.Failure(FactionErrors.NotFound);
+
+        var abilities = await context
+            .Factions.Where(f => f.FactionId == factionId)
+            .SelectMany(f => f.Abilities)
+            .AsNoTracking()
+            .ApplyFilters(abilityQuery)
+            .ApplySorting(abilityQuery)
+            .ToPaginatedReponse(abilityQuery);
+
+        return Result<PaginatedResponse<Ability>>.Success(abilities);
     }
 }

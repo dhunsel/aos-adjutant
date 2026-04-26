@@ -151,10 +151,10 @@ public class UnitServiceTests
             await context.SaveChangesAsync();
             var service = new UnitService(context, NullLogger<UnitService>.Instance);
 
-            var result = await service.GetFactionUnits(factionId);
+            var result = await service.GetFactionUnits(factionId, new UnitQuery { });
 
             Assert.True(result.IsSuccess);
-            Assert.Equal(2, result.GetValue.Count);
+            Assert.Equal(2, result.GetValue.TotalCount);
         }
 
         [Fact]
@@ -163,7 +163,7 @@ public class UnitServiceTests
             await using var context = CreateContext();
             var service = new UnitService(context, NullLogger<UnitService>.Instance);
 
-            var result = await service.GetFactionUnits(999);
+            var result = await service.GetFactionUnits(999, new UnitQuery { });
 
             Assert.False(result.IsSuccess);
             Assert.Equal(ErrorCode.NotFound, result.GetError.Code);
@@ -411,8 +411,8 @@ public class UnitServiceTests
                 Name = "TestAbility",
                 Declaration = "TestDeclaration",
                 Effect = "TestEffect",
-                Phase = TurnPhase.Hero,
-                Turn = PlayerTurn.YourTurn,
+                Phase = Phase.Hero,
+                Turn = Turn.YourTurn,
             };
 
         [Fact]
@@ -488,7 +488,7 @@ public class UnitServiceTests
                 Name = "TestAbility",
                 Declaration = "TestDeclaration",
                 Effect = "TestEffect",
-                Phase = TurnPhase.Passive,
+                Phase = Phase.Passive,
             };
 
             var result = await service.CreateUnitAbility(unitId, invalidDto);
@@ -525,15 +525,15 @@ public class UnitServiceTests
                     Name = "TestAbility",
                     Declaration = "TestDeclaration",
                     Effect = "TestEffect",
-                    Phase = TurnPhase.Hero,
-                    Turn = PlayerTurn.YourTurn,
+                    Phase = Phase.Hero,
+                    Turn = Turn.YourTurn,
                 }
             );
 
-            var result = await service.GetUnitAbilities(unitId);
+            var result = await service.GetUnitAbilities(unitId, new AbilityQuery { });
 
             Assert.True(result.IsSuccess);
-            Assert.Single(result.GetValue);
+            Assert.Single(result.GetValue.Items);
         }
 
         [Fact]
@@ -542,7 +542,7 @@ public class UnitServiceTests
             await using var context = CreateContext();
             var service = new UnitService(context, NullLogger<UnitService>.Instance);
 
-            var result = await service.GetUnitAbilities(999);
+            var result = await service.GetUnitAbilities(999, new AbilityQuery { });
 
             Assert.False(result.IsSuccess);
             Assert.Equal(ErrorCode.NotFound, result.GetError.Code);

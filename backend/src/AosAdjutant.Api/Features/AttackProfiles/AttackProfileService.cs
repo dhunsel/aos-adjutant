@@ -67,17 +67,23 @@ public sealed class AttackProfileService(
         return Result<AttackProfile>.Success(newAttackProfile);
     }
 
-    public async Task<Result<List<AttackProfile>>> GetUnitAttackProfiles(int unitId)
+    public async Task<Result<PaginatedResponse<AttackProfile>>> GetUnitAttackProfiles(
+        int unitId,
+        AttackProfileQuery attackProfileQuery
+    )
     {
         var unitExists = await context.Units.AnyAsync(u => u.UnitId == unitId);
         if (!unitExists)
-            return Result<List<AttackProfile>>.Failure(UnitErrors.NotFound);
+            return Result<PaginatedResponse<AttackProfile>>.Failure(UnitErrors.NotFound);
 
         var attackProfiles = await context
             .AttackProfiles.AsNoTracking()
             .Where(ap => ap.UnitId == unitId)
-            .ToListAsync();
-        return Result<List<AttackProfile>>.Success(attackProfiles);
+            .ApplyFilters(attackProfileQuery)
+            .ApplySorting(attackProfileQuery)
+            .ToPaginatedReponse(attackProfileQuery);
+
+        return Result<PaginatedResponse<AttackProfile>>.Success(attackProfiles);
     }
 
     public async Task<Result<AttackProfile>> GetAttackProfile(int attackProfileId)

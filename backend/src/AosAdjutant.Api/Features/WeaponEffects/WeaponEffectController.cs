@@ -1,3 +1,4 @@
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +12,17 @@ public sealed class WeaponEffectController(ApplicationDbContext context) : Contr
 {
     [HttpGet]
     [EndpointSummary("Get all weapon effects")]
-    [ProducesResponseType<List<WeaponEffectResponseDto>>(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<WeaponEffectResponseDto>>> GetWeaponEffects()
+    [ProducesResponseType<PaginatedResponse<WeaponEffectResponseDto>>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<PaginatedResponse<WeaponEffectResponseDto>>> GetWeaponEffects(
+        [FromQuery] WeaponEffectQuery weaponEffectQuery
+    )
     {
         var weaponEffects = await context
             .WeaponEffects.AsNoTracking()
+            .ApplyFilters(weaponEffectQuery)
+            .ApplySorting(weaponEffectQuery)
             .Select(we => new WeaponEffectResponseDto(we.Key, we.Name))
-            .ToListAsync();
+            .ToPaginatedReponse(weaponEffectQuery);
         return Ok(weaponEffects);
     }
 }

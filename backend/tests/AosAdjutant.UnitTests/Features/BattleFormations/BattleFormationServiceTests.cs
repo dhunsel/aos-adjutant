@@ -110,10 +110,13 @@ public class BattleFormationServiceTests
                 NullLogger<BattleFormationService>.Instance
             );
 
-            var result = await service.GetFactionBattleFormations(factionId);
+            var result = await service.GetFactionBattleFormations(
+                factionId,
+                new BattleFormationQuery { }
+            );
 
             Assert.True(result.IsSuccess);
-            Assert.Equal(2, result.GetValue.Count);
+            Assert.Equal(2, result.GetValue.TotalCount);
         }
 
         [Fact]
@@ -125,7 +128,10 @@ public class BattleFormationServiceTests
                 NullLogger<BattleFormationService>.Instance
             );
 
-            var result = await service.GetFactionBattleFormations(999);
+            var result = await service.GetFactionBattleFormations(
+                999,
+                new BattleFormationQuery { }
+            );
 
             Assert.False(result.IsSuccess);
             Assert.Equal(ErrorCode.NotFound, result.GetError.Code);
@@ -329,8 +335,8 @@ public class BattleFormationServiceTests
                 Name = "TestAbility",
                 Declaration = "TestDeclaration",
                 Effect = "TestEffect",
-                Phase = TurnPhase.Hero,
-                Turn = PlayerTurn.YourTurn,
+                Phase = Phase.Hero,
+                Turn = Turn.YourTurn,
             };
 
         [Fact]
@@ -404,7 +410,7 @@ public class BattleFormationServiceTests
                 Name = "TestAbility",
                 Declaration = "TestDeclaration",
                 Effect = "TestEffect",
-                Phase = TurnPhase.Passive,
+                Phase = Phase.Passive,
             };
 
             var result = await service.CreateBattleFormationAbility(battleFormationId, invalidDto);
@@ -437,15 +443,18 @@ public class BattleFormationServiceTests
                     Name = "TestAbility",
                     Declaration = "TestDeclaration",
                     Effect = "TestEffect",
-                    Phase = TurnPhase.Hero,
-                    Turn = PlayerTurn.YourTurn,
+                    Phase = Phase.Hero,
+                    Turn = Turn.YourTurn,
                 }
             );
 
-            var result = await service.GetBattleFormationAbilities(battleFormationId);
+            var result = await service.GetBattleFormationAbilities(
+                battleFormationId,
+                new AbilityQuery { }
+            );
 
             Assert.True(result.IsSuccess);
-            Assert.Single(result.GetValue);
+            Assert.Single(result.GetValue.Items);
         }
 
         [Fact]
@@ -457,7 +466,7 @@ public class BattleFormationServiceTests
                 NullLogger<BattleFormationService>.Instance
             );
 
-            var result = await service.GetBattleFormationAbilities(999);
+            var result = await service.GetBattleFormationAbilities(999, new AbilityQuery { });
 
             Assert.False(result.IsSuccess);
             Assert.Equal(ErrorCode.NotFound, result.GetError.Code);

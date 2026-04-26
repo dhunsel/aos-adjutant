@@ -44,17 +44,18 @@ public sealed class FactionAbilityController(FactionService factionService) : Co
 
     [HttpGet]
     [EndpointSummary("Get all abilities for a faction")]
-    [ProducesResponseType<List<AbilityResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PaginatedResponse<AbilityResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<AbilityResponseDto>>> GetAbilities(
-        [FromRoute] int factionId
+    public async Task<ActionResult<PaginatedResponse<AbilityResponseDto>>> GetAbilities(
+        [FromRoute] int factionId,
+        [FromQuery] AbilityQuery abilityQuery
     )
     {
-        var abilitiesResult = await factionService.GetFactionAbilities(factionId);
+        var abilitiesResult = await factionService.GetFactionAbilities(factionId, abilityQuery);
         return abilitiesResult.Match(
             abilities =>
                 Ok(
-                    abilities.Select(a => new AbilityResponseDto(
+                    abilities.Map(a => new AbilityResponseDto(
                         a.AbilityId,
                         a.Name,
                         a.Reaction,

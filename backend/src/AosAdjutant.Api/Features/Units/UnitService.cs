@@ -41,17 +41,23 @@ public sealed class UnitService(ApplicationDbContext context, ILogger<UnitServic
         return Result<Unit>.Success(newUnit);
     }
 
-    public async Task<Result<List<Unit>>> GetFactionUnits(int factionId)
+    public async Task<Result<PaginatedResponse<Unit>>> GetFactionUnits(
+        int factionId,
+        UnitQuery unitQuery
+    )
     {
         var factionExists = await context.Factions.AnyAsync(f => f.FactionId == factionId);
         if (!factionExists)
-            return Result<List<Unit>>.Failure(FactionErrors.NotFound);
+            return Result<PaginatedResponse<Unit>>.Failure(FactionErrors.NotFound);
 
         var units = await context
             .Units.AsNoTracking()
             .Where(u => u.FactionId == factionId)
-            .ToListAsync();
-        return Result<List<Unit>>.Success(units);
+            .ApplyFilters(unitQuery)
+            .ApplySorting(unitQuery)
+            .ToPaginatedReponse(unitQuery);
+
+        return Result<PaginatedResponse<Unit>>.Success(units);
     }
 
     public async Task<Result<Unit>> GetUnit(int unitId)
@@ -144,15 +150,24 @@ public sealed class UnitService(ApplicationDbContext context, ILogger<UnitServic
         return Result<Ability>.Success(newAbility);
     }
 
-    public async Task<Result<List<Ability>>> GetUnitAbilities(int unitId)
+    public async Task<Result<PaginatedResponse<Ability>>> GetUnitAbilities(
+        int unitId,
+        AbilityQuery abilityQuery
+    )
     {
-        var unit = await context
-            .Units.AsNoTracking()
-            .Include(u => u.Abilities)
-            .FirstOrDefaultAsync(u => u.UnitId == unitId);
+        var exists = await context.Units.AnyAsync(u => u.UnitId == unitId);
 
-        return unit is null
-            ? Result<List<Ability>>.Failure(UnitErrors.NotFound)
-            : Result<List<Ability>>.Success(unit.Abilities.ToList());
+        if (!exists)
+            return Result<PaginatedResponse<Ability>>.Failure(UnitErrors.NotFound);
+
+        var abilities = await context
+            .Units.Where(u => u.UnitId == unitId)
+            .SelectMany(u => u.Abilities)
+            .AsNoTracking()
+            .ApplyFilters(abilityQuery)
+            .ApplySorting(abilityQuery)
+            .ToPaginatedReponse(abilityQuery);
+
+        return Result<PaginatedResponse<Ability>>.Success(abilities);
     }
 }

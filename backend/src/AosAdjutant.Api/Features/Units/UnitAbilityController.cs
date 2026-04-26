@@ -44,15 +44,18 @@ public sealed class UnitAbilityController(UnitService unitService) : ControllerB
 
     [HttpGet]
     [EndpointSummary("Get all abilities for a unit")]
-    [ProducesResponseType<List<AbilityResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PaginatedResponse<AbilityResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<AbilityResponseDto>>> GetAbilities([FromRoute] int unitId)
+    public async Task<ActionResult<PaginatedResponse<AbilityResponseDto>>> GetAbilities(
+        [FromRoute] int unitId,
+        [FromQuery] AbilityQuery abilityQuery
+    )
     {
-        var abilitiesResult = await unitService.GetUnitAbilities(unitId);
+        var abilitiesResult = await unitService.GetUnitAbilities(unitId, abilityQuery);
         return abilitiesResult.Match(
             abilities =>
                 Ok(
-                    abilities.Select(a => new AbilityResponseDto(
+                    abilities.Map(a => new AbilityResponseDto(
                         a.AbilityId,
                         a.Name,
                         a.Reaction,

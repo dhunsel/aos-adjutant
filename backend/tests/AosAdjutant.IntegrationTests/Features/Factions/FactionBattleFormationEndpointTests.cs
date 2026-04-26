@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.BattleFormations;
 using AosAdjutant.Api.Features.Factions;
 using AosAdjutant.IntegrationTests.Fixture;
@@ -71,10 +72,10 @@ public class FactionBattleFormationEndpointTests(ApiFactory factory) : EndpointT
         );
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<List<BattleFormationResponseDto>>(
-            JsonOptions
-        );
+        var body = await response.Content.ReadFromJsonAsync<
+            PaginatedResponse<BattleFormationResponseDto>
+        >(JsonOptions);
         Assert.NotNull(body);
-        Assert.Single(body);
+        Assert.Single(body.Items);
     }
 }

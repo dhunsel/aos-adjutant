@@ -42,17 +42,23 @@ public sealed class BattleFormationService(
         return Result<BattleFormation>.Success(newBattleFormation);
     }
 
-    public async Task<Result<List<BattleFormation>>> GetFactionBattleFormations(int factionId)
+    public async Task<Result<PaginatedResponse<BattleFormation>>> GetFactionBattleFormations(
+        int factionId,
+        BattleFormationQuery battleFormationQuery
+    )
     {
         var factionExists = await context.Factions.AnyAsync(f => f.FactionId == factionId);
         if (!factionExists)
-            return Result<List<BattleFormation>>.Failure(FactionErrors.NotFound);
+            return Result<PaginatedResponse<BattleFormation>>.Failure(FactionErrors.NotFound);
 
         var battleFormations = await context
             .BattleFormations.AsNoTracking()
             .Where(bf => bf.FactionId == factionId)
-            .ToListAsync();
-        return Result<List<BattleFormation>>.Success(battleFormations);
+            .ApplyFilters(battleFormationQuery)
+            .ApplySorting(battleFormationQuery)
+            .ToPaginatedReponse(battleFormationQuery);
+
+        return Result<PaginatedResponse<BattleFormation>>.Success(battleFormations);
     }
 
     public async Task<Result<BattleFormation>> GetBattleFormation(int battleFormationId)
@@ -156,15 +162,26 @@ public sealed class BattleFormationService(
         return Result<Ability>.Success(newAbility);
     }
 
-    public async Task<Result<List<Ability>>> GetBattleFormationAbilities(int battleFormationId)
+    public async Task<Result<PaginatedResponse<Ability>>> GetBattleFormationAbilities(
+        int battleFormationId,
+        AbilityQuery abilityQuery
+    )
     {
-        var battleFormation = await context
-            .BattleFormations.AsNoTracking()
-            .Include(bf => bf.Abilities)
-            .FirstOrDefaultAsync(bf => bf.BattleFormationId == battleFormationId);
+        var exists = await context.BattleFormations.AnyAsync(bf =>
+            bf.BattleFormationId == battleFormationId
+        );
 
-        return battleFormation is null
-            ? Result<List<Ability>>.Failure(BattleFormationErrors.NotFound)
-            : Result<List<Ability>>.Success(battleFormation.Abilities.ToList());
+        if (!exists)
+            return Result<PaginatedResponse<Ability>>.Failure(BattleFormationErrors.NotFound);
+
+        var abilities = await context
+            .BattleFormations.Where(bf => bf.BattleFormationId == battleFormationId)
+            .SelectMany(bf => bf.Abilities)
+            .AsNoTracking()
+            .ApplyFilters(abilityQuery)
+            .ApplySorting(abilityQuery)
+            .ToPaginatedReponse(abilityQuery);
+
+        return Result<PaginatedResponse<Ability>>.Success(abilities);
     }
 }

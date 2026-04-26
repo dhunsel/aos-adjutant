@@ -66,9 +66,9 @@ public class FactionServiceTests
             await context.SaveChangesAsync();
             var service = new FactionService(context, NullLogger<FactionService>.Instance);
 
-            var result = await service.GetFactions(new FactionQueryFilter { });
+            var result = await service.GetFactions(new FactionQuery { });
 
-            Assert.Equal(2, result.Count);
+            Assert.Equal(2, result.TotalCount);
         }
 
         [Fact]
@@ -77,9 +77,9 @@ public class FactionServiceTests
             await using var context = CreateContext();
             var service = new FactionService(context, NullLogger<FactionService>.Instance);
 
-            var result = await service.GetFactions(new FactionQueryFilter { });
+            var result = await service.GetFactions(new FactionQuery { });
 
-            Assert.Empty(result);
+            Assert.Empty(result.Items);
         }
 
         [Fact]
@@ -94,11 +94,11 @@ public class FactionServiceTests
             var service = new FactionService(context, NullLogger<FactionService>.Instance);
 
             var result = await service.GetFactions(
-                new FactionQueryFilter { GrandAlliance = GrandAlliance.Order }
+                new FactionQuery { GrandAlliance = GrandAlliance.Order }
             );
 
-            Assert.Single(result);
-            Assert.Equal("Order Faction", result[0].Name);
+            Assert.Single(result.Items);
+            Assert.Equal("Order Faction", result.Items[0].Name);
         }
     }
 
@@ -293,8 +293,8 @@ public class FactionServiceTests
                 Name = "TestAbility",
                 Declaration = "TestDeclaration",
                 Effect = "TestEffect",
-                Phase = TurnPhase.Hero,
-                Turn = PlayerTurn.YourTurn,
+                Phase = Phase.Hero,
+                Turn = Turn.YourTurn,
             };
 
         [Fact]
@@ -318,9 +318,9 @@ public class FactionServiceTests
                     Reaction = (string?)null,
                     Declaration = "TestDeclaration",
                     Effect = "TestEffect",
-                    Phase = TurnPhase.Hero,
-                    Restriction = (ActivationRestriction?)null,
-                    Turn = (PlayerTurn?)PlayerTurn.YourTurn,
+                    Phase = Phase.Hero,
+                    Restriction = (Restriction?)null,
+                    Turn = (Turn?)Turn.YourTurn,
                     IsGeneric = false,
                 },
                 result.GetValue
@@ -356,7 +356,7 @@ public class FactionServiceTests
                 Name = "TestAbility",
                 Declaration = "TestDeclaration",
                 Effect = "TestEffect",
-                Phase = TurnPhase.Passive,
+                Phase = Phase.Passive,
             };
 
             var result = await service.CreateFactionAbility(factionId, invalidDto);
@@ -386,15 +386,15 @@ public class FactionServiceTests
                     Name = "TestAbility",
                     Declaration = "TestDeclaration",
                     Effect = "TestEffect",
-                    Phase = TurnPhase.Hero,
-                    Turn = PlayerTurn.YourTurn,
+                    Phase = Phase.Hero,
+                    Turn = Turn.YourTurn,
                 }
             );
 
-            var result = await service.GetFactionAbilities(factionId);
+            var result = await service.GetFactionAbilities(factionId, new AbilityQuery { });
 
             Assert.True(result.IsSuccess);
-            Assert.Single(result.GetValue);
+            Assert.Single(result.GetValue.Items);
         }
 
         [Fact]
@@ -403,7 +403,7 @@ public class FactionServiceTests
             await using var context = CreateContext();
             var service = new FactionService(context, NullLogger<FactionService>.Instance);
 
-            var result = await service.GetFactionAbilities(999);
+            var result = await service.GetFactionAbilities(999, new AbilityQuery { });
 
             Assert.False(result.IsSuccess);
             Assert.Equal(ErrorCode.NotFound, result.GetError.Code);
