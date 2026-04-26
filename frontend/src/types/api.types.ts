@@ -3,11 +3,11 @@ import type { components, paths } from "./schema.d";
 type Schemas = components["schemas"];
 
 export interface PaginatedResponse<T> {
-  items?: T[];
-  totalCount?: number;
-  page?: number;
-  pageSize?: number;
-  totalPages?: number;
+  items: T[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
 }
 
 export interface PagedQuery<TSortBy = never> {

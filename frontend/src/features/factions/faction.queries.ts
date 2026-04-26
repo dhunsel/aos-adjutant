@@ -1,5 +1,10 @@
 import { api } from "@/lib/api-client";
-import type { Faction, ChangeFactionRequest, CreateFactionRequest } from "@/types/api.types";
+import type {
+  PaginatedResponse,
+  Faction,
+  ChangeFactionRequest,
+  CreateFactionRequest,
+} from "@/types/api.types";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const factionKeys = {
@@ -10,7 +15,10 @@ const factionKeys = {
 };
 
 export const factionsQueryOptions = () =>
-  queryOptions({ queryKey: factionKeys.lists(), queryFn: () => api.get<Faction[]>("/factions") });
+  queryOptions({
+    queryKey: factionKeys.lists(),
+    queryFn: () => api.get<PaginatedResponse<Faction>>("/factions"),
+  });
 
 export const useFactions = () => useQuery(factionsQueryOptions());
 

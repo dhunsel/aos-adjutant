@@ -22,9 +22,9 @@ function App() {
     <>
       <h1 className="bg-amber-700 text-3xl font-bold">Aos Adjutant</h1>
       <Button>Test button</Button>
-      <div>Faction 1: {factions[0]?.name}</div>
-      <div>Faction 2: {factions[1]?.name}</div>
-      <div>Faction 3: {factions[2]?.name}</div>
+      <div>Faction 1: {factions.items[0]?.name}</div>
+      <div>Faction 2: {factions.items[1]?.name}</div>
+      <div>Faction 3: {factions.items[2]?.name}</div>
     </>
   );
 }

@@ -3111,6 +3111,13 @@
         ]
       },
       "PaginatedResponseOfAbilityResponseDto": {
+        "required": [
+          "items",
+          "totalCount",
+          "page",
+          "pageSize",
+          "totalPages"
+        ],
         "type": "object",
         "properties": {
           "items": {
@@ -3138,6 +3145,13 @@
         }
       },
       "PaginatedResponseOfAttackProfileResponseDto": {
+        "required": [
+          "items",
+          "totalCount",
+          "page",
+          "pageSize",
+          "totalPages"
+        ],
         "type": "object",
         "properties": {
           "items": {
@@ -3165,6 +3179,13 @@
         }
       },
       "PaginatedResponseOfBattleFormationResponseDto": {
+        "required": [
+          "items",
+          "totalCount",
+          "page",
+          "pageSize",
+          "totalPages"
+        ],
         "type": "object",
         "properties": {
           "items": {
@@ -3192,6 +3213,13 @@
         }
       },
       "PaginatedResponseOfFactionResponseDto": {
+        "required": [
+          "items",
+          "totalCount",
+          "page",
+          "pageSize",
+          "totalPages"
+        ],
         "type": "object",
         "properties": {
           "items": {
@@ -3219,6 +3247,13 @@
         }
       },
       "PaginatedResponseOfUnitResponseDto": {
+        "required": [
+          "items",
+          "totalCount",
+          "page",
+          "pageSize",
+          "totalPages"
+        ],
         "type": "object",
         "properties": {
           "items": {
@@ -3246,6 +3281,13 @@
         }
       },
       "PaginatedResponseOfWeaponEffectResponseDto": {
+        "required": [
+          "items",
+          "totalCount",
+          "page",
+          "pageSize",
+          "totalPages"
+        ],
         "type": "object",
         "properties": {
           "items": {

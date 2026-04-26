@@ -1691,70 +1691,70 @@ export interface components {
     /** @enum {unknown} */
     GrandAlliance: "Order" | "Death" | "Chaos" | "Destruction";
     PaginatedResponseOfAbilityResponseDto: {
-      items?: components["schemas"]["AbilityResponseDto"][];
+      items: components["schemas"]["AbilityResponseDto"][];
       /** Format: int32 */
-      totalCount?: number;
+      totalCount: number;
       /** Format: int32 */
-      page?: number;
+      page: number;
       /** Format: int32 */
-      pageSize?: number;
+      pageSize: number;
       /** Format: int32 */
-      totalPages?: number;
+      totalPages: number;
     };
     PaginatedResponseOfAttackProfileResponseDto: {
-      items?: components["schemas"]["AttackProfileResponseDto"][];
+      items: components["schemas"]["AttackProfileResponseDto"][];
       /** Format: int32 */
-      totalCount?: number;
+      totalCount: number;
       /** Format: int32 */
-      page?: number;
+      page: number;
       /** Format: int32 */
-      pageSize?: number;
+      pageSize: number;
       /** Format: int32 */
-      totalPages?: number;
+      totalPages: number;
     };
     PaginatedResponseOfBattleFormationResponseDto: {
-      items?: components["schemas"]["BattleFormationResponseDto"][];
+      items: components["schemas"]["BattleFormationResponseDto"][];
       /** Format: int32 */
-      totalCount?: number;
+      totalCount: number;
       /** Format: int32 */
-      page?: number;
+      page: number;
       /** Format: int32 */
-      pageSize?: number;
+      pageSize: number;
       /** Format: int32 */
-      totalPages?: number;
+      totalPages: number;
     };
     PaginatedResponseOfFactionResponseDto: {
-      items?: components["schemas"]["FactionResponseDto"][];
+      items: components["schemas"]["FactionResponseDto"][];
       /** Format: int32 */
-      totalCount?: number;
+      totalCount: number;
       /** Format: int32 */
-      page?: number;
+      page: number;
       /** Format: int32 */
-      pageSize?: number;
+      pageSize: number;
       /** Format: int32 */
-      totalPages?: number;
+      totalPages: number;
     };
     PaginatedResponseOfUnitResponseDto: {
-      items?: components["schemas"]["UnitResponseDto"][];
+      items: components["schemas"]["UnitResponseDto"][];
       /** Format: int32 */
-      totalCount?: number;
+      totalCount: number;
       /** Format: int32 */
-      page?: number;
+      page: number;
       /** Format: int32 */
-      pageSize?: number;
+      pageSize: number;
       /** Format: int32 */
-      totalPages?: number;
+      totalPages: number;
     };
     PaginatedResponseOfWeaponEffectResponseDto: {
-      items?: components["schemas"]["WeaponEffectResponseDto"][];
+      items: components["schemas"]["WeaponEffectResponseDto"][];
       /** Format: int32 */
-      totalCount?: number;
+      totalCount: number;
       /** Format: int32 */
-      page?: number;
+      page: number;
       /** Format: int32 */
-      pageSize?: number;
+      pageSize: number;
       /** Format: int32 */
-      totalPages?: number;
+      totalPages: number;
     };
     /** @enum {unknown} */
     Phase:
