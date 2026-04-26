@@ -72,7 +72,9 @@ public class FactionBattleFormationEndpointTests(ApiFactory factory) : EndpointT
         );
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<PaginatedResponse<BattleFormationResponseDto>>(JsonOptions);
+        var body = await response.Content.ReadFromJsonAsync<
+            PaginatedResponse<BattleFormationResponseDto>
+        >(JsonOptions);
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }

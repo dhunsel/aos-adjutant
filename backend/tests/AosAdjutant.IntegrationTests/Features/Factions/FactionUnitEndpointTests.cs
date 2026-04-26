@@ -88,7 +88,9 @@ public class FactionUnitEndpointTests(ApiFactory factory) : EndpointTestsBase(fa
         var response = await Client.GetAsync($"/api/factions/{faction.FactionId}/units");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<PaginatedResponse<UnitResponseDto>>(JsonOptions);
+        var body = await response.Content.ReadFromJsonAsync<PaginatedResponse<UnitResponseDto>>(
+            JsonOptions
+        );
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }

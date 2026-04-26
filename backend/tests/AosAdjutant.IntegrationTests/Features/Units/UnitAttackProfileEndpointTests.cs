@@ -131,7 +131,9 @@ public class UnitAttackProfileEndpointTests(ApiFactory factory) : EndpointTestsB
         var response = await Client.GetAsync($"/api/units/{unit.UnitId}/attack-profiles");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<PaginatedResponse<AttackProfileResponseDto>>(JsonOptions);
+        var body = await response.Content.ReadFromJsonAsync<
+            PaginatedResponse<AttackProfileResponseDto>
+        >(JsonOptions);
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }
