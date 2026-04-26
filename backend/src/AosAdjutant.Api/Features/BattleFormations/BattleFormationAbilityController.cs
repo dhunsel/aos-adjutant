@@ -48,7 +48,7 @@ public sealed class BattleFormationAbilityController(BattleFormationService batt
 
     [HttpGet]
     [EndpointSummary("Get all abilities for a battle formation")]
-    [ProducesResponseType<List<AbilityResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PaginatedResponse<AbilityResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<PaginatedResponse<AbilityResponseDto>>> GetAbilities(
         [FromRoute] int battleFormationId,

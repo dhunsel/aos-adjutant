@@ -53,9 +53,9 @@ public sealed class UnitAttackProfileController(AttackProfileService attackProfi
 
     [HttpGet]
     [EndpointSummary("Get all attack profiles for a unit")]
-    [ProducesResponseType<List<AttackProfileResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PaginatedResponse<AttackProfileResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<AttackProfileResponseDto>>> GetAttackProfiles(
+    public async Task<ActionResult<PaginatedResponse<AttackProfileResponseDto>>> GetAttackProfiles(
         [FromRoute] int unitId,
         [FromQuery] AttackProfileQuery attackProfileQuery
     )

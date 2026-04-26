@@ -40,8 +40,8 @@ public sealed class AbilityController(AbilityService abilityService) : Controlle
 
     [HttpGet]
     [EndpointSummary("Get all generic abilities")]
-    [ProducesResponseType<List<AbilityResponseDto>>(StatusCodes.Status200OK)]
-    public Task<ActionResult<List<AbilityResponseDto>>> GetAbilities()
+    [ProducesResponseType<PaginatedResponse<AbilityResponseDto>>(StatusCodes.Status200OK)]
+    public Task<ActionResult<PaginatedResponse<AbilityResponseDto>>> GetAbilities()
     {
 #pragma warning disable MA0025
         throw new NotImplementedException();

@@ -12,7 +12,7 @@ public sealed class WeaponEffectController(ApplicationDbContext context) : Contr
 {
     [HttpGet]
     [EndpointSummary("Get all weapon effects")]
-    [ProducesResponseType<List<WeaponEffectResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PaginatedResponse<WeaponEffectResponseDto>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<PaginatedResponse<WeaponEffectResponseDto>>> GetWeaponEffects(
         [FromQuery] WeaponEffectQuery weaponEffectQuery
     )

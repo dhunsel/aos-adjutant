@@ -43,9 +43,9 @@ public sealed class FactionBattleFormationController(BattleFormationService batt
 
     [HttpGet]
     [EndpointSummary("Get all battle formations for a faction")]
-    [ProducesResponseType<List<BattleFormationResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PaginatedResponse<BattleFormationResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<BattleFormationResponseDto>>> GetBattleFormations(
+    public async Task<ActionResult<PaginatedResponse<BattleFormationResponseDto>>> GetBattleFormations(
         [FromRoute] int factionId,
         [FromQuery] BattleFormationQuery battleFormationQuery
     )

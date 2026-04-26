@@ -44,9 +44,9 @@ public sealed class FactionAbilityController(FactionService factionService) : Co
 
     [HttpGet]
     [EndpointSummary("Get all abilities for a faction")]
-    [ProducesResponseType<List<AbilityResponseDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PaginatedResponse<AbilityResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<AbilityResponseDto>>> GetAbilities(
+    public async Task<ActionResult<PaginatedResponse<AbilityResponseDto>>> GetAbilities(
         [FromRoute] int factionId,
         [FromQuery] AbilityQuery abilityQuery
     )
