@@ -32,10 +32,10 @@ public sealed class FactionController(FactionService factionService) : Controlle
     [EndpointSummary("Get all factions")]
     [ProducesResponseType<List<FactionResponseDto>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<FactionResponseDto>>> GetFactions(
-        [FromQuery] FactionQueryFilter factionQueryFilter
+        [FromQuery] FactionQuery factionQuery
     )
     {
-        var factions = await factionService.GetFactions(factionQueryFilter);
+        var factions = await factionService.GetFactions(factionQuery);
         return Ok(
             factions.Select(f => new FactionResponseDto(
                 f.FactionId,

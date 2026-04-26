@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using AosAdjutant.Api.Common;
 
 namespace AosAdjutant.Api.Features.Factions;
 
@@ -24,7 +25,7 @@ public sealed record ChangeFactionDto
     public required uint Version { get; init; }
 }
 
-public sealed record FactionQueryFilter
+public sealed record FactionQuery : PagedQuery
 {
     public GrandAlliance? GrandAlliance { get; init; }
 }
