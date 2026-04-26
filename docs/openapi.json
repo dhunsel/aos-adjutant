@@ -11,32 +11,55 @@
           "Weapon Effects"
         ],
         "summary": "Get all weapon effects",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/WeaponEffectSortBy"
+            }
+          },
+          {
+            "name": "SortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeaponEffectResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfWeaponEffectResponseDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeaponEffectResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfWeaponEffectResponseDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeaponEffectResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfWeaponEffectResponseDto"
                 }
               }
             }
@@ -158,6 +181,43 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "Phase",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Phase"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AbilitySortBy"
+            }
+          },
+          {
+            "name": "SortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
           }
         ],
         "responses": {
@@ -166,26 +226,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               }
             }
@@ -327,6 +378,43 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "IsRanged",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AttackProfileSortBy"
+            }
+          },
+          {
+            "name": "SortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
           }
         ],
         "responses": {
@@ -335,26 +423,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AttackProfileResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAttackProfileResponseDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AttackProfileResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAttackProfileResponseDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AttackProfileResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAttackProfileResponseDto"
                 }
               }
             }
@@ -698,6 +777,43 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "Phase",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Phase"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AbilitySortBy"
+            }
+          },
+          {
+            "name": "SortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
           }
         ],
         "responses": {
@@ -706,26 +822,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               }
             }
@@ -867,6 +974,36 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/BattleFormationSortBy"
+            }
+          },
+          {
+            "name": "SortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
           }
         ],
         "responses": {
@@ -875,26 +1012,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BattleFormationResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfBattleFormationResponseDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BattleFormationResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfBattleFormationResponseDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BattleFormationResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfBattleFormationResponseDto"
                 }
               }
             }
@@ -1003,6 +1131,36 @@
             "schema": {
               "$ref": "#/components/schemas/GrandAlliance"
             }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FactionSortBy"
+            }
+          },
+          {
+            "name": "SortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
           }
         ],
         "responses": {
@@ -1011,26 +1169,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/FactionResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfFactionResponseDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/FactionResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfFactionResponseDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/FactionResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfFactionResponseDto"
                 }
               }
             }
@@ -1354,6 +1503,36 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/UnitSortBy"
+            }
+          },
+          {
+            "name": "SortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
           }
         ],
         "responses": {
@@ -1362,26 +1541,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UnitResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfUnitResponseDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UnitResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfUnitResponseDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UnitResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfUnitResponseDto"
                 }
               }
             }
@@ -1523,6 +1693,43 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "Phase",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Phase"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AbilitySortBy"
+            }
+          },
+          {
+            "name": "SortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
           }
         ],
         "responses": {
@@ -1531,26 +1738,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               }
             }
@@ -2062,26 +2260,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AbilityResponseDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedResponseOfAbilityResponseDto"
                 }
               }
             }
@@ -2331,7 +2520,7 @@
             "type": "string"
           },
           "phase": {
-            "$ref": "#/components/schemas/TurnPhase"
+            "$ref": "#/components/schemas/Phase"
           },
           "restriction": {
             "oneOf": [
@@ -2339,7 +2528,7 @@
                 "type": "null"
               },
               {
-                "$ref": "#/components/schemas/ActivationRestriction"
+                "$ref": "#/components/schemas/Restriction"
               }
             ]
           },
@@ -2349,7 +2538,7 @@
                 "type": "null"
               },
               {
-                "$ref": "#/components/schemas/PlayerTurn"
+                "$ref": "#/components/schemas/Turn"
               }
             ]
           },
@@ -2359,13 +2548,10 @@
           }
         }
       },
-      "ActivationRestriction": {
+      "AbilitySortBy": {
         "enum": [
-          "OnceTurnArmy",
-          "OnceRoundArmy",
-          "OnceBattleArmy",
-          "OnceRound",
-          "OnceBattle",
+          "Name",
+          "Phase",
           null
         ]
       },
@@ -2440,6 +2626,13 @@
           }
         }
       },
+      "AttackProfileSortBy": {
+        "enum": [
+          "Name",
+          "IsRanged",
+          null
+        ]
+      },
       "BattleFormationResponseDto": {
         "required": [
           "battleFormationId",
@@ -2465,6 +2658,12 @@
             "format": "uint32"
           }
         }
+      },
+      "BattleFormationSortBy": {
+        "enum": [
+          "Name",
+          null
+        ]
       },
       "ChangeAbilityDto": {
         "required": [
@@ -2502,7 +2701,7 @@
             "type": "string"
           },
           "phase": {
-            "$ref": "#/components/schemas/TurnPhase"
+            "$ref": "#/components/schemas/Phase"
           },
           "restriction": {
             "oneOf": [
@@ -2510,7 +2709,7 @@
                 "type": "null"
               },
               {
-                "$ref": "#/components/schemas/ActivationRestriction"
+                "$ref": "#/components/schemas/Restriction"
               }
             ]
           },
@@ -2520,7 +2719,7 @@
                 "type": "null"
               },
               {
-                "$ref": "#/components/schemas/PlayerTurn"
+                "$ref": "#/components/schemas/Turn"
               }
             ]
           },
@@ -2716,7 +2915,7 @@
             "type": "string"
           },
           "phase": {
-            "$ref": "#/components/schemas/TurnPhase"
+            "$ref": "#/components/schemas/Phase"
           },
           "restriction": {
             "oneOf": [
@@ -2724,7 +2923,7 @@
                 "type": "null"
               },
               {
-                "$ref": "#/components/schemas/ActivationRestriction"
+                "$ref": "#/components/schemas/Restriction"
               }
             ]
           },
@@ -2734,7 +2933,7 @@
                 "type": "null"
               },
               {
-                "$ref": "#/components/schemas/PlayerTurn"
+                "$ref": "#/components/schemas/Turn"
               }
             ]
           }
@@ -2896,6 +3095,13 @@
           }
         }
       },
+      "FactionSortBy": {
+        "enum": [
+          "Name",
+          "GrandAlliance",
+          null
+        ]
+      },
       "GrandAlliance": {
         "enum": [
           "Order",
@@ -2904,12 +3110,179 @@
           "Destruction"
         ]
       },
-      "PlayerTurn": {
+      "PaginatedResponseOfAbilityResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AbilityResponseDto"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PaginatedResponseOfAttackProfileResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttackProfileResponseDto"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PaginatedResponseOfBattleFormationResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BattleFormationResponseDto"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PaginatedResponseOfFactionResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FactionResponseDto"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PaginatedResponseOfUnitResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UnitResponseDto"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PaginatedResponseOfWeaponEffectResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeaponEffectResponseDto"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Phase": {
         "enum": [
-          "YourTurn",
-          "EnemyTurn",
-          "AnyTurn",
-          null
+          "Deployment",
+          "Start",
+          "Hero",
+          "Movement",
+          "Shooting",
+          "Charge",
+          "Combat",
+          "End",
+          "Passive"
         ]
       },
       "ProblemDetails": {
@@ -2948,17 +3321,28 @@
           }
         }
       },
-      "TurnPhase": {
+      "Restriction": {
         "enum": [
-          "Deployment",
-          "Start",
-          "Hero",
-          "Movement",
-          "Shooting",
-          "Charge",
-          "Combat",
-          "End",
-          "Passive"
+          "OnceTurnArmy",
+          "OnceRoundArmy",
+          "OnceBattleArmy",
+          "OnceRound",
+          "OnceBattle",
+          null
+        ]
+      },
+      "SortDirection": {
+        "enum": [
+          "Asc",
+          "Desc"
+        ]
+      },
+      "Turn": {
+        "enum": [
+          "YourTurn",
+          "EnemyTurn",
+          "AnyTurn",
+          null
         ]
       },
       "UnitResponseDto": {
@@ -3014,6 +3398,12 @@
           }
         }
       },
+      "UnitSortBy": {
+        "enum": [
+          "Name",
+          null
+        ]
+      },
       "WeaponEffectResponseDto": {
         "required": [
           "key",
@@ -3028,6 +3418,12 @@
             "type": "string"
           }
         }
+      },
+      "WeaponEffectSortBy": {
+        "enum": [
+          "Name",
+          null
+        ]
       }
     }
   },
