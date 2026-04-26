@@ -42,22 +42,23 @@ public sealed class BattleFormationService(
         return Result<BattleFormation>.Success(newBattleFormation);
     }
 
-    public async Task<Result<List<BattleFormation>>> GetFactionBattleFormations(
+    public async Task<Result<PaginatedResponse<BattleFormation>>> GetFactionBattleFormations(
         int factionId,
         BattleFormationQuery battleFormationQuery
     )
     {
         var factionExists = await context.Factions.AnyAsync(f => f.FactionId == factionId);
         if (!factionExists)
-            return Result<List<BattleFormation>>.Failure(FactionErrors.NotFound);
+            return Result<PaginatedResponse<BattleFormation>>.Failure(FactionErrors.NotFound);
 
         var battleFormations = await context
             .BattleFormations.AsNoTracking()
             .Where(bf => bf.FactionId == factionId)
             .ApplyFilters(battleFormationQuery)
             .ApplySorting(battleFormationQuery)
-            .ToListAsync();
-        return Result<List<BattleFormation>>.Success(battleFormations);
+            .ToPaginatedReponse(battleFormationQuery);
+
+        return Result<PaginatedResponse<BattleFormation>>.Success(battleFormations);
     }
 
     public async Task<Result<BattleFormation>> GetBattleFormation(int battleFormationId)
@@ -161,7 +162,7 @@ public sealed class BattleFormationService(
         return Result<Ability>.Success(newAbility);
     }
 
-    public async Task<Result<List<Ability>>> GetBattleFormationAbilities(
+    public async Task<Result<PaginatedResponse<Ability>>> GetBattleFormationAbilities(
         int battleFormationId,
         AbilityQuery abilityQuery
     )
@@ -171,7 +172,7 @@ public sealed class BattleFormationService(
         );
 
         if (!exists)
-            return Result<List<Ability>>.Failure(BattleFormationErrors.NotFound);
+            return Result<PaginatedResponse<Ability>>.Failure(BattleFormationErrors.NotFound);
 
         var abilities = await context
             .BattleFormations.Where(bf => bf.BattleFormationId == battleFormationId)
@@ -179,8 +180,8 @@ public sealed class BattleFormationService(
             .AsNoTracking()
             .ApplyFilters(abilityQuery)
             .ApplySorting(abilityQuery)
-            .ToListAsync();
+            .ToPaginatedReponse(abilityQuery);
 
-        return Result<List<Ability>>.Success(abilities);
+        return Result<PaginatedResponse<Ability>>.Success(abilities);
     }
 }

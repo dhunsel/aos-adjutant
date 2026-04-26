@@ -67,7 +67,7 @@ public sealed class UnitAttackProfileController(AttackProfileService attackProfi
         return attackProfilesResult.Match(
             attackProfiles =>
                 Ok(
-                    attackProfiles.Select(ap => new AttackProfileResponseDto(
+                    attackProfiles.Map(ap => new AttackProfileResponseDto(
                         ap.AttackProfileId,
                         ap.Name,
                         ap.IsRanged,

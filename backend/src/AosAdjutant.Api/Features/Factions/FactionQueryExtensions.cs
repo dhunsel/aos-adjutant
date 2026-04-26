@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using AosAdjutant.Api.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.Factions;
 

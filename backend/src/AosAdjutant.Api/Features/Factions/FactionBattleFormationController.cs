@@ -57,7 +57,7 @@ public sealed class FactionBattleFormationController(BattleFormationService batt
         return battleFormationsResult.Match(
             battleFormations =>
                 Ok(
-                    battleFormations.Select(bf => new BattleFormationResponseDto(
+                    battleFormations.Map(bf => new BattleFormationResponseDto(
                         bf.BattleFormationId,
                         bf.Name,
                         bf.FactionId,

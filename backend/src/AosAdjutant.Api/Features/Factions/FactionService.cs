@@ -29,13 +29,13 @@ public sealed class FactionService(ApplicationDbContext context, ILogger<Faction
         return Result<Faction>.Success(newFaction);
     }
 
-    public async Task<List<Faction>> GetFactions(FactionQuery factionQuery)
+    public async Task<PaginatedResponse<Faction>> GetFactions(FactionQuery factionQuery)
     {
         return await context
             .Factions.AsNoTracking()
             .ApplyFilters(factionQuery)
             .ApplySorting(factionQuery)
-            .ToListAsync();
+            .ToPaginatedReponse(factionQuery);
     }
 
     public async Task<Result<Faction>> GetFaction(int factionId)
@@ -128,7 +128,7 @@ public sealed class FactionService(ApplicationDbContext context, ILogger<Faction
         return Result<Ability>.Success(newAbility);
     }
 
-    public async Task<Result<List<Ability>>> GetFactionAbilities(
+    public async Task<Result<PaginatedResponse<Ability>>> GetFactionAbilities(
         int factionId,
         AbilityQuery abilityQuery
     )
@@ -136,7 +136,7 @@ public sealed class FactionService(ApplicationDbContext context, ILogger<Faction
         var exists = await context.Factions.AnyAsync(f => f.FactionId == factionId);
 
         if (!exists)
-            return Result<List<Ability>>.Failure(FactionErrors.NotFound);
+            return Result<PaginatedResponse<Ability>>.Failure(FactionErrors.NotFound);
 
         var abilities = await context
             .Factions.Where(f => f.FactionId == factionId)
@@ -144,8 +144,8 @@ public sealed class FactionService(ApplicationDbContext context, ILogger<Faction
             .AsNoTracking()
             .ApplyFilters(abilityQuery)
             .ApplySorting(abilityQuery)
-            .ToListAsync();
+            .ToPaginatedReponse(abilityQuery);
 
-        return Result<List<Ability>>.Success(abilities);
+        return Result<PaginatedResponse<Ability>>.Success(abilities);
     }
 }

@@ -116,7 +116,7 @@ public class BattleFormationServiceTests
             );
 
             Assert.True(result.IsSuccess);
-            Assert.Equal(2, result.GetValue.Count);
+            Assert.Equal(2, result.GetValue.TotalCount);
         }
 
         [Fact]
@@ -454,7 +454,7 @@ public class BattleFormationServiceTests
             );
 
             Assert.True(result.IsSuccess);
-            Assert.Single(result.GetValue);
+            Assert.Single(result.GetValue.Items);
         }
 
         [Fact]

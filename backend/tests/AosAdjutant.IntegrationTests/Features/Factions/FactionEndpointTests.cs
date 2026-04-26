@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.Factions;
 using AosAdjutant.IntegrationTests.Fixture;
 
@@ -63,9 +64,9 @@ public class FactionEndpointTests(ApiFactory factory) : EndpointTestsBase(factor
         var response = await Client.GetAsync("/api/factions");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<List<FactionResponseDto>>(JsonOptions);
+        var body = await response.Content.ReadFromJsonAsync<PaginatedResponse<FactionResponseDto>>(JsonOptions);
         Assert.NotNull(body);
-        Assert.Equal(2, body.Count);
+        Assert.Equal(2, body.Items.Count);
     }
 
     // --- GET /api/factions/{id} ---

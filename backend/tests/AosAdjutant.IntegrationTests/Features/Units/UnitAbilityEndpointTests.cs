@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.Abilities;
 using AosAdjutant.Api.Features.Factions;
 using AosAdjutant.Api.Features.Units;
@@ -92,8 +93,8 @@ public class UnitAbilityEndpointTests(ApiFactory factory) : EndpointTestsBase(fa
         var response = await Client.GetAsync($"/api/units/{unit.UnitId}/abilities");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<List<AbilityResponseDto>>(JsonOptions);
+        var body = await response.Content.ReadFromJsonAsync<PaginatedResponse<AbilityResponseDto>>(JsonOptions);
         Assert.NotNull(body);
-        Assert.Single(body);
+        Assert.Single(body.Items);
     }
 }

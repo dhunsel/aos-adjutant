@@ -37,7 +37,7 @@ public sealed class FactionController(FactionService factionService) : Controlle
     {
         var factions = await factionService.GetFactions(factionQuery);
         return Ok(
-            factions.Select(f => new FactionResponseDto(
+            factions.Map(f => new FactionResponseDto(
                 f.FactionId,
                 f.Name,
                 f.GrandAlliance,

@@ -154,7 +154,7 @@ public class UnitServiceTests
             var result = await service.GetFactionUnits(factionId, new UnitQuery { });
 
             Assert.True(result.IsSuccess);
-            Assert.Equal(2, result.GetValue.Count);
+            Assert.Equal(2, result.GetValue.TotalCount);
         }
 
         [Fact]
@@ -533,7 +533,7 @@ public class UnitServiceTests
             var result = await service.GetUnitAbilities(unitId, new AbilityQuery { });
 
             Assert.True(result.IsSuccess);
-            Assert.Single(result.GetValue);
+            Assert.Single(result.GetValue.Items);
         }
 
         [Fact]

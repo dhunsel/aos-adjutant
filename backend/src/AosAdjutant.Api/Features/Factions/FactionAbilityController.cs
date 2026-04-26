@@ -55,7 +55,7 @@ public sealed class FactionAbilityController(FactionService factionService) : Co
         return abilitiesResult.Match(
             abilities =>
                 Ok(
-                    abilities.Select(a => new AbilityResponseDto(
+                    abilities.Map(a => new AbilityResponseDto(
                         a.AbilityId,
                         a.Name,
                         a.Reaction,

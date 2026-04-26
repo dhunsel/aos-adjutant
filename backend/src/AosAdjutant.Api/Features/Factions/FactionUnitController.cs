@@ -55,7 +55,7 @@ public sealed class FactionUnitController(UnitService unitService) : ControllerB
         return unitsResult.Match(
             units =>
                 Ok(
-                    units.Select(u => new UnitResponseDto(
+                    units.Map(u => new UnitResponseDto(
                         u.UnitId,
                         u.Name,
                         u.Health,

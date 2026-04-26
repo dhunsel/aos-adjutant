@@ -281,7 +281,7 @@ public class AttackProfileServiceTests
             var result = await service.GetUnitAttackProfiles(unitId, new AttackProfileQuery { });
 
             Assert.True(result.IsSuccess);
-            Assert.Equal(2, result.GetValue.Count);
+            Assert.Equal(2, result.GetValue.TotalCount);
         }
 
         [Fact]

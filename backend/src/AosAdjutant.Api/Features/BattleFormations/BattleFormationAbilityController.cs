@@ -50,7 +50,7 @@ public sealed class BattleFormationAbilityController(BattleFormationService batt
     [EndpointSummary("Get all abilities for a battle formation")]
     [ProducesResponseType<List<AbilityResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<AbilityResponseDto>>> GetAbilities(
+    public async Task<ActionResult<PaginatedResponse<AbilityResponseDto>>> GetAbilities(
         [FromRoute] int battleFormationId,
         [FromQuery] AbilityQuery abilityQuery
     )
@@ -62,7 +62,7 @@ public sealed class BattleFormationAbilityController(BattleFormationService batt
         return abilitiesResult.Match(
             abilities =>
                 Ok(
-                    abilities.Select(a => new AbilityResponseDto(
+                    abilities.Map(a => new AbilityResponseDto(
                         a.AbilityId,
                         a.Name,
                         a.Reaction,

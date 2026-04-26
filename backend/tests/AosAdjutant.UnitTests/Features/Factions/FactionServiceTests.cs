@@ -68,7 +68,7 @@ public class FactionServiceTests
 
             var result = await service.GetFactions(new FactionQuery { });
 
-            Assert.Equal(2, result.Count);
+            Assert.Equal(2, result.TotalCount);
         }
 
         [Fact]
@@ -79,7 +79,7 @@ public class FactionServiceTests
 
             var result = await service.GetFactions(new FactionQuery { });
 
-            Assert.Empty(result);
+            Assert.Empty(result.Items);
         }
 
         [Fact]
@@ -97,8 +97,8 @@ public class FactionServiceTests
                 new FactionQuery { GrandAlliance = GrandAlliance.Order }
             );
 
-            Assert.Single(result);
-            Assert.Equal("Order Faction", result[0].Name);
+            Assert.Single(result.Items);
+            Assert.Equal("Order Faction", result.Items[0].Name);
         }
     }
 
@@ -394,7 +394,7 @@ public class FactionServiceTests
             var result = await service.GetFactionAbilities(factionId, new AbilityQuery { });
 
             Assert.True(result.IsSuccess);
-            Assert.Single(result.GetValue);
+            Assert.Single(result.GetValue.Items);
         }
 
         [Fact]
