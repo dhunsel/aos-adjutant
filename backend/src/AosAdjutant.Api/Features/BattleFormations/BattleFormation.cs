@@ -14,6 +14,13 @@ public sealed class BattleFormation
     public ICollection<Ability> Abilities { get; } = new List<Ability>();
 }
 
+public enum BattleFormationSortBy
+{
+    Name,
+}
+
+public sealed record BattleFormationQuery : PagedQuery<BattleFormationSortBy> { }
+
 public static class BattleFormationErrors
 {
     public static readonly AppError NotFound = new(

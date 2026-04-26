@@ -159,6 +159,17 @@ public sealed class Ability
     }
 }
 
+public enum AbilitySortBy
+{
+    Name,
+    Phase,
+}
+
+public sealed record AbilityQuery : PagedQuery<AbilitySortBy>
+{
+    public Phase? Phase { init; get; }
+}
+
 public static class AbilityErrors
 {
     public static readonly AppError NotFound = new(ErrorCode.NotFound, "Ability not found.");

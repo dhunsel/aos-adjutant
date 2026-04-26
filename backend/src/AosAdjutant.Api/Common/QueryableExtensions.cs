@@ -4,10 +4,11 @@ namespace AosAdjutant.Api.Common;
 
 public static class QueryableExtensions
 {
-    public static async Task<PaginatedResponse<T>> ToPaginatedReponse<T>(
+    public static async Task<PaginatedResponse<T>> ToPaginatedReponse<T, TSortBy>(
         this IQueryable<T> query,
-        PagedQuery filter
+        PagedQuery<TSortBy> filter
     )
+        where TSortBy : struct, Enum
     {
         var totalCount = await query.CountAsync();
 

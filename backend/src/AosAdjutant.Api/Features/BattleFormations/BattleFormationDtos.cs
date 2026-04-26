@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using AosAdjutant.Api.Common;
 
 namespace AosAdjutant.Api.Features.BattleFormations;
 
@@ -22,5 +21,3 @@ public sealed record ChangeBattleFormationDto
     public required string Name { get; init; }
     public required uint Version { get; init; }
 }
-
-public sealed record BattleFormationQuery : PagedQuery { }

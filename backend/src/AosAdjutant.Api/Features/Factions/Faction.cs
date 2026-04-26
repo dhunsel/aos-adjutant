@@ -26,6 +26,17 @@ public sealed class Faction
     public ICollection<Ability> Abilities { get; } = [];
 }
 
+public enum FactionSortBy
+{
+    Name,
+    GrandAlliance,
+}
+
+public sealed record FactionQuery : PagedQuery<FactionSortBy>
+{
+    public GrandAlliance? GrandAlliance { get; init; }
+}
+
 public static class FactionErrors
 {
     public static readonly AppError NotFound = new(ErrorCode.NotFound, "Faction not found.");

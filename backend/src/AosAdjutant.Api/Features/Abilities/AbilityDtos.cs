@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using AosAdjutant.Api.Common;
 
 namespace AosAdjutant.Api.Features.Abilities;
 
@@ -50,9 +49,4 @@ public sealed record ChangeAbilityDto
     public Restriction? Restriction { get; init; }
     public Turn? Turn { get; init; }
     public required uint Version { get; init; }
-}
-
-public sealed record AbilityQuery : PagedQuery
-{
-    public Phase? Phase { init; get; }
 }

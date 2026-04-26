@@ -105,6 +105,17 @@ public sealed class AttackProfile
     }
 }
 
+public enum AttackProfileSortBy
+{
+    Name,
+    IsRanged,
+}
+
+public sealed record AttackProfileQuery : PagedQuery<AttackProfileSortBy>
+{
+    public bool? IsRanged { get; init; }
+}
+
 public static class AttackProfileErrors
 {
     public static readonly AppError NotFound = new(ErrorCode.NotFound, "Attack profile not found.");
