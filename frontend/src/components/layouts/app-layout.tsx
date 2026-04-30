@@ -83,7 +83,7 @@ const footerOld = (
 
 export function AppLayout() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div>
       <SidebarProvider open={false}>
         <Sidebar collapsible="icon">
           <SidebarHeader>
@@ -136,11 +136,17 @@ export function AppLayout() {
             </SidebarMenu>
           </SidebarFooter>
         </Sidebar>
-        <main className="flex-1">
-          <div className="mx-auto max-w-7xl">
-            <Outlet />
-          </div>
-        </main>
+        <div className="flex min-h-screen flex-1 flex-col">
+          <header className="flex w-full items-center justify-between border-b border-border bg-card px-5 py-2">
+            <span>Element 1</span>
+            <span>Profile</span>
+          </header>
+          <main className="flex-1">
+            <div className="mx-auto max-w-7xl">
+              <Outlet />
+            </div>
+          </main>
+        </div>
       </SidebarProvider>
     </div>
   );
