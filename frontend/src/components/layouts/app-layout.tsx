@@ -1,26 +1,29 @@
 import { cn } from "@/lib/utils";
 import { Link, NavLink, Outlet } from "react-router";
-import { Dices, Database, Play, ListPlus, Settings, Search, ChevronDown } from "lucide-react";
+import { Database, Play, ListPlus, Settings, Search, ChevronDown } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarRail,
   SidebarSeparator,
-  SidebarTrigger,
 } from "../ui/sidebar";
 import { Anvil } from "lucide-react";
-import { Input } from "../ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
-//import { Astroid } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import GithubLogo from "@/assets/GitHub_Invertocat_White.svg?react";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   cn(
@@ -28,24 +31,9 @@ const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     isActive && "border-primary text-card-foreground",
   );
 
-const Logo = () => (
-  <NavLink
-    to="/"
-    className="flex items-center gap-3 border-r-2 border-border py-2 pr-15 pl-6 leading-none text-primary"
-    end
-  >
-    <Dices size={32} />
-    <div className="item-start flex flex-col font-heading leading-none tracking-wide text-primary uppercase">
-      <span className="text-2xl">AoS</span>
-      <span className="text-xs tracking-widest text-muted-foreground">Adjutant</span>
-    </div>
-  </NavLink>
-);
-
 const headerOld = (
   <header className="bg-card">
     <nav className="flex items-stretch border-b-2 border-border">
-      <Logo />
       <ul className="flex items-stretch gap-3 pl-5 font-semibold">
         <li className="flex">
           <NavLink to="/factions" className={navLinkClass}>
@@ -60,27 +48,6 @@ const headerOld = (
       </ul>
     </nav>
   </header>
-);
-
-const footerOld = (
-  <footer className="flex flex-col gap-1 border-t-2 border-border bg-card py-2 text-xs text-muted-foreground">
-    <div className="flex items-center justify-center gap-3">
-      <a
-        className="hover:text-card-foreground"
-        href="https://github.com/dhunsel/aos-adjutant"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Github
-      </a>
-      <span aria-hidden="true">{"\u00B7"}</span>
-      <span>AoS Adjutant - {__APP_VERSION__}</span>
-    </div>
-    <small className="text-center">
-      AoS Adjutant is an unofficial application and not affiliated with Games Workshop. Warhammer,
-      Age of Sigmar, and associated brands are © Games Workshop Ltd.
-    </small>
-  </footer>
 );
 
 export function AppLayout() {
@@ -139,7 +106,7 @@ export function AppLayout() {
           </SidebarFooter>
         </Sidebar>
         <div className="flex min-h-screen flex-1 flex-col">
-          <header className="flex w-full items-center justify-between border-b border-border bg-card px-5 py-2">
+          <header className="flex w-full items-center justify-between border-b border-border bg-sidebar px-5 py-2">
             <InputGroup className="max-w-xs">
               <InputGroupAddon>
                 <Search />
@@ -147,10 +114,10 @@ export function AppLayout() {
               <InputGroupInput type="search" placeholder="Search factions, units, abilities, ..." />
             </InputGroup>
             <div className="flex max-w-xs items-center gap-3">
-              <span className="shrink-0 rounded-4xl border-3 border-sidebar-border bg-sidebar-ring p-2 font-bold text-primary-foreground">
+              <span className="size-10 shrink-0 rounded-4xl border-3 border-sidebar-border bg-sidebar-ring p-1 text-center font-bold text-primary-foreground">
                 PU
               </span>
-              <span className="truncate">Placeholder User</span>
+              <span className="truncate text-muted-foreground">Placeholder User</span>
               <ChevronDown className="size-4 shrink-0" />
             </div>
           </header>
@@ -159,6 +126,34 @@ export function AppLayout() {
               <Outlet />
             </div>
           </main>
+          <footer className="flex items-center justify-end gap-3 border-t border-border bg-sidebar py-1 pr-3 text-xs text-muted-foreground">
+            <Dialog>
+              <DialogTrigger className="cursor-pointer hover:text-sidebar-foreground">
+                Disclaimer
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Disclaimer</DialogTitle>
+                  <DialogDescription>
+                    AoS Adjutant is an unofficial application and not affiliated with Games
+                    Workshop. Warhammer, Age of Sigmar, and associated brands are {"\u00A9"} Games
+                    Workshop Ltd.
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+            <span aria-hidden="true">{"\u00B7"}</span>
+            <a
+              className="shrink-0"
+              href="https://github.com/dhunsel/aos-adjutant"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GithubLogo aria-label="Github Repository" className="size-4" />
+            </a>
+            <span aria-hidden="true">{"\u00B7"}</span>
+            <span className="font-mono">v{__APP_VERSION__}</span>
+          </footer>
         </div>
       </SidebarProvider>
     </div>
