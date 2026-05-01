@@ -8,7 +8,6 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
@@ -81,25 +80,11 @@ const SidebarNavButton = ({
     </SidebarMenuButton>
   );
 };
-//<Link
-//  to="/"
-//  className="flex size-12 items-center justify-center rounded-lg border-2 border-border bg-primary text-primary-foreground"
-//>
-//  <Anvil className="size-8" />
-//</Link>
-//
-//<SidebarMenuButton
-//  className="bg-primary text-primary-foreground"
-//  size="xl"
-//  render={<Link to="/" />}
-//>
-//  <Anvil />
-//</SidebarMenuButton>
 
 export function AppLayout() {
   return (
     // Always show the collapsed icon sidebar
-    <SidebarProvider>
+    <SidebarProvider open={false}>
       <Sidebar collapsible="icon">
         <SidebarHeader>
           <SidebarMenu>
@@ -166,28 +151,34 @@ export function AppLayout() {
         </SidebarFooter>
       </Sidebar>
       <div className="flex min-h-screen flex-1 flex-col">
-        <header className="flex w-full items-center justify-between gap-1 border-b border-border bg-sidebar px-5 py-2">
-          <SidebarTrigger />
-          <InputGroup className="max-w-xs">
-            <InputGroupAddon>
-              <Search />
-            </InputGroupAddon>
-            <InputGroupInput type="search" placeholder="Search factions, units, abilities, ..." />
-          </InputGroup>
-          <div className="flex max-w-xs items-center gap-3">
+        <header className="flex w-full items-center justify-between gap-1 border-b border-border bg-sidebar py-2">
+          <div className="flex items-center justify-start gap-1">
+            <SidebarTrigger className="size-4 md:hidden" />
+            <InputGroup className="max-w-xs">
+              <InputGroupAddon>
+                <Search />
+              </InputGroupAddon>
+              <InputGroupInput
+                className="hidden md:block"
+                type="search"
+                placeholder="Search factions, units, abilities, ..."
+              />
+            </InputGroup>
+          </div>
+          <div className="flex max-w-xs items-center gap-3 pr-2">
             <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-3xl border-2 border-sidebar-border bg-sidebar-ring font-bold text-primary-foreground">
               PU
             </span>
-            <span className="truncate text-foreground">Placeholder User</span>
-            <ChevronDown className="size-4 shrink-0" />
+            <span className="hidden truncate text-foreground md:block">Placeholder User</span>
+            <ChevronDown className="hidden size-4 shrink-0 md:block" />
           </div>
         </header>
-        <main className="flex-1 px-5 py-6">
+        <main className="flex-1 px-3 py-2 md:px-5 md:py-6">
           <div className="mx-auto max-w-7xl">
             <Outlet />
           </div>
         </main>
-        <footer className="flex items-center justify-end gap-3 border-t border-border bg-sidebar py-1 pr-3 text-xs text-muted-foreground">
+        <footer className="flex items-center justify-center gap-3 border-t border-border bg-sidebar py-1 pr-3 text-muted-foreground md:justify-end md:text-xs">
           <Dialog>
             <DialogTrigger className="cursor-pointer hover:text-sidebar-foreground">
               Disclaimer
@@ -210,7 +201,7 @@ export function AppLayout() {
             rel="noopener noreferrer"
             aria-label="Github Repository"
           >
-            <GithubLogo className="size-4" />
+            <GithubLogo className="size-6 md:size-4" />
           </a>
           <span aria-hidden="true">{"\u00B7"}</span>
           <span className="font-mono">v{__APP_VERSION__}</span>
