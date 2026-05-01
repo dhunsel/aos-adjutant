@@ -8,10 +8,13 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
   SidebarSeparator,
+  SidebarTrigger,
+  useSidebar,
 } from "../ui/sidebar";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
 import {
@@ -27,23 +30,33 @@ import GithubLogo from "@/assets/GitHub_Invertocat_White.svg?react";
 type SidebarNavButtonProps = {
   to: string;
   disabled?: boolean;
+  closeSidebarOnClick?: boolean;
+  showActive?: boolean;
 } & Omit<React.ComponentProps<typeof SidebarMenuButton>, "render" | "isActive">;
 
 const SidebarNavButton = ({
   to,
   disabled,
+  closeSidebarOnClick = true,
+  showActive = true,
   className,
+  onClick,
   children,
   ...props
 }: SidebarNavButtonProps) => {
   const isActive = !!useMatch({ path: to, end: false });
+  const { isMobile, openMobile, toggleSidebar, open } = useSidebar();
 
   if (disabled)
     return (
       <SidebarMenuButton
         size="xl"
         aria-disabled={true}
-        className={cn("cursor-not-allowed aria-disabled:pointer-events-auto", className)}
+        className={cn(
+          "cursor-not-allowed font-heading aria-disabled:pointer-events-auto",
+          className,
+        )}
+        onClick={onClick}
         {...props}
       >
         {children}
@@ -54,44 +67,84 @@ const SidebarNavButton = ({
     <SidebarMenuButton
       size="xl"
       render={<Link to={to} aria-current={isActive ? "page" : undefined} />}
-      isActive={isActive}
+      isActive={showActive && isActive}
+      className={cn("font-heading", className)}
+      onClick={(e) => {
+        onClick?.(e);
+        if (e.defaultPrevented) return;
+        if (closeSidebarOnClick && ((isMobile && openMobile) || (!isMobile && open)))
+          toggleSidebar();
+      }}
       {...props}
     >
       {children}
     </SidebarMenuButton>
   );
 };
+//<Link
+//  to="/"
+//  className="flex size-12 items-center justify-center rounded-lg border-2 border-border bg-primary text-primary-foreground"
+//>
+//  <Anvil className="size-8" />
+//</Link>
+//
+//<SidebarMenuButton
+//  className="bg-primary text-primary-foreground"
+//  size="xl"
+//  render={<Link to="/" />}
+//>
+//  <Anvil />
+//</SidebarMenuButton>
 
 export function AppLayout() {
   return (
     // Always show the collapsed icon sidebar
-    <SidebarProvider open={false}>
+    <SidebarProvider>
       <Sidebar collapsible="icon">
         <SidebarHeader>
-          <Link
-            to="/"
-            className="flex size-12 items-center justify-center rounded-lg border-2 border-border bg-primary text-primary-foreground"
-          >
-            <Anvil className="size-8" />
-          </Link>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarNavButton
+                showActive={false}
+                className="bg-primary font-semibold text-nowrap text-primary-foreground hover:bg-primary hover:text-primary-foreground active:bg-primary active:text-primary-foreground"
+                to="/"
+              >
+                <Anvil />
+                AoS Adjutant
+              </SidebarNavButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </SidebarHeader>
         <SidebarSeparator />
         <SidebarContent>
           <SidebarGroup>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarNavButton tooltip="Dashboard" to="/factions">
+                <SidebarNavButton className="text-nowrap" tooltip="Dashboard" to="/factions">
                   <Database />
+                  Dashboard
                 </SidebarNavButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarNavButton disabled tooltip="List Builder (TBD)" to="/list-builder">
+                <SidebarNavButton
+                  className="text-nowrap"
+                  disabled
+                  tooltip="List Builder (TBD)"
+                  to="/list-builder"
+                >
                   <ListPlus />
+                  List Builder
                 </SidebarNavButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarNavButton disabled tooltip="Play Mode (TBD)" to="/battle">
+                <SidebarNavButton
+                  className="text-nowrap"
+                  disabled
+                  tooltip="Play Mode (TBD)"
+                  to="/battle"
+                >
                   <Play />
+                  Battle Mode
                 </SidebarNavButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -100,8 +153,13 @@ export function AppLayout() {
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton size={"xl"} tooltip={"Settings"}>
+              <SidebarMenuButton
+                className="font-heading text-nowrap"
+                size={"xl"}
+                tooltip={"Settings"}
+              >
                 <Settings />
+                Settings
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -109,6 +167,7 @@ export function AppLayout() {
       </Sidebar>
       <div className="flex min-h-screen flex-1 flex-col">
         <header className="flex w-full items-center justify-between gap-1 border-b border-border bg-sidebar px-5 py-2">
+          <SidebarTrigger />
           <InputGroup className="max-w-xs">
             <InputGroupAddon>
               <Search />
@@ -119,7 +178,7 @@ export function AppLayout() {
             <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-3xl border-2 border-sidebar-border bg-sidebar-ring font-bold text-primary-foreground">
               PU
             </span>
-            <span className="truncate text-muted-foreground">Placeholder User</span>
+            <span className="truncate text-foreground">Placeholder User</span>
             <ChevronDown className="size-4 shrink-0" />
           </div>
         </header>
