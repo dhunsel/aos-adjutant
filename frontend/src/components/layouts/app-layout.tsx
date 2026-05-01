@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Link, NavLink, Outlet } from "react-router";
-import { Dices, Database, Play, ListPlus, Settings } from "lucide-react";
+import { Dices, Database, Play, ListPlus, Settings, Search, ChevronDown } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +18,8 @@ import {
   SidebarTrigger,
 } from "../ui/sidebar";
 import { Anvil } from "lucide-react";
+import { Input } from "../ui/input";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
 //import { Astroid } from "lucide-react";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -89,9 +91,9 @@ export function AppLayout() {
           <SidebarHeader>
             <Link
               to="/"
-              className="flex size-12 items-center justify-center rounded-lg border-2 border-border bg-primary text-primary-foreground [&_svg]:size-8"
+              className="flex size-12 items-center justify-center rounded-lg border-2 border-border bg-primary text-primary-foreground"
             >
-              <Anvil />
+              <Anvil className="size-8" />
             </Link>
           </SidebarHeader>
           <SidebarSeparator />
@@ -138,8 +140,19 @@ export function AppLayout() {
         </Sidebar>
         <div className="flex min-h-screen flex-1 flex-col">
           <header className="flex w-full items-center justify-between border-b border-border bg-card px-5 py-2">
-            <span>Element 1</span>
-            <span>Profile</span>
+            <InputGroup className="max-w-xs">
+              <InputGroupAddon>
+                <Search />
+              </InputGroupAddon>
+              <InputGroupInput type="search" placeholder="Search factions, units, abilities, ..." />
+            </InputGroup>
+            <div className="flex max-w-xs items-center gap-3">
+              <span className="shrink-0 rounded-4xl border-3 border-sidebar-border bg-sidebar-ring p-2 font-bold text-primary-foreground">
+                PU
+              </span>
+              <span className="truncate">Placeholder User</span>
+              <ChevronDown className="size-4 shrink-0" />
+            </div>
           </header>
           <main className="flex-1">
             <div className="mx-auto max-w-7xl">
