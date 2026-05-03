@@ -12,11 +12,9 @@ export function AppLayout() {
       <AppSidebar />
       <div className="flex min-h-screen flex-1 flex-col">
         <AppHeader />
-        <main className="flex-1 px-3 py-2 md:px-5 md:py-6">
-          <div className="mx-auto max-w-7xl">
-            <Outlet />
-          </div>
-        </main>
+        <div className="flex flex-1">
+          <Outlet />
+        </div>
         <AppFooter />
       </div>
     </SidebarProvider>
