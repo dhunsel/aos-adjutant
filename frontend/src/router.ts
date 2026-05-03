@@ -4,6 +4,7 @@ import { AppLayout } from "./components/layouts/app-layout";
 import { Home } from "./pages/home";
 import { NotFound } from "./pages/not-found";
 import { UnexpectedError } from "./pages/unexpected-error";
+import { DashBoardLayout } from "./features/dashboard/layouts/dashboard-layout";
 
 export const router = createBrowserRouter([
   {
@@ -13,8 +14,11 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: Home },
       {
-        path: "factions",
-        children: [{ index: true, Component: App }],
+        path: "dashboard",
+        Component: DashBoardLayout,
+        children: [
+          { path: "factions", Component: App, children: [{ path: ":factionId", Component: App }] },
+        ],
       },
     ],
   },

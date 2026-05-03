@@ -34,7 +34,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarNavButton tooltip="Dashboard" to="/factions">
+              <SidebarNavButton tooltip="Dashboard" to="/dashboard">
                 <Database />
                 Dashboard
               </SidebarNavButton>
