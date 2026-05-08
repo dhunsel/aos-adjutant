@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Database;
@@ -75,7 +76,10 @@ try
         {
             opts.JsonSerializerOptions.NumberHandling = JsonNumberHandling.Strict;
             opts.JsonSerializerOptions.Converters.Add(
-                new JsonStringEnumConverter(allowIntegerValues: false)
+                new JsonStringEnumConverter(
+                    namingPolicy: JsonNamingPolicy.CamelCase,
+                    allowIntegerValues: false
+                )
             );
         });
 
@@ -83,7 +87,10 @@ try
     {
         options.SerializerOptions.NumberHandling = JsonNumberHandling.Strict;
         options.SerializerOptions.Converters.Add(
-            new JsonStringEnumConverter(allowIntegerValues: false)
+            new JsonStringEnumConverter(
+                namingPolicy: JsonNamingPolicy.CamelCase,
+                allowIntegerValues: false
+            )
         );
     });
 
@@ -96,7 +103,9 @@ try
     builder.Services.AddProblemDetails();
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
-    builder.Services.AddOpenApi();
+    builder.Services.AddOpenApi(opts =>
+        opts.AddOperationTransformer<CamelCaseQueryParametersTransformer>()
+    );
 
     builder.Services.AddCors(options =>
         options.AddPolicy(

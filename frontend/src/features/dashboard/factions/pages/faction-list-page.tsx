@@ -1,0 +1,109 @@
+import { Spinner } from "@/components/ui/spinner";
+import { useFactions } from "../faction.queries";
+import type { FactionQuery, GrandAlliance } from "@/types/api.types";
+import { Badge } from "@/components/ui/badge";
+import { type ComponentProps } from "react";
+import { cn } from "@/lib/utils";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useSearchParams } from "react-router";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import z from "zod";
+
+const GrandAllianceBadge = ({
+  grandAlliance,
+  className,
+  ...props
+}: { grandAlliance: GrandAlliance } & ComponentProps<typeof Badge>) => {
+  let color;
+  switch (grandAlliance) {
+    case "order": {
+      color = "bg-alliance-order text-foreground";
+      break;
+    }
+    case "chaos": {
+      color = "bg-alliance-chaos text-foreground";
+      break;
+    }
+    case "death": {
+      color = "bg-alliance-death text-foreground";
+      break;
+    }
+    case "destruction": {
+      color = "bg-alliance-destruction text-foreground";
+      break;
+    }
+  }
+
+  return (
+    <Badge className={cn(color, className)} {...props}>
+      {grandAlliance.charAt(0).toUpperCase() + grandAlliance.slice(1)}
+    </Badge>
+  );
+};
+
+const GRAND_ALLIANCE_KEY = "grandAlliance" satisfies keyof FactionQuery;
+
+const grandAllianceSchema = z
+  .enum(["order", "chaos", "death", "destruction"])
+  .optional()
+  .catch(undefined);
+
+export function FactionListPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const grandAlliance = grandAllianceSchema.parse(
+    searchParams.get(GRAND_ALLIANCE_KEY) ?? undefined,
+  );
+
+  const factions = useFactions(grandAlliance ? { grandAlliance } : {});
+
+  const onFilterClick = (value: string[]) => {
+    setSearchParams((prev) => {
+      if (value[0]) prev.set(GRAND_ALLIANCE_KEY, value[0]);
+      else prev.delete(GRAND_ALLIANCE_KEY);
+      return prev;
+    });
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex justify-between">
+        <ToggleGroup value={grandAlliance ? [grandAlliance] : []} onValueChange={onFilterClick}>
+          <ToggleGroupItem variant="outline" value="order">
+            Order
+          </ToggleGroupItem>
+          <ToggleGroupItem variant="outline" value="chaos">
+            Chaos
+          </ToggleGroupItem>
+          <ToggleGroupItem variant="outline" value="death">
+            Death
+          </ToggleGroupItem>
+          <ToggleGroupItem variant="outline" value="destruction">
+            Destruction
+          </ToggleGroupItem>
+        </ToggleGroup>
+        <Button variant="outline">
+          <Plus />
+          <span className="hidden md:inline">Add Faction</span>
+        </Button>
+      </div>
+      {factions.isLoading ? (
+        <div className="pt-10">
+          <Spinner className="mx-auto" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3">
+          {factions.data?.items.map((f) => (
+            <div
+              key={f.factionId}
+              className="flex flex-col gap-2 rounded-lg border border-border bg-card p-2 text-nowrap text-card-foreground"
+            >
+              <span className="font-heading text-xl">{f.name}</span>
+              <GrandAllianceBadge grandAlliance={f.grandAlliance} />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
