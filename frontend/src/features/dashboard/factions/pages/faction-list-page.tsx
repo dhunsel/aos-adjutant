@@ -1,6 +1,6 @@
 import { Spinner } from "@/components/ui/spinner";
 import { useFactions } from "../faction.queries";
-import type { GrandAlliance } from "@/types/api.types";
+import type { FactionQuery, GrandAlliance } from "@/types/api.types";
 import { Badge } from "@/components/ui/badge";
 import { type ComponentProps } from "react";
 import { cn } from "@/lib/utils";
@@ -8,6 +8,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useSearchParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import z from "zod";
 
 const GrandAllianceBadge = ({
   grandAlliance,
@@ -16,19 +17,19 @@ const GrandAllianceBadge = ({
 }: { grandAlliance: GrandAlliance } & ComponentProps<typeof Badge>) => {
   let color;
   switch (grandAlliance) {
-    case "Order": {
+    case "order": {
       color = "bg-alliance-order text-foreground";
       break;
     }
-    case "Chaos": {
+    case "chaos": {
       color = "bg-alliance-chaos text-foreground";
       break;
     }
-    case "Death": {
+    case "death": {
       color = "bg-alliance-death text-foreground";
       break;
     }
-    case "Destruction": {
+    case "destruction": {
       color = "bg-alliance-destruction text-foreground";
       break;
     }
@@ -36,41 +37,54 @@ const GrandAllianceBadge = ({
 
   return (
     <Badge className={cn(color, className)} {...props}>
-      {grandAlliance}
+      {grandAlliance.charAt(0).toUpperCase() + grandAlliance.slice(1)}
     </Badge>
   );
 };
 
+const GRAND_ALLIANCE_KEY = "grandAlliance" satisfies keyof FactionQuery;
+
+const grandAllianceSchema = z
+  .enum(["order", "chaos", "death", "destruction"])
+  .optional()
+  .catch(undefined);
+
 export function FactionListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const grandAlliance = searchParams.get("grandAlliance") as GrandAlliance;
-  const factions = useFactions({ GrandAlliance: grandAlliance });
+  const grandAlliance = grandAllianceSchema.parse(
+    searchParams.get(GRAND_ALLIANCE_KEY) ?? undefined,
+  );
+
+  const factions = useFactions(grandAlliance ? { grandAlliance } : {});
 
   const onFilterClick = (value: string[]) => {
-    const newVal = value[0] ? { grandAlliance: value[0] } : undefined;
-    setSearchParams(newVal);
+    setSearchParams((prev) => {
+      if (value[0]) prev.set(GRAND_ALLIANCE_KEY, value[0]);
+      else prev.delete(GRAND_ALLIANCE_KEY);
+      return prev;
+    });
   };
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between">
-        <ToggleGroup value={[grandAlliance]} onValueChange={onFilterClick}>
-          <ToggleGroupItem variant="outline" value="Order">
+        <ToggleGroup value={grandAlliance ? [grandAlliance] : []} onValueChange={onFilterClick}>
+          <ToggleGroupItem variant="outline" value="order">
             Order
           </ToggleGroupItem>
-          <ToggleGroupItem variant="outline" value="Chaos">
+          <ToggleGroupItem variant="outline" value="chaos">
             Chaos
           </ToggleGroupItem>
-          <ToggleGroupItem variant="outline" value="Death">
+          <ToggleGroupItem variant="outline" value="death">
             Death
           </ToggleGroupItem>
-          <ToggleGroupItem variant="outline" value="Destruction">
+          <ToggleGroupItem variant="outline" value="destruction">
             Destruction
           </ToggleGroupItem>
         </ToggleGroup>
         <Button variant="outline">
           <Plus />
-          Add Faction
+          <span className="hidden md:inline">Add Faction</span>
         </Button>
       </div>
       {factions.isLoading ? (

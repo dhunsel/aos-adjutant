@@ -15,7 +15,7 @@ public class EndpointTestsBase(ApiFactory factory) : IAsyncLifetime
     protected static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
-        Converters = { new JsonStringEnumConverter() },
+        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
     };
 
     public async Task InitializeAsync()

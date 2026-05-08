@@ -13,7 +13,7 @@
         "summary": "Get all weapon effects",
         "parameters": [
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -21,7 +21,7 @@
             }
           },
           {
-            "name": "PageSize",
+            "name": "pageSize",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -29,14 +29,14 @@
             }
           },
           {
-            "name": "SortBy",
+            "name": "sortBy",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/WeaponEffectSortBy"
             }
           },
           {
-            "name": "SortDirection",
+            "name": "sortDirection",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/SortDirection"
@@ -183,14 +183,14 @@
             }
           },
           {
-            "name": "Phase",
+            "name": "phase",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/Phase"
             }
           },
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -198,7 +198,7 @@
             }
           },
           {
-            "name": "PageSize",
+            "name": "pageSize",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -206,14 +206,14 @@
             }
           },
           {
-            "name": "SortBy",
+            "name": "sortBy",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/AbilitySortBy"
             }
           },
           {
-            "name": "SortDirection",
+            "name": "sortDirection",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/SortDirection"
@@ -380,14 +380,14 @@
             }
           },
           {
-            "name": "IsRanged",
+            "name": "isRanged",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -395,7 +395,7 @@
             }
           },
           {
-            "name": "PageSize",
+            "name": "pageSize",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -403,14 +403,14 @@
             }
           },
           {
-            "name": "SortBy",
+            "name": "sortBy",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/AttackProfileSortBy"
             }
           },
           {
-            "name": "SortDirection",
+            "name": "sortDirection",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/SortDirection"
@@ -779,14 +779,14 @@
             }
           },
           {
-            "name": "Phase",
+            "name": "phase",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/Phase"
             }
           },
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -794,7 +794,7 @@
             }
           },
           {
-            "name": "PageSize",
+            "name": "pageSize",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -802,14 +802,14 @@
             }
           },
           {
-            "name": "SortBy",
+            "name": "sortBy",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/AbilitySortBy"
             }
           },
           {
-            "name": "SortDirection",
+            "name": "sortDirection",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/SortDirection"
@@ -976,7 +976,7 @@
             }
           },
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -984,7 +984,7 @@
             }
           },
           {
-            "name": "PageSize",
+            "name": "pageSize",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -992,14 +992,14 @@
             }
           },
           {
-            "name": "SortBy",
+            "name": "sortBy",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/BattleFormationSortBy"
             }
           },
           {
-            "name": "SortDirection",
+            "name": "sortDirection",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/SortDirection"
@@ -1126,14 +1126,14 @@
         "summary": "Get all factions",
         "parameters": [
           {
-            "name": "GrandAlliance",
+            "name": "grandAlliance",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/GrandAlliance"
             }
           },
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1141,7 +1141,7 @@
             }
           },
           {
-            "name": "PageSize",
+            "name": "pageSize",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1149,14 +1149,14 @@
             }
           },
           {
-            "name": "SortBy",
+            "name": "sortBy",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/FactionSortBy"
             }
           },
           {
-            "name": "SortDirection",
+            "name": "sortDirection",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/SortDirection"
@@ -1505,7 +1505,7 @@
             }
           },
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1513,7 +1513,7 @@
             }
           },
           {
-            "name": "PageSize",
+            "name": "pageSize",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1521,14 +1521,14 @@
             }
           },
           {
-            "name": "SortBy",
+            "name": "sortBy",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/UnitSortBy"
             }
           },
           {
-            "name": "SortDirection",
+            "name": "sortDirection",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/SortDirection"
@@ -1695,14 +1695,14 @@
             }
           },
           {
-            "name": "Phase",
+            "name": "phase",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/Phase"
             }
           },
           {
-            "name": "Page",
+            "name": "page",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1710,7 +1710,7 @@
             }
           },
           {
-            "name": "PageSize",
+            "name": "pageSize",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1718,14 +1718,14 @@
             }
           },
           {
-            "name": "SortBy",
+            "name": "sortBy",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/AbilitySortBy"
             }
           },
           {
-            "name": "SortDirection",
+            "name": "sortDirection",
             "in": "query",
             "schema": {
               "$ref": "#/components/schemas/SortDirection"
@@ -2550,8 +2550,8 @@
       },
       "AbilitySortBy": {
         "enum": [
-          "Name",
-          "Phase",
+          "name",
+          "phase",
           null
         ]
       },
@@ -2628,8 +2628,8 @@
       },
       "AttackProfileSortBy": {
         "enum": [
-          "Name",
-          "IsRanged",
+          "name",
+          "isRanged",
           null
         ]
       },
@@ -2661,7 +2661,7 @@
       },
       "BattleFormationSortBy": {
         "enum": [
-          "Name",
+          "name",
           null
         ]
       },
@@ -3097,17 +3097,17 @@
       },
       "FactionSortBy": {
         "enum": [
-          "Name",
-          "GrandAlliance",
+          "name",
+          "grandAlliance",
           null
         ]
       },
       "GrandAlliance": {
         "enum": [
-          "Order",
-          "Death",
-          "Chaos",
-          "Destruction"
+          "order",
+          "death",
+          "chaos",
+          "destruction"
         ]
       },
       "PaginatedResponseOfAbilityResponseDto": {
@@ -3316,15 +3316,15 @@
       },
       "Phase": {
         "enum": [
-          "Deployment",
-          "Start",
-          "Hero",
-          "Movement",
-          "Shooting",
-          "Charge",
-          "Combat",
-          "End",
-          "Passive"
+          "deployment",
+          "start",
+          "hero",
+          "movement",
+          "shooting",
+          "charge",
+          "combat",
+          "end",
+          "passive"
         ]
       },
       "ProblemDetails": {
@@ -3365,25 +3365,25 @@
       },
       "Restriction": {
         "enum": [
-          "OnceTurnArmy",
-          "OnceRoundArmy",
-          "OnceBattleArmy",
-          "OnceRound",
-          "OnceBattle",
+          "onceTurnArmy",
+          "onceRoundArmy",
+          "onceBattleArmy",
+          "onceRound",
+          "onceBattle",
           null
         ]
       },
       "SortDirection": {
         "enum": [
-          "Asc",
-          "Desc"
+          "asc",
+          "desc"
         ]
       },
       "Turn": {
         "enum": [
-          "YourTurn",
-          "EnemyTurn",
-          "AnyTurn",
+          "yourTurn",
+          "enemyTurn",
+          "anyTurn",
           null
         ]
       },
@@ -3442,7 +3442,7 @@
       },
       "UnitSortBy": {
         "enum": [
-          "Name",
+          "name",
           null
         ]
       },
@@ -3463,7 +3463,7 @@
       },
       "WeaponEffectSortBy": {
         "enum": [
-          "Name",
+          "name",
           null
         ]
       }

@@ -15,10 +15,10 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          Page?: number;
-          PageSize?: number;
-          SortBy?: components["schemas"]["WeaponEffectSortBy"];
-          SortDirection?: components["schemas"]["SortDirection"];
+          page?: number;
+          pageSize?: number;
+          sortBy?: components["schemas"]["WeaponEffectSortBy"];
+          sortDirection?: components["schemas"]["SortDirection"];
         };
         header?: never;
         path?: never;
@@ -58,11 +58,11 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          Phase?: components["schemas"]["Phase"];
-          Page?: number;
-          PageSize?: number;
-          SortBy?: components["schemas"]["AbilitySortBy"];
-          SortDirection?: components["schemas"]["SortDirection"];
+          phase?: components["schemas"]["Phase"];
+          page?: number;
+          pageSize?: number;
+          sortBy?: components["schemas"]["AbilitySortBy"];
+          sortDirection?: components["schemas"]["SortDirection"];
         };
         header?: never;
         path: {
@@ -167,11 +167,11 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          IsRanged?: boolean;
-          Page?: number;
-          PageSize?: number;
-          SortBy?: components["schemas"]["AttackProfileSortBy"];
-          SortDirection?: components["schemas"]["SortDirection"];
+          isRanged?: boolean;
+          page?: number;
+          pageSize?: number;
+          sortBy?: components["schemas"]["AttackProfileSortBy"];
+          sortDirection?: components["schemas"]["SortDirection"];
         };
         header?: never;
         path: {
@@ -410,11 +410,11 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          Phase?: components["schemas"]["Phase"];
-          Page?: number;
-          PageSize?: number;
-          SortBy?: components["schemas"]["AbilitySortBy"];
-          SortDirection?: components["schemas"]["SortDirection"];
+          phase?: components["schemas"]["Phase"];
+          page?: number;
+          pageSize?: number;
+          sortBy?: components["schemas"]["AbilitySortBy"];
+          sortDirection?: components["schemas"]["SortDirection"];
         };
         header?: never;
         path: {
@@ -519,10 +519,10 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          Page?: number;
-          PageSize?: number;
-          SortBy?: components["schemas"]["BattleFormationSortBy"];
-          SortDirection?: components["schemas"]["SortDirection"];
+          page?: number;
+          pageSize?: number;
+          sortBy?: components["schemas"]["BattleFormationSortBy"];
+          sortDirection?: components["schemas"]["SortDirection"];
         };
         header?: never;
         path: {
@@ -627,11 +627,11 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          GrandAlliance?: components["schemas"]["GrandAlliance"];
-          Page?: number;
-          PageSize?: number;
-          SortBy?: components["schemas"]["FactionSortBy"];
-          SortDirection?: components["schemas"]["SortDirection"];
+          grandAlliance?: components["schemas"]["GrandAlliance"];
+          page?: number;
+          pageSize?: number;
+          sortBy?: components["schemas"]["FactionSortBy"];
+          sortDirection?: components["schemas"]["SortDirection"];
         };
         header?: never;
         path?: never;
@@ -844,10 +844,10 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          Page?: number;
-          PageSize?: number;
-          SortBy?: components["schemas"]["UnitSortBy"];
-          SortDirection?: components["schemas"]["SortDirection"];
+          page?: number;
+          pageSize?: number;
+          sortBy?: components["schemas"]["UnitSortBy"];
+          sortDirection?: components["schemas"]["SortDirection"];
         };
         header?: never;
         path: {
@@ -952,11 +952,11 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          Phase?: components["schemas"]["Phase"];
-          Page?: number;
-          PageSize?: number;
-          SortBy?: components["schemas"]["AbilitySortBy"];
-          SortDirection?: components["schemas"]["SortDirection"];
+          phase?: components["schemas"]["Phase"];
+          page?: number;
+          pageSize?: number;
+          sortBy?: components["schemas"]["AbilitySortBy"];
+          sortDirection?: components["schemas"]["SortDirection"];
         };
         header?: never;
         path: {
@@ -1547,7 +1547,7 @@ export interface components {
       version: number;
     };
     /** @enum {unknown} */
-    AbilitySortBy: "Name" | "Phase" | null;
+    AbilitySortBy: "name" | "phase" | null;
     AttackProfileResponseDto: {
       /** Format: int32 */
       attackProfileId: number;
@@ -1570,7 +1570,7 @@ export interface components {
       weaponEffects: components["schemas"]["WeaponEffectResponseDto"][];
     };
     /** @enum {unknown} */
-    AttackProfileSortBy: "Name" | "IsRanged" | null;
+    AttackProfileSortBy: "name" | "isRanged" | null;
     BattleFormationResponseDto: {
       /** Format: int32 */
       battleFormationId: number;
@@ -1581,7 +1581,7 @@ export interface components {
       version: number;
     };
     /** @enum {unknown} */
-    BattleFormationSortBy: "Name" | null;
+    BattleFormationSortBy: "name" | null;
     ChangeAbilityDto: {
       name: string;
       reaction?: null | string;
@@ -1687,9 +1687,9 @@ export interface components {
       version: number;
     };
     /** @enum {unknown} */
-    FactionSortBy: "Name" | "GrandAlliance" | null;
+    FactionSortBy: "name" | "grandAlliance" | null;
     /** @enum {unknown} */
-    GrandAlliance: "Order" | "Death" | "Chaos" | "Destruction";
+    GrandAlliance: "order" | "death" | "chaos" | "destruction";
     PaginatedResponseOfAbilityResponseDto: {
       items: components["schemas"]["AbilityResponseDto"][];
       /** Format: int32 */
@@ -1758,15 +1758,15 @@ export interface components {
     };
     /** @enum {unknown} */
     Phase:
-      | "Deployment"
-      | "Start"
-      | "Hero"
-      | "Movement"
-      | "Shooting"
-      | "Charge"
-      | "Combat"
-      | "End"
-      | "Passive";
+      | "deployment"
+      | "start"
+      | "hero"
+      | "movement"
+      | "shooting"
+      | "charge"
+      | "combat"
+      | "end"
+      | "passive";
     ProblemDetails: {
       type?: null | string;
       title?: null | string;
@@ -1777,16 +1777,16 @@ export interface components {
     };
     /** @enum {unknown} */
     Restriction:
-      | "OnceTurnArmy"
-      | "OnceRoundArmy"
-      | "OnceBattleArmy"
-      | "OnceRound"
-      | "OnceBattle"
+      | "onceTurnArmy"
+      | "onceRoundArmy"
+      | "onceBattleArmy"
+      | "onceRound"
+      | "onceBattle"
       | null;
     /** @enum {unknown} */
-    SortDirection: "Asc" | "Desc";
+    SortDirection: "asc" | "desc";
     /** @enum {unknown} */
-    Turn: "YourTurn" | "EnemyTurn" | "AnyTurn" | null;
+    Turn: "yourTurn" | "enemyTurn" | "anyTurn" | null;
     UnitResponseDto: {
       /** Format: int32 */
       unitId: number;
@@ -1806,13 +1806,13 @@ export interface components {
       version: number;
     };
     /** @enum {unknown} */
-    UnitSortBy: "Name" | null;
+    UnitSortBy: "name" | null;
     WeaponEffectResponseDto: {
       key: string;
       name: string;
     };
     /** @enum {unknown} */
-    WeaponEffectSortBy: "Name" | null;
+    WeaponEffectSortBy: "name" | null;
   };
   responses: never;
   parameters: never;
