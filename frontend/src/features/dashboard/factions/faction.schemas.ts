@@ -26,3 +26,8 @@ export const factionListParamsSchema = z
     if (s.sortDirection) out.sortDirection = s.sortDirection;
     return out;
   });
+
+export const createFactionSchema = z.object({
+  name: z.string().min(1).max(100),
+  grandAlliance: z.enum(grandAlliances),
+});

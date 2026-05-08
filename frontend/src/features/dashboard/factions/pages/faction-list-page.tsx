@@ -9,6 +9,14 @@ import { useSearchParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import z from "zod";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { CreateFaction } from "../components/create-faction";
 
 const GrandAllianceBadge = ({
   grandAlliance,
@@ -82,10 +90,22 @@ export function FactionListPage() {
             Destruction
           </ToggleGroupItem>
         </ToggleGroup>
-        <Button variant="outline">
-          <Plus />
-          <span className="hidden md:inline">Add Faction</span>
-        </Button>
+        <Dialog>
+          <DialogTrigger
+            render={
+              <Button variant="outline">
+                <Plus />
+                <span className="hidden md:inline">Add Faction</span>
+              </Button>
+            }
+          />
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add Faction</DialogTitle>
+            </DialogHeader>
+            <CreateFaction />
+          </DialogContent>
+        </Dialog>
       </div>
       {factions.isLoading ? (
         <div className="pt-10">
