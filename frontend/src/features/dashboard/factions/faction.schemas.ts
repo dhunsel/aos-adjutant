@@ -9,9 +9,11 @@ const sortByValues = ["name", "grandAlliance"] as const;
 
 const sortDirections = ["asc", "desc"] as const;
 
+export const grandAllianceSchema = z.enum(grandAlliances, "Invalid Grand Alliance");
+
 export const factionListParamsSchema = z
   .object({
-    grandAlliance: z.enum(grandAlliances).optional().catch(undefined),
+    grandAlliance: grandAllianceSchema.optional().catch(undefined),
     page: z.coerce.number().int().min(1).optional().catch(undefined),
     pageSize: z.coerce.number().int().min(1).max(100).optional().catch(undefined),
     sortBy: z.enum(sortByValues).optional().catch(undefined),
@@ -26,3 +28,8 @@ export const factionListParamsSchema = z
     if (s.sortDirection) out.sortDirection = s.sortDirection;
     return out;
   });
+
+export const createFactionSchema = z.object({
+  name: z.string().min(1, "Name is required").max(50, "Name too long"),
+  grandAlliance: grandAllianceSchema,
+});
