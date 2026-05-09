@@ -11,18 +11,39 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "@tanstack/react-form";
 import { createFactionSchema } from "../faction.schemas";
+import { useCreateFaction } from "../faction.queries";
+import { Spinner } from "@/components/ui/spinner";
+import { ApiError } from "@/lib/api-client";
 
-export function CreateFaction() {
+export function CreateFaction({ onSuccess }: { onSuccess?: () => void }) {
+  const createFaction = useCreateFaction();
   const form = useForm({
     defaultValues: {
       name: "",
       grandAlliance: "",
     },
-    validators: { onChange: createFactionSchema },
-    onSubmit: async ({ value }) => {
-      await Promise.resolve();
-      console.log(value);
-      alert("submit success");
+    validators: {
+      onChange: createFactionSchema,
+      onSubmitAsync: async ({ value }) => {
+        try {
+          const parsed = createFactionSchema.parse(value);
+          await createFaction.mutateAsync(parsed);
+          return null;
+        } catch (err) {
+          if (err instanceof ApiError && err.status === 409) {
+            return {
+              fields: {
+                name: { message: "Name already used by another faction" },
+              },
+            };
+          }
+          return { form: { message: "Unexpected error" } };
+        }
+      },
+    },
+    onSubmit: ({ formApi }) => {
+      formApi.reset();
+      onSuccess?.();
     },
   });
 
@@ -67,17 +88,22 @@ export function CreateFaction() {
         <form.Field
           name="grandAlliance"
           children={(field) => {
+            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
             return (
-              <Field className="max-w-48">
-                <FieldLabel>Grand Alliance</FieldLabel>
+              <Field data-invalid={isInvalid} className="max-w-40">
+                <FieldLabel htmlFor={field.name}>Grand Alliance</FieldLabel>
                 <Select
+                  name={field.name}
                   items={grandAlliances}
+                  onOpenChange={(isOpen) => {
+                    if (!isOpen) field.handleBlur();
+                  }}
                   onValueChange={(value) => {
                     field.handleChange(value ?? "");
                   }}
                   value={field.state.value}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger id={field.name} aria-invalid={isInvalid}>
                     <SelectValue placeholder="Grand Alliance" />
                   </SelectTrigger>
                   <SelectContent>
@@ -90,13 +116,21 @@ export function CreateFaction() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             );
           }}
         />
-        <Field>
-          <Button type="submit">Create</Button>
-        </Field>
+        <form.Subscribe
+          selector={(state) => [state.canSubmit && !state.isPristine, state.isSubmitting]}
+          children={([canSubmitAndNotPristine, isSubmitting]) => (
+            <Field>
+              <Button disabled={!canSubmitAndNotPristine || isSubmitting} type="submit">
+                {isSubmitting ? <Spinner /> : "Create"}
+              </Button>
+            </Field>
+          )}
+        />
       </FieldGroup>
     </form>
   );

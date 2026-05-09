@@ -2,13 +2,12 @@ import { Spinner } from "@/components/ui/spinner";
 import { useFactions } from "../faction.queries";
 import type { FactionQuery, GrandAlliance } from "@/types/api.types";
 import { Badge } from "@/components/ui/badge";
-import { type ComponentProps } from "react";
+import { useState, type ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useSearchParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import z from "zod";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { CreateFaction } from "../components/create-faction";
+import { grandAllianceSchema } from "../faction.schemas";
 
 const GrandAllianceBadge = ({
   grandAlliance,
@@ -52,16 +52,13 @@ const GrandAllianceBadge = ({
 
 const GRAND_ALLIANCE_KEY = "grandAlliance" satisfies keyof FactionQuery;
 
-const grandAllianceSchema = z
-  .enum(["order", "chaos", "death", "destruction"])
-  .optional()
-  .catch(undefined);
-
 export function FactionListPage() {
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const grandAlliance = grandAllianceSchema.parse(
-    searchParams.get(GRAND_ALLIANCE_KEY) ?? undefined,
-  );
+  const grandAlliance = grandAllianceSchema
+    .optional()
+    .catch(undefined)
+    .parse(searchParams.get(GRAND_ALLIANCE_KEY) ?? undefined);
 
   const factions = useFactions(grandAlliance ? { grandAlliance } : {});
 
@@ -90,7 +87,7 @@ export function FactionListPage() {
             Destruction
           </ToggleGroupItem>
         </ToggleGroup>
-        <Dialog>
+        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger
             render={
               <Button variant="outline">
@@ -103,7 +100,11 @@ export function FactionListPage() {
             <DialogHeader>
               <DialogTitle>Add Faction</DialogTitle>
             </DialogHeader>
-            <CreateFaction />
+            <CreateFaction
+              onSuccess={() => {
+                setIsCreateDialogOpen(false);
+              }}
+            />
           </DialogContent>
         </Dialog>
       </div>
