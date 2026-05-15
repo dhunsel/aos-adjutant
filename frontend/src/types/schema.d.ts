@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-  "/api/weapon-effects": {
+  "/weapon-effects": {
     parameters: {
       query?: never;
       header?: never;
@@ -47,7 +47,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/units/{unitId}/abilities": {
+  "/units/{unitId}/abilities": {
     parameters: {
       query?: never;
       header?: never;
@@ -156,7 +156,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/units/{unitId}/attack-profiles": {
+  "/units/{unitId}/attack-profiles": {
     parameters: {
       query?: never;
       header?: never;
@@ -265,7 +265,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/units/{unitId}": {
+  "/units/{unitId}": {
     parameters: {
       query?: never;
       header?: never;
@@ -399,7 +399,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/factions/{factionId}/abilities": {
+  "/factions/{factionId}/abilities": {
     parameters: {
       query?: never;
       header?: never;
@@ -508,7 +508,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/factions/{factionId}/battle-formations": {
+  "/factions/{factionId}/battle-formations": {
     parameters: {
       query?: never;
       header?: never;
@@ -616,7 +616,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/factions": {
+  "/factions": {
     parameters: {
       query?: never;
       header?: never;
@@ -699,7 +699,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/factions/{factionId}": {
+  "/factions/{factionId}": {
     parameters: {
       query?: never;
       header?: never;
@@ -833,7 +833,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/factions/{factionId}/units": {
+  "/factions/{factionId}/units": {
     parameters: {
       query?: never;
       header?: never;
@@ -941,7 +941,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/battle-formations/{battleFormationId}/abilities": {
+  "/battle-formations/{battleFormationId}/abilities": {
     parameters: {
       query?: never;
       header?: never;
@@ -1050,7 +1050,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/battle-formations/{battleFormationId}": {
+  "/battle-formations/{battleFormationId}": {
     parameters: {
       query?: never;
       header?: never;
@@ -1184,7 +1184,110 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/attack-profiles/{attackProfileId}": {
+  "/auth/login": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/auth/logout": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/auth/me": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "text/plain": components["schemas"]["UserResponseDto"];
+            "application/json": components["schemas"]["UserResponseDto"];
+            "text/json": components["schemas"]["UserResponseDto"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/attack-profiles/{attackProfileId}": {
     parameters: {
       query?: never;
       header?: never;
@@ -1318,7 +1421,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/abilities": {
+  "/abilities": {
     parameters: {
       query?: never;
       header?: never;
@@ -1395,7 +1498,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/abilities/{abilityId}": {
+  "/abilities/{abilityId}": {
     parameters: {
       query?: never;
       header?: never;
@@ -1807,6 +1910,10 @@ export interface components {
     };
     /** @enum {unknown} */
     UnitSortBy: "name" | null;
+    UserResponseDto: {
+      username: string;
+      isAdmin: boolean;
+    };
     WeaponEffectResponseDto: {
       key: string;
       name: string;

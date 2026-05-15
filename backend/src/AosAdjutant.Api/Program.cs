@@ -8,12 +8,14 @@ using AosAdjutant.Api.Features.AttackProfiles;
 using AosAdjutant.Api.Features.BattleFormations;
 using AosAdjutant.Api.Features.Factions;
 using AosAdjutant.Api.Features.Units;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -33,11 +35,14 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    // Path prefix applied via UsePathBase and reflected in the OpenAPI servers entry.
+    // Both must stay in sync, so reference this single source of truth.
+    const string BasePath = "/api";
+
     builder
         .Services.AddAuthentication(opts =>
         {
             opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
         })
         .AddCookie(opts =>
         {
@@ -58,10 +63,18 @@ try
             opts.ResponseType = OpenIdConnectResponseType.Code;
             opts.UsePkce = true;
             opts.SaveTokens = false;
+
+            opts.Events.OnTokenValidated = ctx =>
+            {
+                // Save ID token so logout redirect works
+                ctx.Properties!.StoreTokens([
+                    new() { Name = "id_token", Value = ctx.TokenEndpointResponse!.IdToken },
+                ]);
+                return Task.CompletedTask;
+            };
+
             opts.GetClaimsFromUserInfoEndpoint = false;
-
             opts.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
             opts.MapInboundClaims = false;
 
             opts.Scope.Clear();
@@ -159,22 +172,21 @@ try
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
     builder.Services.AddOpenApi(opts =>
-        opts.AddOperationTransformer<CamelCaseQueryParametersTransformer>()
-    );
+    {
+        opts.AddOperationTransformer<CamelCaseQueryParametersTransformer>();
 
-    builder.Services.AddCors(options =>
-        options.AddPolicy(
-            "Frontend",
-            policy =>
-                policy
-                    .WithOrigins(
-                        builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
-                            ?? []
-                    )
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-        )
-    );
+        // ASP.NET Core's OpenAPI generation does not emit a servers entry, so the document
+        // describes endpoints at the root and ignores the UsePathBase prefix. Declare the
+        // base path as a server so Scalar, generated clients and the checked-in spec target
+        // the correct URLs.
+        opts.AddDocumentTransformer(
+            (document, _, _) =>
+            {
+                document.Servers = [new OpenApiServer { Url = BasePath }];
+                return Task.CompletedTask;
+            }
+        );
+    });
 
     builder.Services.AddDbContext<ApplicationDbContext>(opt =>
         opt.UseNpgsql(builder.Configuration["AosAdjutant:DbContextConnectionString"])
@@ -182,7 +194,7 @@ try
 
     var app = builder.Build();
 
-    app.UsePathBase("/api");
+    app.UsePathBase(BasePath);
 
     app.UseMiddleware<CorrelationIdMiddleware>();
 
