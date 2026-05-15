@@ -1,16 +1,18 @@
 using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.BattleFormations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AosAdjutant.Api.Features.Factions;
 
-[Route("api/factions/{factionId:int}/battle-formations")]
+[Route("factions/{factionId:int}/battle-formations")]
 [ApiController]
 [Tags("Battle Formations")]
 public sealed class FactionBattleFormationController(BattleFormationService battleFormationService)
     : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Create a battle formation under a faction")]
     [ProducesResponseType<BattleFormationResponseDto>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -42,6 +44,7 @@ public sealed class FactionBattleFormationController(BattleFormationService batt
     }
 
     [HttpGet]
+    [Authorize]
     [EndpointSummary("Get all battle formations for a faction")]
     [ProducesResponseType<PaginatedResponse<BattleFormationResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]

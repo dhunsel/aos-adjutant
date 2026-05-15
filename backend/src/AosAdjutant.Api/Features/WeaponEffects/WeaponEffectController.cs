@@ -1,11 +1,12 @@
 using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AosAdjutant.Api.Features.WeaponEffects;
 
-[Route("api/weapon-effects")]
+[Route("weapon-effects")]
 [ApiController]
 [Tags("Weapon Effects")]
 public sealed class WeaponEffectController(ApplicationDbContext context) : ControllerBase
@@ -13,6 +14,7 @@ public sealed class WeaponEffectController(ApplicationDbContext context) : Contr
     [HttpGet]
     [EndpointSummary("Get all weapon effects")]
     [ProducesResponseType<PaginatedResponse<WeaponEffectResponseDto>>(StatusCodes.Status200OK)]
+    [Authorize]
     public async Task<ActionResult<PaginatedResponse<WeaponEffectResponseDto>>> GetWeaponEffects(
         [FromQuery] WeaponEffectQuery weaponEffectQuery
     )

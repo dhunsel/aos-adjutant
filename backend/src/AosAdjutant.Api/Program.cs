@@ -8,7 +8,12 @@ using AosAdjutant.Api.Features.AttackProfiles;
 using AosAdjutant.Api.Features.BattleFormations;
 using AosAdjutant.Api.Features.Factions;
 using AosAdjutant.Api.Features.Units;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -27,6 +32,56 @@ Log.Information("Starting the application");
 try
 {
     var builder = WebApplication.CreateBuilder(args);
+
+    builder
+        .Services.AddAuthentication(opts =>
+        {
+            opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+        })
+        .AddCookie(opts =>
+        {
+            opts.Cookie.Name = "__Host-aosadj-id";
+            opts.Cookie.HttpOnly = true;
+            opts.Cookie.SameSite = SameSiteMode.Strict;
+            opts.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            opts.Cookie.Path = "/";
+            opts.ExpireTimeSpan = TimeSpan.FromHours(8);
+            opts.SlidingExpiration = true;
+        })
+        .AddOpenIdConnect(opts =>
+        {
+            opts.Authority = builder.Configuration["Authentication:Authority"];
+
+            opts.ClientId = builder.Configuration["Authentication:ClientId"];
+            opts.ClientSecret = builder.Configuration["Authentication:ClientSecret"];
+            opts.ResponseType = OpenIdConnectResponseType.Code;
+            opts.UsePkce = true;
+            opts.SaveTokens = false;
+            opts.GetClaimsFromUserInfoEndpoint = false;
+
+            opts.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            opts.MapInboundClaims = false;
+
+            opts.Scope.Clear();
+            opts.Scope.Add("openid");
+            opts.Scope.Add("profile");
+            opts.Scope.Add("email");
+            opts.Scope.Add("groups");
+
+            opts.RequireHttpsMetadata = builder.Configuration.GetValue(
+                "Authentication:RequireHttpsMetadata",
+                defaultValue: true
+            );
+
+            opts.TokenValidationParameters.NameClaimType = "preferred_username";
+            opts.TokenValidationParameters.RoleClaimType = "groups";
+        });
+
+    builder
+        .Services.AddAuthorizationBuilder()
+        .AddFallbackPolicy("RequireAdmin", p => p.RequireRole("admins"));
 
     builder.Services.AddSerilog(
         (services, lc) =>
@@ -127,6 +182,8 @@ try
 
     var app = builder.Build();
 
+    app.UsePathBase("/api");
+
     app.UseMiddleware<CorrelationIdMiddleware>();
 
     app.UseSerilogRequestLogging(opts =>
@@ -140,7 +197,8 @@ try
 
     app.UseExceptionHandler();
 
-    app.UseCors("Frontend");
+    app.UseAuthentication();
+    app.UseAuthorization();
 
     if (app.Environment.IsDevelopment())
     {

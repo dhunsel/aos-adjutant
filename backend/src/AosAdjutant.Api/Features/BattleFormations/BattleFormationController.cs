@@ -1,15 +1,17 @@
 using AosAdjutant.Api.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AosAdjutant.Api.Features.BattleFormations;
 
-[Route("api/battle-formations")]
+[Route("battle-formations")]
 [ApiController]
 [Tags("Battle Formations")]
 public sealed class BattleFormationController(BattleFormationService battleFormationService)
     : ControllerBase
 {
     [HttpGet("{battleFormationId:int}")]
+    [Authorize]
     [EndpointSummary("Get a battle formation by ID")]
     [ProducesResponseType<BattleFormationResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -35,6 +37,7 @@ public sealed class BattleFormationController(BattleFormationService battleForma
     }
 
     [HttpPut("{battleFormationId:int}")]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Update a battle formation")]
     [ProducesResponseType<BattleFormationResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -63,6 +66,7 @@ public sealed class BattleFormationController(BattleFormationService battleForma
     }
 
     [HttpDelete("{battleFormationId:int}")]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Delete a battle formation")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]

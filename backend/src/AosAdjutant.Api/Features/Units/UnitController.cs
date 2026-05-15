@@ -1,14 +1,16 @@
 using AosAdjutant.Api.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AosAdjutant.Api.Features.Units;
 
-[Route("api/units")]
+[Route("units")]
 [ApiController]
 [Tags("Units")]
 public sealed class UnitController(UnitService unitService) : ControllerBase
 {
     [HttpGet("{unitId:int}")]
+    [Authorize]
     [EndpointSummary("Get a unit by ID")]
     [ProducesResponseType<UnitResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -35,6 +37,7 @@ public sealed class UnitController(UnitService unitService) : ControllerBase
     }
 
     [HttpPut("{unitId:int}")]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Update a unit")]
     [ProducesResponseType<UnitResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -65,6 +68,7 @@ public sealed class UnitController(UnitService unitService) : ControllerBase
     }
 
     [HttpDelete("{unitId:int}")]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Delete a unit")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]

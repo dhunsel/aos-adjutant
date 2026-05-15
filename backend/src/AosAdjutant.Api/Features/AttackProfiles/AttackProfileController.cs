@@ -1,16 +1,18 @@
 using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.WeaponEffects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AosAdjutant.Api.Features.AttackProfiles;
 
-[Route("api/attack-profiles")]
+[Route("attack-profiles")]
 [ApiController]
 [Tags("Attack Profiles")]
 public sealed class AttackProfileController(AttackProfileService attackProfileService)
     : ControllerBase
 {
     [HttpGet("{attackProfileId}")]
+    [Authorize]
     [EndpointSummary("Get an attack profile by ID")]
     [ProducesResponseType<AttackProfileResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -43,6 +45,7 @@ public sealed class AttackProfileController(AttackProfileService attackProfileSe
     }
 
     [HttpPut("{attackProfileId:int}")]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Update an attack profile")]
     [ProducesResponseType<AttackProfileResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -80,6 +83,7 @@ public sealed class AttackProfileController(AttackProfileService attackProfileSe
     }
 
     [HttpDelete("{attackProfileId:int}")]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Delete an attack profile")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]

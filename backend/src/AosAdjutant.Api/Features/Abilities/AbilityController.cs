@@ -1,14 +1,16 @@
 using AosAdjutant.Api.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AosAdjutant.Api.Features.Abilities;
 
-[Route("api/abilities")]
+[Route("abilities")]
 [ApiController]
 [Tags("Abilities")]
 public sealed class AbilityController(AbilityService abilityService) : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Create a generic ability")]
     [ProducesResponseType<AbilityResponseDto>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
@@ -39,6 +41,7 @@ public sealed class AbilityController(AbilityService abilityService) : Controlle
     }
 
     [HttpGet]
+    [Authorize]
     [EndpointSummary("Get all generic abilities")]
     [ProducesResponseType<PaginatedResponse<AbilityResponseDto>>(StatusCodes.Status200OK)]
     public Task<ActionResult<PaginatedResponse<AbilityResponseDto>>> GetAbilities()
@@ -49,6 +52,7 @@ public sealed class AbilityController(AbilityService abilityService) : Controlle
     }
 
     [HttpGet("{abilityId:int}")]
+    [Authorize]
     [EndpointSummary("Get an ability by ID")]
     [ProducesResponseType<AbilityResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -75,6 +79,7 @@ public sealed class AbilityController(AbilityService abilityService) : Controlle
     }
 
     [HttpPut("{abilityId:int}")]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Update an ability")]
     [ProducesResponseType<AbilityResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -105,6 +110,7 @@ public sealed class AbilityController(AbilityService abilityService) : Controlle
     }
 
     [HttpDelete("{abilityId:int}")]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Delete an ability")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
