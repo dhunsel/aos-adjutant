@@ -67,6 +67,9 @@ jobs:
         run: dotnet test tests/AosAdjutant.UnitTests --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory coverage/unit
 
       - name: Integration Tests
+        env:
+          "Authentication:ClientId": ${{ secrets.Authentication_ClientId }}
+          "Authentication:ClientSecret": ${{ secrets.Authentication_ClientSecret }}
         run: dotnet test tests/AosAdjutant.IntegrationTests --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory coverage/integration
 
       - name: Upload coverage to Codecov
