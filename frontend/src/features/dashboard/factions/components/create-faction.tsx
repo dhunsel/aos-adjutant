@@ -37,6 +37,9 @@ export function CreateFaction({ onSuccess }: { onSuccess?: () => void }) {
               },
             };
           }
+          if (err instanceof ApiError && err.status === 403) {
+            return { form: { message: "You don't have permission to do this." } };
+          }
           return { form: { message: "Unexpected error" } };
         }
       },

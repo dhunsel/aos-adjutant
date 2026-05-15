@@ -1,5 +1,6 @@
 import { Spinner } from "@/components/ui/spinner";
 import { useFactions } from "../faction.queries";
+import { useIsAdmin } from "@/features/auth/auth.queries";
 import type { FactionQuery, GrandAlliance } from "@/types/api.types";
 import { Badge } from "@/components/ui/badge";
 import { useState, type ComponentProps } from "react";
@@ -61,6 +62,7 @@ export function FactionListPage() {
     .parse(searchParams.get(GRAND_ALLIANCE_KEY) ?? undefined);
 
   const factions = useFactions(grandAlliance ? { grandAlliance } : {});
+  const isAdmin = useIsAdmin();
 
   const onFilterClick = (value: string[]) => {
     setSearchParams((prev) => {
@@ -87,26 +89,28 @@ export function FactionListPage() {
             Destruction
           </ToggleGroupItem>
         </ToggleGroup>
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-          <DialogTrigger
-            render={
-              <Button variant="outline">
-                <Plus />
-                <span className="hidden md:inline">Add Faction</span>
-              </Button>
-            }
-          />
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Faction</DialogTitle>
-            </DialogHeader>
-            <CreateFaction
-              onSuccess={() => {
-                setIsCreateDialogOpen(false);
-              }}
+        {isAdmin && (
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <DialogTrigger
+              render={
+                <Button variant="outline">
+                  <Plus />
+                  <span className="hidden md:inline">Add Faction</span>
+                </Button>
+              }
             />
-          </DialogContent>
-        </Dialog>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add Faction</DialogTitle>
+              </DialogHeader>
+              <CreateFaction
+                onSuccess={() => {
+                  setIsCreateDialogOpen(false);
+                }}
+              />
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
       {factions.isLoading ? (
         <div className="pt-10">

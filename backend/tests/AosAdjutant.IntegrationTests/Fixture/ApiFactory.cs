@@ -1,4 +1,5 @@
 using AosAdjutant.Api.Database;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,21 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
             services.AddDbContext<ApplicationDbContext>(opt =>
                 opt.UseNpgsql(_db.GetConnectionString())
             );
+
+            services.RemoveAll<IAuthenticationSchemeProvider>();
+            services.RemoveAll<IAuthenticationHandlerProvider>();
+            services.RemoveAll<IAuthenticationService>();
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultScheme = TestAuthHandler.SchemeName;
+                    options.DefaultAuthenticateScheme = TestAuthHandler.SchemeName;
+                    options.DefaultChallengeScheme = TestAuthHandler.SchemeName;
+                })
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                    TestAuthHandler.SchemeName,
+                    _ => { }
+                );
         });
     }
 

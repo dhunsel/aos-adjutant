@@ -1,15 +1,17 @@
 using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.Abilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AosAdjutant.Api.Features.Units;
 
-[Route("api/units/{unitId:int}/abilities")]
+[Route("units/{unitId:int}/abilities")]
 [ApiController]
 [Tags("Units")]
 public sealed class UnitAbilityController(UnitService unitService) : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Create an ability for a unit")]
     [ProducesResponseType<AbilityResponseDto>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
@@ -43,6 +45,7 @@ public sealed class UnitAbilityController(UnitService unitService) : ControllerB
     }
 
     [HttpGet]
+    [Authorize]
     [EndpointSummary("Get all abilities for a unit")]
     [ProducesResponseType<PaginatedResponse<AbilityResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]

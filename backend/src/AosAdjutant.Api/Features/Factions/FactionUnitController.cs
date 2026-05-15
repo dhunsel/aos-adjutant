@@ -1,15 +1,17 @@
 using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.Units;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AosAdjutant.Api.Features.Factions;
 
-[Route("api/factions/{factionId:int}/units")]
+[Route("factions/{factionId:int}/units")]
 [ApiController]
 [Tags("Units")]
 public sealed class FactionUnitController(UnitService unitService) : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Create a unit under a faction")]
     [ProducesResponseType<UnitResponseDto>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -43,6 +45,7 @@ public sealed class FactionUnitController(UnitService unitService) : ControllerB
     }
 
     [HttpGet]
+    [Authorize]
     [EndpointSummary("Get all units for a faction")]
     [ProducesResponseType<PaginatedResponse<UnitResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]

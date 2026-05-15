@@ -12,10 +12,11 @@ export class ApiError extends Error {
   }
 }
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+//const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function buildUrl(path: string, params?: object): string {
-  const url = `${BASE_URL}${path}`;
+  //const url = `${BASE_URL}${path}`;
+  const url = `/api${path}`;
 
   if (!params) return url;
 

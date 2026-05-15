@@ -1,17 +1,19 @@
 using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.AttackProfiles;
 using AosAdjutant.Api.Features.WeaponEffects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AosAdjutant.Api.Features.Units;
 
-[Route("api/units/{unitId:int}/attack-profiles")]
+[Route("units/{unitId:int}/attack-profiles")]
 [ApiController]
 [Tags("Attack Profiles")]
 public sealed class UnitAttackProfileController(AttackProfileService attackProfileService)
     : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Create an attack profile under a unit")]
     [ProducesResponseType<AttackProfileResponseDto>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -52,6 +54,7 @@ public sealed class UnitAttackProfileController(AttackProfileService attackProfi
     }
 
     [HttpGet]
+    [Authorize]
     [EndpointSummary("Get all attack profiles for a unit")]
     [ProducesResponseType<PaginatedResponse<AttackProfileResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]

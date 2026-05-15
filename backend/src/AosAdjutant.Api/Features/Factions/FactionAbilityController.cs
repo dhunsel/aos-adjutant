@@ -1,15 +1,17 @@
 using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Features.Abilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AosAdjutant.Api.Features.Factions;
 
-[Route("api/factions/{factionId:int}/abilities")]
+[Route("factions/{factionId:int}/abilities")]
 [ApiController]
 [Tags("Factions")]
 public sealed class FactionAbilityController(FactionService factionService) : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Create an ability for a faction")]
     [ProducesResponseType<AbilityResponseDto>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
@@ -43,6 +45,7 @@ public sealed class FactionAbilityController(FactionService factionService) : Co
     }
 
     [HttpGet]
+    [Authorize]
     [EndpointSummary("Get all abilities for a faction")]
     [ProducesResponseType<PaginatedResponse<AbilityResponseDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]

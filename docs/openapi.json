@@ -4,8 +4,13 @@
     "title": "AosAdjutant.Api | v1",
     "version": "1.0.0"
   },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
   "paths": {
-    "/api/weapon-effects": {
+    "/weapon-effects": {
       "get": {
         "tags": [
           "Weapon Effects"
@@ -67,7 +72,7 @@
         }
       }
     },
-    "/api/units/{unitId}/abilities": {
+    "/units/{unitId}/abilities": {
       "post": {
         "tags": [
           "Units"
@@ -264,7 +269,7 @@
         }
       }
     },
-    "/api/units/{unitId}/attack-profiles": {
+    "/units/{unitId}/attack-profiles": {
       "post": {
         "tags": [
           "Attack Profiles"
@@ -461,7 +466,7 @@
         }
       }
     },
-    "/api/units/{unitId}": {
+    "/units/{unitId}": {
       "get": {
         "tags": [
           "Units"
@@ -663,7 +668,7 @@
         }
       }
     },
-    "/api/factions/{factionId}/abilities": {
+    "/factions/{factionId}/abilities": {
       "post": {
         "tags": [
           "Factions"
@@ -860,7 +865,7 @@
         }
       }
     },
-    "/api/factions/{factionId}/battle-formations": {
+    "/factions/{factionId}/battle-formations": {
       "post": {
         "tags": [
           "Battle Formations"
@@ -1050,7 +1055,7 @@
         }
       }
     },
-    "/api/factions": {
+    "/factions": {
       "post": {
         "tags": [
           "Factions"
@@ -1187,7 +1192,7 @@
         }
       }
     },
-    "/api/factions/{factionId}": {
+    "/factions/{factionId}": {
       "get": {
         "tags": [
           "Factions"
@@ -1389,7 +1394,7 @@
         }
       }
     },
-    "/api/factions/{factionId}/units": {
+    "/factions/{factionId}/units": {
       "post": {
         "tags": [
           "Units"
@@ -1579,7 +1584,7 @@
         }
       }
     },
-    "/api/battle-formations/{battleFormationId}/abilities": {
+    "/battle-formations/{battleFormationId}/abilities": {
       "post": {
         "tags": [
           "Battle Formations"
@@ -1776,7 +1781,7 @@
         }
       }
     },
-    "/api/battle-formations/{battleFormationId}": {
+    "/battle-formations/{battleFormationId}": {
       "get": {
         "tags": [
           "Battle Formations"
@@ -1978,7 +1983,60 @@
         }
       }
     },
-    "/api/attack-profiles/{attackProfileId}": {
+    "/auth/login": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/attack-profiles/{attackProfileId}": {
       "get": {
         "tags": [
           "Attack Profiles"
@@ -2180,7 +2238,7 @@
         }
       }
     },
-    "/api/abilities": {
+    "/abilities": {
       "post": {
         "tags": [
           "Abilities"
@@ -2278,7 +2336,7 @@
         }
       }
     },
-    "/api/abilities/{abilityId}": {
+    "/abilities/{abilityId}": {
       "get": {
         "tags": [
           "Abilities"
@@ -3446,6 +3504,21 @@
           null
         ]
       },
+      "UserResponseDto": {
+        "required": [
+          "username",
+          "isAdmin"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "isAdmin": {
+            "type": "boolean"
+          }
+        }
+      },
       "WeaponEffectResponseDto": {
         "required": [
           "key",
@@ -3484,6 +3557,9 @@
     },
     {
       "name": "Battle Formations"
+    },
+    {
+      "name": "Auth"
     },
     {
       "name": "Abilities"

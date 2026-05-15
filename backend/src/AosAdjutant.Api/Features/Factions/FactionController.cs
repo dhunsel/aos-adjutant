@@ -1,14 +1,16 @@
 using AosAdjutant.Api.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AosAdjutant.Api.Features.Factions;
 
-[Route("api/factions")]
+[Route("factions")]
 [ApiController]
 [Tags("Factions")]
 public sealed class FactionController(FactionService factionService) : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Create a faction")]
     [ProducesResponseType<FactionResponseDto>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
@@ -29,6 +31,7 @@ public sealed class FactionController(FactionService factionService) : Controlle
     }
 
     [HttpGet]
+    [Authorize]
     [EndpointSummary("Get all factions")]
     [ProducesResponseType<PaginatedResponse<FactionResponseDto>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<PaginatedResponse<FactionResponseDto>>> GetFactions(
@@ -47,6 +50,7 @@ public sealed class FactionController(FactionService factionService) : Controlle
     }
 
     [HttpGet("{factionId:int}")]
+    [Authorize]
     [EndpointSummary("Get a faction by ID")]
     [ProducesResponseType<FactionResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -60,6 +64,7 @@ public sealed class FactionController(FactionService factionService) : Controlle
     }
 
     [HttpPut("{factionId:int}")]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Update a faction")]
     [ProducesResponseType<FactionResponseDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -77,6 +82,7 @@ public sealed class FactionController(FactionService factionService) : Controlle
     }
 
     [HttpDelete("{factionId:int}")]
+    [Authorize(Policy = "RequireAdmin")]
     [EndpointSummary("Delete a faction")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
