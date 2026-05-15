@@ -14,13 +14,34 @@ public class TestAuthHandler(
 {
     public const string SchemeName = "Test";
 
+    /// <summary>
+    /// Per-request header letting a test pick the principal. Absent or "admin"
+    /// keeps the original always-admin behaviour, so existing tests are
+    /// unaffected. "user" is authenticated but not in "admins"; "anonymous"
+    /// (or any unknown value) is unauthenticated.
+    /// </summary>
+    public const string AuthHeader = "X-Test-Auth";
+
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        var claims = new[]
-        {
-            new Claim("preferred_username", "integration-test"),
-            new Claim("groups", "admins"),
-        };
+        var mode = Request.Headers[AuthHeader].ToString();
+
+        if (string.IsNullOrEmpty(mode) || mode.Equals("admin", StringComparison.OrdinalIgnoreCase))
+            return Task.FromResult(Authenticate(isAdmin: true));
+
+        if (mode.Equals("user", StringComparison.OrdinalIgnoreCase))
+            return Task.FromResult(Authenticate(isAdmin: false));
+
+        // "anonymous" and any unknown value: no authenticated principal.
+        return Task.FromResult(AuthenticateResult.NoResult());
+    }
+
+    private AuthenticateResult Authenticate(bool isAdmin)
+    {
+        var claims = new List<Claim> { new("preferred_username", "integration-test") };
+        if (isAdmin)
+            claims.Add(new Claim("groups", "admins"));
+
         var identity = new ClaimsIdentity(
             claims,
             authenticationType: SchemeName,
@@ -29,6 +50,6 @@ public class TestAuthHandler(
         );
         var ticket = new AuthenticationTicket(new ClaimsPrincipal(identity), SchemeName);
 
-        return Task.FromResult(AuthenticateResult.Success(ticket));
+        return AuthenticateResult.Success(ticket);
     }
 }
