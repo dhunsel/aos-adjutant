@@ -22,6 +22,9 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
                 opt.UseNpgsql(_db.GetConnectionString())
             );
 
+            services.RemoveAll<IAuthenticationSchemeProvider>();
+            services.RemoveAll<IAuthenticationHandlerProvider>();
+            services.RemoveAll<IAuthenticationService>();
             services
                 .AddAuthentication(options =>
                 {
