@@ -8,13 +8,11 @@ using AosAdjutant.Api.Features.AttackProfiles;
 using AosAdjutant.Api.Features.BattleFormations;
 using AosAdjutant.Api.Features.Factions;
 using AosAdjutant.Api.Features.Units;
+using AosAdjutant.Api.Features.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
@@ -70,6 +68,9 @@ try
                 ctx.Properties!.StoreTokens([
                     new() { Name = "id_token", Value = ctx.TokenEndpointResponse!.IdToken },
                 ]);
+
+                ctx.HttpContext.RequestServices.GetService<UserService>();
+
                 return Task.CompletedTask;
             };
 
@@ -167,6 +168,7 @@ try
     builder.Services.AddScoped<UnitService, UnitService>();
     builder.Services.AddScoped<AttackProfileService, AttackProfileService>();
     builder.Services.AddScoped<AbilityService, AbilityService>();
+    builder.Services.AddScoped<UserService, UserService>();
 
     builder.Services.AddProblemDetails();
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
