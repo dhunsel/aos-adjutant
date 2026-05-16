@@ -80,6 +80,43 @@ public class BattleFormationEndpointTests(ApiFactory factory) : EndpointTestsBas
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task UpdateBattleFormation_Returns409_WhenNameTaken()
+    {
+        var existing = await CreateBattleFormationAsync();
+        var secondResponse = await Client.PostAsJsonAsync(
+            $"/api/factions/{existing.FactionId}/battle-formations",
+            new CreateBattleFormationDto { Name = "SecondFormation" }
+        );
+        var target = (
+            await secondResponse.Content.ReadFromJsonAsync<BattleFormationResponseDto>(JsonOptions)
+        )!;
+
+        var response = await Client.PutAsJsonAsync(
+            $"/api/battle-formations/{target.BattleFormationId}",
+            new ChangeBattleFormationDto { Name = existing.Name, Version = target.Version }
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "UniqueKeyError");
+    }
+
+    [Fact]
+    public async Task UpdateBattleFormation_Returns409_WhenVersionMismatch()
+    {
+        var created = await CreateBattleFormationAsync();
+
+        var response = await Client.PutAsJsonAsync(
+            $"/api/battle-formations/{created.BattleFormationId}",
+            new ChangeBattleFormationDto
+            {
+                Name = "UpdatedBattleFormation",
+                Version = created.Version + 1u,
+            }
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "ConcurrencyError");
+    }
+
     // --- DELETE /api/battle-formations/{id} ---
 
     [Fact]
@@ -93,4 +130,14 @@ public class BattleFormationEndpointTests(ApiFactory factory) : EndpointTestsBas
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
+
+    // --- Not-found ---
+
+    [Fact]
+    public Task UpdateBattleFormation_Returns404_WhenMissing() =>
+        AssertRequestNotFound(
+            HttpMethod.Put,
+            "/api/battle-formations/999",
+            new ChangeBattleFormationDto { Name = "UpdatedBattleFormation", Version = 0 }
+        );
 }

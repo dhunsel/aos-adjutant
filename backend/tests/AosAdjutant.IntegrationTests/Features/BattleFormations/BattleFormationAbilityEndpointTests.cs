@@ -94,4 +94,14 @@ public class BattleFormationAbilityEndpointTests(ApiFactory factory) : EndpointT
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }
+
+    // --- Not-found ---
+
+    [Fact]
+    public Task CreateAbility_Returns404_WhenBattleFormationMissing() =>
+        AssertRequestNotFound(
+            HttpMethod.Post,
+            "/api/battle-formations/999/abilities",
+            ValidAbilityDto()
+        );
 }

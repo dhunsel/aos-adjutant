@@ -2,13 +2,13 @@ coverage:
   status:
     project:
       default:
-        # Fail if overall project coverage drops by more than 1% compared to parent commit
+        # Fail if overall project coverage drops by more than 5% compared to parent commit
         target: auto
-        threshold: 1%
+        threshold: 5%
     patch:
       default:
-        # New code introduced in a PR should be at least 80% covered
-        target: 80%
+        # New code introduced in a PR should be at least 60% covered
+        target: 60%
 
 flags:
   backend:

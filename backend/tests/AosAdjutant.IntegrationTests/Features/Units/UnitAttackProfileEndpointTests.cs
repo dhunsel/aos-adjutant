@@ -117,6 +117,39 @@ public class UnitAttackProfileEndpointTests(ApiFactory factory) : EndpointTestsB
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task CreateAttackProfile_Returns400_WhenWeaponEffectKeyInvalid()
+    {
+        var unit = await CreateUnitAsync();
+
+        var response = await Client.PostAsJsonAsync(
+            $"/api/units/{unit.UnitId}/attack-profiles",
+            ValidAttackProfileDto() with
+            {
+                WeaponEffects = ["invalid_key"],
+            }
+        );
+
+        await AssertProblem(response, HttpStatusCode.BadRequest, "ValidationError");
+    }
+
+    [Fact]
+    public async Task CreateAttackProfile_Returns409_WhenNameExistsInUnit()
+    {
+        var unit = await CreateUnitAsync();
+        await Client.PostAsJsonAsync(
+            $"/api/units/{unit.UnitId}/attack-profiles",
+            ValidAttackProfileDto()
+        );
+
+        var response = await Client.PostAsJsonAsync(
+            $"/api/units/{unit.UnitId}/attack-profiles",
+            ValidAttackProfileDto()
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "UniqueKeyError");
+    }
+
     // --- GET /api/units/{id}/attack-profiles ---
 
     [Fact]
@@ -137,4 +170,14 @@ public class UnitAttackProfileEndpointTests(ApiFactory factory) : EndpointTestsB
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }
+
+    // --- Not-found ---
+
+    [Fact]
+    public Task CreateAttackProfile_Returns404_WhenUnitMissing() =>
+        AssertRequestNotFound(
+            HttpMethod.Post,
+            "/api/units/999/attack-profiles",
+            ValidAttackProfileDto()
+        );
 }

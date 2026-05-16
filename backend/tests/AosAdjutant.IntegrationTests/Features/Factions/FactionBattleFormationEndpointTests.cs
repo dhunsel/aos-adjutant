@@ -56,6 +56,23 @@ public class FactionBattleFormationEndpointTests(ApiFactory factory) : EndpointT
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task CreateBattleFormation_Returns409_WhenNameExistsInFaction()
+    {
+        var faction = await CreateFactionAsync();
+        await Client.PostAsJsonAsync(
+            $"/api/factions/{faction.FactionId}/battle-formations",
+            new CreateBattleFormationDto { Name = "TestBattleFormation" }
+        );
+
+        var response = await Client.PostAsJsonAsync(
+            $"/api/factions/{faction.FactionId}/battle-formations",
+            new CreateBattleFormationDto { Name = "TestBattleFormation" }
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "UniqueKeyError");
+    }
+
     // --- GET /api/factions/{factionId}/battle-formations ---
 
     [Fact]
@@ -78,4 +95,14 @@ public class FactionBattleFormationEndpointTests(ApiFactory factory) : EndpointT
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }
+
+    // --- Not-found ---
+
+    [Fact]
+    public Task CreateBattleFormation_Returns404_WhenFactionMissing() =>
+        AssertRequestNotFound(
+            HttpMethod.Post,
+            "/api/factions/999/battle-formations",
+            new CreateBattleFormationDto { Name = "TestBattleFormation" }
+        );
 }

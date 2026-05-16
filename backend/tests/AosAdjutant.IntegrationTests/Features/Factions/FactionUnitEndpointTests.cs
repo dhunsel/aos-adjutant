@@ -77,6 +77,20 @@ public class FactionUnitEndpointTests(ApiFactory factory) : EndpointTestsBase(fa
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task CreateUnit_Returns409_WhenNameExistsInFaction()
+    {
+        var faction = await CreateFactionAsync();
+        await Client.PostAsJsonAsync($"/api/factions/{faction.FactionId}/units", ValidUnitDto());
+
+        var response = await Client.PostAsJsonAsync(
+            $"/api/factions/{faction.FactionId}/units",
+            ValidUnitDto()
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "UniqueKeyError");
+    }
+
     // --- GET /api/factions/{factionId}/units ---
 
     [Fact]
@@ -94,4 +108,10 @@ public class FactionUnitEndpointTests(ApiFactory factory) : EndpointTestsBase(fa
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }
+
+    // --- Not-found ---
+
+    [Fact]
+    public Task CreateUnit_Returns404_WhenFactionMissing() =>
+        AssertRequestNotFound(HttpMethod.Post, "/api/factions/999/units", ValidUnitDto());
 }
