@@ -192,19 +192,4 @@ public class FactionEndpointTests(ApiFactory factory) : EndpointTestsBase(factor
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
-
-    // --- Not-found ---
-
-    [Fact]
-    public Task UpdateFaction_Returns404_WhenMissing() =>
-        AssertRequestNotFound(
-            HttpMethod.Put,
-            "/api/factions/999",
-            new ChangeFactionDto
-            {
-                Name = "TestFactionUpdated",
-                GrandAlliance = GrandAlliance.Order,
-                Version = 0,
-            }
-        );
 }

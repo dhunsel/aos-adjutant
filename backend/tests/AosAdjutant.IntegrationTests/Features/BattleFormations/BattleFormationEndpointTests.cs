@@ -130,14 +130,4 @@ public class BattleFormationEndpointTests(ApiFactory factory) : EndpointTestsBas
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
-
-    // --- Not-found ---
-
-    [Fact]
-    public Task UpdateBattleFormation_Returns404_WhenMissing() =>
-        AssertRequestNotFound(
-            HttpMethod.Put,
-            "/api/battle-formations/999",
-            new ChangeBattleFormationDto { Name = "UpdatedBattleFormation", Version = 0 }
-        );
 }

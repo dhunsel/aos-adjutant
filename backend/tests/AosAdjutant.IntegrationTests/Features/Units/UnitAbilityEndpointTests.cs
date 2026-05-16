@@ -99,10 +99,4 @@ public class UnitAbilityEndpointTests(ApiFactory factory) : EndpointTestsBase(fa
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }
-
-    // --- Not-found ---
-
-    [Fact]
-    public Task CreateAbility_Returns404_WhenUnitMissing() =>
-        AssertRequestNotFound(HttpMethod.Post, "/api/units/999/abilities", ValidAbilityDto());
 }

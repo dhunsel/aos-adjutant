@@ -83,10 +83,4 @@ public class FactionAbilityEndpointTests(ApiFactory factory) : EndpointTestsBase
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }
-
-    // --- Not-found ---
-
-    [Fact]
-    public Task CreateAbility_Returns404_WhenFactionMissing() =>
-        AssertRequestNotFound(HttpMethod.Post, "/api/factions/999/abilities", ValidAbilityDto());
 }

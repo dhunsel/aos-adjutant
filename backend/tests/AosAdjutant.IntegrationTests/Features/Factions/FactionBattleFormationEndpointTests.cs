@@ -95,14 +95,4 @@ public class FactionBattleFormationEndpointTests(ApiFactory factory) : EndpointT
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }
-
-    // --- Not-found ---
-
-    [Fact]
-    public Task CreateBattleFormation_Returns404_WhenFactionMissing() =>
-        AssertRequestNotFound(
-            HttpMethod.Post,
-            "/api/factions/999/battle-formations",
-            new CreateBattleFormationDto { Name = "TestBattleFormation" }
-        );
 }

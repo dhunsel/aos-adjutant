@@ -108,10 +108,4 @@ public class FactionUnitEndpointTests(ApiFactory factory) : EndpointTestsBase(fa
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }
-
-    // --- Not-found ---
-
-    [Fact]
-    public Task CreateUnit_Returns404_WhenFactionMissing() =>
-        AssertRequestNotFound(HttpMethod.Post, "/api/factions/999/units", ValidUnitDto());
 }

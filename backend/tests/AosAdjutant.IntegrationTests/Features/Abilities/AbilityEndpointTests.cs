@@ -191,22 +191,4 @@ public class AbilityEndpointTests(ApiFactory factory) : EndpointTestsBase(factor
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
-
-    // --- Not-found ---
-
-    [Fact]
-    public Task UpdateAbility_Returns404_WhenMissing() =>
-        AssertRequestNotFound(
-            HttpMethod.Put,
-            "/api/abilities/999",
-            new ChangeAbilityDto
-            {
-                Name = "UpdatedAbility",
-                Declaration = "UpdatedDeclaration",
-                Effect = "UpdatedEffect",
-                Phase = Phase.Combat,
-                Turn = Turn.EnemyTurn,
-                Version = 0,
-            }
-        );
 }

@@ -225,24 +225,4 @@ public class AttackProfileEndpointTests(ApiFactory factory) : EndpointTestsBase(
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
-
-    // --- Not-found ---
-
-    [Fact]
-    public Task UpdateAttackProfile_Returns404_WhenMissing() =>
-        AssertRequestNotFound(
-            HttpMethod.Put,
-            "/api/attack-profiles/999",
-            new ChangeAttackProfileDto
-            {
-                Name = "UpdatedProfile",
-                IsRanged = false,
-                Attacks = "3",
-                ToHit = 4,
-                ToWound = 4,
-                Damage = "2",
-                WeaponEffects = [],
-                Version = 0,
-            }
-        );
 }

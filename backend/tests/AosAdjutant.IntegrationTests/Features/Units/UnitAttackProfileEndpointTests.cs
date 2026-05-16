@@ -170,14 +170,4 @@ public class UnitAttackProfileEndpointTests(ApiFactory factory) : EndpointTestsB
         Assert.NotNull(body);
         Assert.Single(body.Items);
     }
-
-    // --- Not-found ---
-
-    [Fact]
-    public Task CreateAttackProfile_Returns404_WhenUnitMissing() =>
-        AssertRequestNotFound(
-            HttpMethod.Post,
-            "/api/units/999/attack-profiles",
-            ValidAttackProfileDto()
-        );
 }

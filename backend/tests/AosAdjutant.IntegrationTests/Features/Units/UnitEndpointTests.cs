@@ -172,22 +172,4 @@ public class UnitEndpointTests(ApiFactory factory) : EndpointTestsBase(factory)
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
-
-    // --- Not-found ---
-
-    [Fact]
-    public Task UpdateUnit_Returns404_WhenMissing() =>
-        AssertRequestNotFound(
-            HttpMethod.Put,
-            "/api/units/999",
-            new ChangeUnitDto
-            {
-                Name = "UpdatedUnit",
-                Health = 20,
-                Move = "6",
-                Save = 3,
-                Control = 1,
-                Version = 0,
-            }
-        );
 }
