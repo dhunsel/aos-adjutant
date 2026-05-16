@@ -63,6 +63,24 @@ public class AbilityEndpointTests(ApiFactory factory) : EndpointTestsBase(factor
         );
     }
 
+    [Fact]
+    public async Task CreateAbility_Returns400_WhenPassiveHasDeclaration()
+    {
+        var response = await Client.PostAsJsonAsync(
+            "/api/abilities",
+            new CreateAbilityDto
+            {
+                Name = "TestAbility",
+                Declaration = "TestDeclaration",
+                Effect = "TestEffect",
+                Phase = Phase.Passive,
+            },
+            JsonOptions
+        );
+
+        await AssertProblem(response, HttpStatusCode.BadRequest, "ValidationError");
+    }
+
     // --- GET /api/abilities/{id} ---
 
     [Fact]
@@ -138,6 +156,28 @@ public class AbilityEndpointTests(ApiFactory factory) : EndpointTestsBase(factor
         );
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateAbility_Returns409_WhenVersionMismatch()
+    {
+        var created = await CreateAbilityAsync();
+
+        var response = await Client.PutAsJsonAsync(
+            $"/api/abilities/{created.AbilityId}",
+            new ChangeAbilityDto
+            {
+                Name = "UpdatedAbility",
+                Declaration = "UpdatedDeclaration",
+                Effect = "UpdatedEffect",
+                Phase = Phase.Combat,
+                Turn = Turn.EnemyTurn,
+                Version = created.Version + 1u,
+            },
+            JsonOptions
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "ConcurrencyError");
     }
 
     // --- DELETE /api/abilities/{id} ---

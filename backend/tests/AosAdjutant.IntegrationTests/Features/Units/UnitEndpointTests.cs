@@ -105,6 +105,62 @@ public class UnitEndpointTests(ApiFactory factory) : EndpointTestsBase(factory)
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task UpdateUnit_Returns409_WhenVersionMismatch()
+    {
+        var created = await CreateUnitAsync();
+
+        var response = await Client.PutAsJsonAsync(
+            $"/api/units/{created.UnitId}",
+            new ChangeUnitDto
+            {
+                Name = "UpdatedUnit",
+                Health = 20,
+                Move = "6",
+                Save = 3,
+                Control = 1,
+                Version = created.Version + 1u,
+            }
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "ConcurrencyError");
+    }
+
+    [Fact]
+    public async Task UpdateUnit_Returns409_WhenNameTaken()
+    {
+        var existing = await CreateUnitAsync();
+        var secondResponse = await Client.PostAsJsonAsync(
+            $"/api/factions/{existing.FactionId}/units",
+            new CreateUnitDto
+            {
+                Name = "SecondUnit",
+                Health = 10,
+                Move = "5",
+                Save = 4,
+                Control = 2,
+            }
+        );
+        var target = (
+            await secondResponse.Content.ReadFromJsonAsync<UnitResponseDto>(JsonOptions)
+        )!;
+
+        var response = await Client.PutAsJsonAsync(
+            $"/api/units/{target.UnitId}",
+            new ChangeUnitDto
+            {
+                Name = existing.Name,
+                Health = 20,
+                Move = "6",
+                Save = 3,
+                Control = 1,
+                Version = target.Version,
+            }
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "UniqueKeyError");
+    }
+
     // --- DELETE /api/units/{id} ---
 
     [Fact]

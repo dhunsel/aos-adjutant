@@ -53,6 +53,20 @@ public class FactionEndpointTests(ApiFactory factory) : EndpointTestsBase(factor
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task CreateFaction_Returns409_WhenNameExists()
+    {
+        await CreateFactionAsync("TestFaction");
+
+        var response = await Client.PostAsJsonAsync(
+            "/api/factions",
+            new CreateFactionDto { Name = "TestFaction", GrandAlliance = GrandAlliance.Order },
+            JsonOptions
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "UniqueKeyError");
+    }
+
     // --- GET /api/factions ---
 
     [Fact]
@@ -69,6 +83,23 @@ public class FactionEndpointTests(ApiFactory factory) : EndpointTestsBase(factor
         );
         Assert.NotNull(body);
         Assert.Equal(2, body.Items.Count);
+    }
+
+    [Fact]
+    public async Task GetFactions_FiltersByGrandAlliance()
+    {
+        await CreateFactionAsync("Order Faction", GrandAlliance.Order);
+        await CreateFactionAsync("Chaos Faction", GrandAlliance.Chaos);
+
+        var response = await Client.GetAsync("/api/factions?grandAlliance=Chaos");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<PaginatedResponse<FactionResponseDto>>(
+            JsonOptions
+        );
+        Assert.NotNull(body);
+        Assert.Single(body.Items);
+        Assert.Equal("Chaos Faction", body.Items[0].Name);
     }
 
     // --- GET /api/factions/{id} ---
@@ -109,6 +140,45 @@ public class FactionEndpointTests(ApiFactory factory) : EndpointTestsBase(factor
         var body = await response.Content.ReadFromJsonAsync<FactionResponseDto>(JsonOptions);
         Assert.NotNull(body);
         Assert.Equivalent(new { changeFactionDto.Name, changeFactionDto.GrandAlliance }, body);
+    }
+
+    [Fact]
+    public async Task UpdateFaction_Returns409_WhenNameTaken()
+    {
+        await CreateFactionAsync("TestFaction1");
+        var target = await CreateFactionAsync("TestFaction2");
+
+        var response = await Client.PutAsJsonAsync(
+            $"/api/factions/{target.FactionId}",
+            new ChangeFactionDto
+            {
+                Name = "TestFaction1",
+                GrandAlliance = GrandAlliance.Order,
+                Version = target.Version,
+            },
+            JsonOptions
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "UniqueKeyError");
+    }
+
+    [Fact]
+    public async Task UpdateFaction_Returns409_WhenVersionMismatch()
+    {
+        var created = await CreateFactionAsync();
+
+        var response = await Client.PutAsJsonAsync(
+            $"/api/factions/{created.FactionId}",
+            new ChangeFactionDto
+            {
+                Name = "TestFactionUpdated",
+                GrandAlliance = GrandAlliance.Order,
+                Version = created.Version + 1u,
+            },
+            JsonOptions
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "ConcurrencyError");
     }
 
     // --- DELETE /api/factions/{id} ---

@@ -129,6 +129,91 @@ public class AttackProfileEndpointTests(ApiFactory factory) : EndpointTestsBase(
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task UpdateAttackProfile_Returns400_WhenWeaponEffectKeyInvalid()
+    {
+        var created = await CreateAttackProfileAsync();
+
+        var response = await Client.PutAsJsonAsync(
+            $"/api/attack-profiles/{created.AttackProfileId}",
+            new ChangeAttackProfileDto
+            {
+                Name = "UpdatedProfile",
+                IsRanged = false,
+                Attacks = "3",
+                ToHit = 4,
+                ToWound = 4,
+                Damage = "2",
+                WeaponEffects = ["invalid_key"],
+                Version = created.Version,
+            }
+        );
+
+        await AssertProblem(response, HttpStatusCode.BadRequest, "ValidationError");
+    }
+
+    [Fact]
+    public async Task UpdateAttackProfile_Returns409_WhenNameTaken()
+    {
+        var existing = await CreateAttackProfileAsync();
+        var secondResponse = await Client.PostAsJsonAsync(
+            $"/api/units/{existing.UnitId}/attack-profiles",
+            new CreateAttackProfileDto
+            {
+                Name = "SecondProfile",
+                IsRanged = false,
+                Attacks = "2",
+                ToHit = 3,
+                ToWound = 3,
+                Damage = "1",
+                WeaponEffects = [],
+            }
+        );
+        var target = (
+            await secondResponse.Content.ReadFromJsonAsync<AttackProfileResponseDto>(JsonOptions)
+        )!;
+
+        var response = await Client.PutAsJsonAsync(
+            $"/api/attack-profiles/{target.AttackProfileId}",
+            new ChangeAttackProfileDto
+            {
+                Name = existing.Name,
+                IsRanged = false,
+                Attacks = "3",
+                ToHit = 4,
+                ToWound = 4,
+                Damage = "2",
+                WeaponEffects = [],
+                Version = target.Version,
+            }
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "UniqueKeyError");
+    }
+
+    [Fact]
+    public async Task UpdateAttackProfile_Returns409_WhenVersionMismatch()
+    {
+        var created = await CreateAttackProfileAsync();
+
+        var response = await Client.PutAsJsonAsync(
+            $"/api/attack-profiles/{created.AttackProfileId}",
+            new ChangeAttackProfileDto
+            {
+                Name = "UpdatedProfile",
+                IsRanged = false,
+                Attacks = "3",
+                ToHit = 4,
+                ToWound = 4,
+                Damage = "2",
+                WeaponEffects = [],
+                Version = created.Version + 1u,
+            }
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "ConcurrencyError");
+    }
+
     // --- DELETE /api/attack-profiles/{id} ---
 
     [Fact]

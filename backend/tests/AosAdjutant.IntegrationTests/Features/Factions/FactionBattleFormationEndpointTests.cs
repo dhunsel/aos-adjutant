@@ -56,6 +56,23 @@ public class FactionBattleFormationEndpointTests(ApiFactory factory) : EndpointT
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task CreateBattleFormation_Returns409_WhenNameExistsInFaction()
+    {
+        var faction = await CreateFactionAsync();
+        await Client.PostAsJsonAsync(
+            $"/api/factions/{faction.FactionId}/battle-formations",
+            new CreateBattleFormationDto { Name = "TestBattleFormation" }
+        );
+
+        var response = await Client.PostAsJsonAsync(
+            $"/api/factions/{faction.FactionId}/battle-formations",
+            new CreateBattleFormationDto { Name = "TestBattleFormation" }
+        );
+
+        await AssertProblem(response, HttpStatusCode.Conflict, "UniqueKeyError");
+    }
+
     // --- GET /api/factions/{factionId}/battle-formations ---
 
     [Fact]

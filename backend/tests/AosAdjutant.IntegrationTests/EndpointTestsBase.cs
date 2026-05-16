@@ -1,7 +1,10 @@
+using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using AosAdjutant.Api.Database;
 using AosAdjutant.IntegrationTests.Fixture;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,4 +40,25 @@ public class EndpointTestsBase(ApiFactory factory) : IAsyncLifetime
     }
 
     public Task DisposeAsync() => Task.CompletedTask;
+
+    protected static async Task AssertProblem(
+        HttpResponseMessage response,
+        HttpStatusCode status,
+        string title
+    )
+    {
+        Assert.Equal(status, response.StatusCode);
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(JsonOptions);
+        Assert.NotNull(problem);
+        Assert.Equal(title, problem.Title);
+    }
+
+    protected async Task AssertRequestNotFound(HttpMethod method, string url, object? body = null)
+    {
+        using var request = new HttpRequestMessage(method, url);
+        if (body is not null)
+            request.Content = JsonContent.Create(body, options: JsonOptions);
+        var response = await Client.SendAsync(request);
+        await AssertProblem(response, HttpStatusCode.NotFound, "NotFound");
+    }
 }
