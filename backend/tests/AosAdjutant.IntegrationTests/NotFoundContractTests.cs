@@ -2,12 +2,6 @@ using AosAdjutant.IntegrationTests.Fixture;
 
 namespace AosAdjutant.IntegrationTests;
 
-/// <summary>
-/// Cross-cutting contract: every resource route returns a 404 NotFound problem
-/// for an id (or parent id) that does not exist. Covers the body-free verbs
-/// (GET/DELETE single, GET nested list); write verbs that need a valid DTO are
-/// covered as one-liners in their own endpoint test files.
-/// </summary>
 public class NotFoundContractTests(ApiFactory factory) : EndpointTestsBase(factory)
 {
     public static TheoryData<string, string> MissingRoutes =>
