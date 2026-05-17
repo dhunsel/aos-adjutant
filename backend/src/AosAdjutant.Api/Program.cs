@@ -5,16 +5,14 @@ using AosAdjutant.Api.Common;
 using AosAdjutant.Api.Database;
 using AosAdjutant.Api.Features.Abilities;
 using AosAdjutant.Api.Features.AttackProfiles;
+using AosAdjutant.Api.Features.Auth;
 using AosAdjutant.Api.Features.BattleFormations;
 using AosAdjutant.Api.Features.Factions;
 using AosAdjutant.Api.Features.Units;
-using Microsoft.AspNetCore.Authentication;
+using AosAdjutant.Api.Features.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
@@ -64,14 +62,8 @@ try
             opts.UsePkce = true;
             opts.SaveTokens = false;
 
-            opts.Events.OnTokenValidated = ctx =>
-            {
-                // Save ID token so logout redirect works
-                ctx.Properties!.StoreTokens([
-                    new() { Name = "id_token", Value = ctx.TokenEndpointResponse!.IdToken },
-                ]);
-                return Task.CompletedTask;
-            };
+            opts.Events.OnTokenValidated = AuthEvents.OnTokenValidated;
+            opts.Events.OnRemoteFailure = AuthEvents.OnRemoteFailure;
 
             opts.GetClaimsFromUserInfoEndpoint = false;
             opts.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -167,9 +159,12 @@ try
     builder.Services.AddScoped<UnitService, UnitService>();
     builder.Services.AddScoped<AttackProfileService, AttackProfileService>();
     builder.Services.AddScoped<AbilityService, AbilityService>();
+    builder.Services.AddScoped<UserService, UserService>();
 
     builder.Services.AddProblemDetails();
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
     builder.Services.AddOpenApi(opts =>
     {

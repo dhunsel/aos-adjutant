@@ -4,6 +4,7 @@ using AosAdjutant.Api.Features.AttackProfiles;
 using AosAdjutant.Api.Features.BattleFormations;
 using AosAdjutant.Api.Features.Factions;
 using AosAdjutant.Api.Features.Units;
+using AosAdjutant.Api.Features.Users;
 using AosAdjutant.Api.Features.WeaponEffects;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     public DbSet<Unit> Units { get; set; }
     public DbSet<AttackProfile> AttackProfiles { get; set; }
     public DbSet<WeaponEffect> WeaponEffects { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,6 +31,7 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
         new UnitEntityTypeConfiguration().Configure(modelBuilder.Entity<Unit>());
         new AttackProfileEntityTypeConfiguration().Configure(modelBuilder.Entity<AttackProfile>());
         new WeaponEffectEntityTypeConfiguration().Configure(modelBuilder.Entity<WeaponEffect>());
+        new UserEntityTypeConfiguration().Configure(modelBuilder.Entity<User>());
 
         base.OnModelCreating(modelBuilder);
     }
