@@ -40,5 +40,7 @@ public sealed class UnitEntityTypeConfiguration : IEntityTypeConfiguration<Unit>
             });
 
         builder.Property(u => u.Version).IsRowVersion();
+
+        builder.ConfigureAuditColumns();
     }
 }

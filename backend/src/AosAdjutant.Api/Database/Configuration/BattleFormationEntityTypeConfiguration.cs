@@ -30,5 +30,7 @@ public sealed class BattleFormationEntityTypeConfiguration
             });
 
         builder.Property(bf => bf.Version).IsRowVersion();
+
+        builder.ConfigureAuditColumns();
     }
 }

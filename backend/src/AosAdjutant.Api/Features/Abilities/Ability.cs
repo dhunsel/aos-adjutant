@@ -76,7 +76,7 @@ public sealed record AbilityData
     public required bool IsGeneric { get; init; }
 }
 
-public sealed class Ability
+public sealed class Ability : AuditableEntity
 {
     public int AbilityId { get; set; }
     public required string Name { get; set; }

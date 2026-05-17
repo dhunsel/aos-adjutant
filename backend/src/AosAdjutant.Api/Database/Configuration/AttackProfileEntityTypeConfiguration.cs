@@ -35,5 +35,7 @@ public sealed class AttackProfileEntityTypeConfiguration : IEntityTypeConfigurat
             });
 
         builder.Property(ap => ap.Version).IsRowVersion();
+
+        builder.ConfigureAuditColumns();
     }
 }

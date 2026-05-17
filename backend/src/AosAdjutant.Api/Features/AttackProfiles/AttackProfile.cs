@@ -17,7 +17,7 @@ public sealed record AttackProfileData
     public required int UnitId { get; init; }
 }
 
-public sealed class AttackProfile
+public sealed class AttackProfile : AuditableEntity
 {
     public int AttackProfileId { get; set; }
     public required string Name { get; set; }
