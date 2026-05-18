@@ -40,5 +40,7 @@ public sealed class FactionEntityTypeConfiguration : IEntityTypeConfiguration<Fa
             });
 
         builder.Property(f => f.Version).IsRowVersion();
+
+        builder.ConfigureAuditColumns();
     }
 }

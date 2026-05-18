@@ -183,8 +183,13 @@ try
         );
     });
 
-    builder.Services.AddDbContext<ApplicationDbContext>(opt =>
-        opt.UseNpgsql(builder.Configuration["AosAdjutant:DbContextConnectionString"])
+    builder.Services.AddSingleton(TimeProvider.System);
+    builder.Services.AddScoped<AuditSaveChangesInterceptor>();
+
+    builder.Services.AddDbContext<ApplicationDbContext>(
+        (sp, opt) =>
+            opt.AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>())
+                .UseNpgsql(builder.Configuration["AosAdjutant:DbContextConnectionString"])
     );
 
     var app = builder.Build();

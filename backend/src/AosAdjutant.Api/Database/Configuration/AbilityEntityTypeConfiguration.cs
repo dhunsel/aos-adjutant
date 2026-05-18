@@ -34,5 +34,7 @@ public sealed class AbilityEntityTypeConfiguration : IEntityTypeConfiguration<Ab
         builder.HasKey(f => f.AbilityId);
 
         builder.Property(a => a.Version).IsRowVersion();
+
+        builder.ConfigureAuditColumns();
     }
 }

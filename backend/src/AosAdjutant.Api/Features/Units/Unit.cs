@@ -5,7 +5,7 @@ using AosAdjutant.Api.Features.AttackProfiles;
 
 namespace AosAdjutant.Api.Features.Units;
 
-public sealed class Unit
+public sealed class Unit : AuditableEntity
 {
     public int UnitId { get; set; }
     public required string Name { get; set; }

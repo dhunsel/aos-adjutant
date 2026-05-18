@@ -14,7 +14,7 @@ public enum GrandAlliance
     Destruction,
 }
 
-public sealed class Faction
+public sealed class Faction : AuditableEntity
 {
     public int FactionId { get; set; }
     public required string Name { get; set; }

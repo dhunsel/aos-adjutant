@@ -4,7 +4,7 @@ using AosAdjutant.Api.Features.Abilities;
 
 namespace AosAdjutant.Api.Features.BattleFormations;
 
-public sealed class BattleFormation
+public sealed class BattleFormation : AuditableEntity
 {
     public int BattleFormationId { get; set; }
     public required string Name { get; set; }
