@@ -64,7 +64,7 @@ jobs:
         run: dotnet list AosAdjutant.slnx package --vulnerable --include-transitive
 
       - name: Verify OpenApi doc
-        run: diff -u docs/openapi.json backen/src/AosAdjutant.Api/obj/AosAdjutant.Api.json
+        run: diff -u docs/openapi.json backend/src/AosAdjutant.Api/obj/AosAdjutant.Api.json
         working-directory: ${{ github.workspace }}
 
       - name: Unit Tests
