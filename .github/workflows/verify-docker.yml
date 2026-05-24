@@ -2,10 +2,6 @@ name: verify-docker
 
 on:
   pull_request:
-    paths:
-      - 'Dockerfile'
-      - '.dockerignore'
-      - ' .github/workflows/verify-docker.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{github.head_ref }}
