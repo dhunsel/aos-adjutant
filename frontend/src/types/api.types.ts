@@ -31,7 +31,7 @@ export type Faction = Schemas["FactionResponseDto"];
 export type CreateFactionRequest = Schemas["CreateFactionDto"];
 export type ChangeFactionRequest = Schemas["ChangeFactionDto"];
 export type FactionSortBy = Schemas["FactionSortBy"];
-export type FactionQuery = GetQueryType<FactionSortBy, "/factions">;
+export type FactionQuery = GetQueryType<FactionSortBy, "/api/factions">;
 
 export type BattleFormation = Schemas["BattleFormationResponseDto"];
 export type CreateBattleFormationRequest = Schemas["CreateBattleFormationDto"];
@@ -39,14 +39,14 @@ export type ChangeBattleFormationRequest = Schemas["ChangeBattleFormationDto"];
 export type BattleFormationSortBy = Schemas["BattleFormationSortBy"];
 export type BattleFormationQuery = GetQueryType<
   BattleFormationSortBy,
-  "/factions/{factionId}/battle-formations"
+  "/api/factions/{factionId}/battle-formations"
 >;
 
 export type Unit = Schemas["UnitResponseDto"];
 export type CreateUnitRequest = Schemas["CreateUnitDto"];
 export type ChangeUnitRequest = Schemas["ChangeUnitDto"];
 export type UnitSortBy = Schemas["UnitSortBy"];
-export type UnitQuery = GetQueryType<UnitSortBy, "/factions/{factionId}/units">;
+export type UnitQuery = GetQueryType<UnitSortBy, "/api/factions/{factionId}/units">;
 
 export type AttackProfile = Schemas["AttackProfileResponseDto"];
 export type CreateAttackProfileRequest = Schemas["CreateAttackProfileDto"];
@@ -54,18 +54,18 @@ export type ChangeAttackProfileRequest = Schemas["ChangeAttackProfileDto"];
 export type AttackProfileSortBy = Schemas["AttackProfileSortBy"];
 export type AttackProfileQuery = GetQueryType<
   AttackProfileSortBy,
-  "/units/{unitId}/attack-profiles"
+  "/api/units/{unitId}/attack-profiles"
 >;
 
 export type Ability = Schemas["AbilityResponseDto"];
 export type CreateAbilityRequest = Schemas["CreateAbilityDto"];
 export type ChangeAbilityRequest = Schemas["ChangeAbilityDto"];
 export type AbilitySortBy = Schemas["AbilitySortBy"];
-export type AbilityQuery = GetQueryType<AbilitySortBy, "/factions/{factionId}/abilities">;
+export type AbilityQuery = GetQueryType<AbilitySortBy, "/api/factions/{factionId}/abilities">;
 
 export type WeaponEffect = Schemas["WeaponEffectResponseDto"];
 export type WeaponEffectSortBy = Schemas["WeaponEffectSortBy"];
-export type WeaponEffectQuery = GetQueryType<WeaponEffectSortBy, "/weapon-effects">;
+export type WeaponEffectQuery = GetQueryType<WeaponEffectSortBy, "/api/weapon-effects">;
 
 export type Phase = Schemas["Phase"];
 export type Restriction = Schemas["Restriction"];
