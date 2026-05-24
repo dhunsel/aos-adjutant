@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/weapon-effects": {
+    "/api/weapon-effects": {
         parameters: {
             query?: never;
             header?: never;
@@ -47,7 +47,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/units/{unitId}/abilities": {
+    "/api/units/{unitId}/abilities": {
         parameters: {
             query?: never;
             header?: never;
@@ -156,7 +156,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/units/{unitId}/attack-profiles": {
+    "/api/units/{unitId}/attack-profiles": {
         parameters: {
             query?: never;
             header?: never;
@@ -265,7 +265,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/units/{unitId}": {
+    "/api/units/{unitId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -399,7 +399,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/factions/{factionId}/abilities": {
+    "/api/factions/{factionId}/abilities": {
         parameters: {
             query?: never;
             header?: never;
@@ -508,7 +508,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/factions/{factionId}/battle-formations": {
+    "/api/factions/{factionId}/battle-formations": {
         parameters: {
             query?: never;
             header?: never;
@@ -616,7 +616,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/factions": {
+    "/api/factions": {
         parameters: {
             query?: never;
             header?: never;
@@ -699,7 +699,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/factions/{factionId}": {
+    "/api/factions/{factionId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -833,7 +833,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/factions/{factionId}/units": {
+    "/api/factions/{factionId}/units": {
         parameters: {
             query?: never;
             header?: never;
@@ -941,7 +941,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/battle-formations/{battleFormationId}/abilities": {
+    "/api/battle-formations/{battleFormationId}/abilities": {
         parameters: {
             query?: never;
             header?: never;
@@ -1050,7 +1050,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/battle-formations/{battleFormationId}": {
+    "/api/battle-formations/{battleFormationId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1184,7 +1184,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/auth/login": {
+    "/api/auth/login": {
         parameters: {
             query?: never;
             header?: never;
@@ -1217,7 +1217,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/auth/logout": {
+    "/api/auth/logout": {
         parameters: {
             query?: never;
             header?: never;
@@ -1250,7 +1250,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/auth/me": {
+    "/api/auth/me": {
         parameters: {
             query?: never;
             header?: never;
@@ -1287,7 +1287,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/attack-profiles/{attackProfileId}": {
+    "/api/attack-profiles/{attackProfileId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1421,7 +1421,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/abilities": {
+    "/api/abilities": {
         parameters: {
             query?: never;
             header?: never;
@@ -1498,7 +1498,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/abilities/{abilityId}": {
+    "/api/abilities/{abilityId}": {
         parameters: {
             query?: never;
             header?: never;

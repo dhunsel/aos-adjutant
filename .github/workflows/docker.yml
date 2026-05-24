@@ -7,13 +7,9 @@ on:
 
 jobs:
   docker-push:
-    strategy:
-      fail-fast: false
-      matrix:
-        app: [ backend, frontend ]
 
     concurrency:
-      group: docker-${{ matrix.app }}
+      group: docker-webapp
       cancel-in-progress: false
 
     runs-on: ubuntu-latest
@@ -42,7 +38,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ghcr.io/${{ github.repository }}/${{ matrix.app }}
+          images: ghcr.io/${{ github.repository }}/webapp
           tags: |
             type=sha
             type=ref,event=branch
@@ -52,18 +48,18 @@ jobs:
         id: build
         uses: docker/build-push-action@v7
         with:
-          context: ./${{ matrix.app }}
+          context: ./
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ matrix.app }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.app }}
+          cache-from: type=gha,scope=webapp
+          cache-to: type=gha,mode=max,scope=webapp
           sbom: true
           provenance: false
 
       - name: Image attestation
         uses: actions/attest@v4
         with:
-          subject-name: ghcr.io/${{ github.repository }}/${{ matrix.app }}
+          subject-name: ghcr.io/${{ github.repository }}/webapp
           subject-digest: ${{ steps.build.outputs.digest }}
           push-to-registry: true

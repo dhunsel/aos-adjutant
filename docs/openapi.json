@@ -4,13 +4,8 @@
     "title": "AosAdjutant.Api | v1",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "/api"
-    }
-  ],
   "paths": {
-    "/weapon-effects": {
+    "/api/weapon-effects": {
       "get": {
         "tags": [
           "Weapon Effects"
@@ -72,7 +67,7 @@
         }
       }
     },
-    "/units/{unitId}/abilities": {
+    "/api/units/{unitId}/abilities": {
       "post": {
         "tags": [
           "Units"
@@ -269,7 +264,7 @@
         }
       }
     },
-    "/units/{unitId}/attack-profiles": {
+    "/api/units/{unitId}/attack-profiles": {
       "post": {
         "tags": [
           "Attack Profiles"
@@ -466,7 +461,7 @@
         }
       }
     },
-    "/units/{unitId}": {
+    "/api/units/{unitId}": {
       "get": {
         "tags": [
           "Units"
@@ -668,7 +663,7 @@
         }
       }
     },
-    "/factions/{factionId}/abilities": {
+    "/api/factions/{factionId}/abilities": {
       "post": {
         "tags": [
           "Factions"
@@ -865,7 +860,7 @@
         }
       }
     },
-    "/factions/{factionId}/battle-formations": {
+    "/api/factions/{factionId}/battle-formations": {
       "post": {
         "tags": [
           "Battle Formations"
@@ -1055,7 +1050,7 @@
         }
       }
     },
-    "/factions": {
+    "/api/factions": {
       "post": {
         "tags": [
           "Factions"
@@ -1192,7 +1187,7 @@
         }
       }
     },
-    "/factions/{factionId}": {
+    "/api/factions/{factionId}": {
       "get": {
         "tags": [
           "Factions"
@@ -1394,7 +1389,7 @@
         }
       }
     },
-    "/factions/{factionId}/units": {
+    "/api/factions/{factionId}/units": {
       "post": {
         "tags": [
           "Units"
@@ -1584,7 +1579,7 @@
         }
       }
     },
-    "/battle-formations/{battleFormationId}/abilities": {
+    "/api/battle-formations/{battleFormationId}/abilities": {
       "post": {
         "tags": [
           "Battle Formations"
@@ -1781,7 +1776,7 @@
         }
       }
     },
-    "/battle-formations/{battleFormationId}": {
+    "/api/battle-formations/{battleFormationId}": {
       "get": {
         "tags": [
           "Battle Formations"
@@ -1983,7 +1978,7 @@
         }
       }
     },
-    "/auth/login": {
+    "/api/auth/login": {
       "get": {
         "tags": [
           "Auth"
@@ -1995,7 +1990,7 @@
         }
       }
     },
-    "/auth/logout": {
+    "/api/auth/logout": {
       "get": {
         "tags": [
           "Auth"
@@ -2007,7 +2002,7 @@
         }
       }
     },
-    "/auth/me": {
+    "/api/auth/me": {
       "get": {
         "tags": [
           "Auth"
@@ -2036,7 +2031,7 @@
         }
       }
     },
-    "/attack-profiles/{attackProfileId}": {
+    "/api/attack-profiles/{attackProfileId}": {
       "get": {
         "tags": [
           "Attack Profiles"
@@ -2238,7 +2233,7 @@
         }
       }
     },
-    "/abilities": {
+    "/api/abilities": {
       "post": {
         "tags": [
           "Abilities"
@@ -2336,7 +2331,7 @@
         }
       }
     },
-    "/abilities/{abilityId}": {
+    "/api/abilities/{abilityId}": {
       "get": {
         "tags": [
           "Abilities"
