@@ -1,8 +1,15 @@
 global:
-  scrape_interval: 15s
   evaluation_interval: 15s
 
-scrape_configs:
-  - job_name: prometheus
-    static_configs:
-      - targets: [ "localhost:9090" ]
+otlp:
+  translation_strategy: NoUTF8EscapingWithSuffixes
+  promote_resource_attributes:
+    - service.instance_id
+    - service.name
+    - service.namespace
+    - service.version
+    - deployment.environment
+
+storage:
+  tsdb:
+    out_of_order_time_window: 30m

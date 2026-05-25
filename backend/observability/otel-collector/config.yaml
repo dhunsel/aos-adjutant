@@ -16,26 +16,28 @@ processors:
   filter/static:
     error_mode: ignore
     trace_conditions:
-      - span.kind = SPAN_KIND_SERVER and not IsMatch(span.attributes["url.path"], "^/api(/|$)")
+      - span.kind == SPAN_KIND_SERVER and not IsMatch(span.attributes["url.path"], "^/api(/|$)")
 
   batch:
 
 exporters:
   otlp_http/prometheus:
-    endpoint: prometheus:9090
+    endpoint: http://prometheus:9090/api/v1/otlp
 
-  otlp_http/tempo:
-    endpoint: tempo:3200
+  otlp_grpc/tempo:
+    endpoint: http://tempo:4317
+    tls:
+      insecure: true
 
   otlp_http/loki:
-    endpoint: loki:3100
+    endpoint: http://loki:3100/otlp
 
 service:
   pipelines:
     traces:
       receivers: [ otlp ]
       processors: [ memory_limiter, batch ]
-      exporters: [ otlp_http/tempo ]
+      exporters: [ otlp_grpc/tempo ]
     metrics:
       receivers: [ otlp ]
       processors: [ memory_limiter, batch ]
