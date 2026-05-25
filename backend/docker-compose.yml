@@ -15,6 +15,14 @@ services:
       interval: 5s
       timeout: 5s
 
+  otel-collector:
+    image: otel/opentelemetry-collector:0.152.1
+    volumes:
+      - ./observability/otel-collector/config.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - 4317:4317
+      - 4318:4318
+
   loki:
     image: grafana/loki:3
     command: -config.file=/etc/loki/loki-config.yaml
@@ -30,8 +38,6 @@ services:
       - --web.enable-otlp-receiver
       - --enable-feature=exemplar-storage
       - --config.file=/etc/prometheus/prometheus.yml
-    ports:
-      - 9090:9090
     volumes:
       - ./observability/prometheus/:/etc/prometheus/
       - prometheus-data:/prometheus
@@ -43,9 +49,6 @@ services:
       - ./observability/tempo/tempo.yaml:/etc/tempo.yaml
       - tempo-data:/var/tempo
     ports:
-      - 3200:3200
-      - 4317:4317
-      - 4318:4318
 
   grafana:
     image: grafana/grafana:12.4

@@ -1,0 +1,46 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: otel-collector:4317
+      http:
+        endpoint: otel-collector:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 80
+    spike_limit_percentage: 15
+
+  # Not yet part of pipeline
+  filter/static:
+    error_mode: ignore
+    trace_conditions:
+      - span.kind = SPAN_KIND_SERVER and not IsMatch(span.attributes["url.path"], "^/api(/|$)")
+
+  batch:
+
+exporters:
+  otlp_http/prometheus:
+    endpoint: prometheus:9090
+
+  otlp_http/tempo:
+    endpoint: tempo:3200
+
+  otlp_http/loki:
+    endpoint: loki:3100
+
+service:
+  pipelines:
+    traces:
+      receivers: [ otlp ]
+      processors: [ memory_limiter, batch ]
+      exporters: [ otlp_http/tempo ]
+    metrics:
+      receivers: [ otlp ]
+      processors: [ memory_limiter, batch ]
+      exporters: [ otlp_http/prometheus ]
+    logs:
+      receivers: [ otlp ]
+      processors: [ memory_limiter, batch ]
+      exporters: [ otlp_http/loki ]
