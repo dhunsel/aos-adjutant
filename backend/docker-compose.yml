@@ -21,6 +21,11 @@ services:
       - ./observability/otel-collector/config.yaml:/etc/otelcol/config.yaml:ro
     ports:
       - 4317:4317
+      - 4318:4318
+    depends_on:
+      - prometheus
+      - tempo
+      - loki
 
   loki:
     image: grafana/loki:3.7
