@@ -52,6 +52,9 @@ try
         {
             opts.Authority = builder.Configuration["Authentication:Authority"];
 
+            opts.CallbackPath = "/api/signin-oidc";
+            opts.SignedOutCallbackPath = "/api/signout-callback-oidc";
+
             opts.ClientId = builder.Configuration["Authentication:ClientId"];
             opts.ClientSecret = builder.Configuration["Authentication:ClientSecret"];
             opts.ResponseType = OpenIdConnectResponseType.Code;
@@ -94,9 +97,7 @@ try
 
     builder
         .Services.AddOpenTelemetry()
-        .ConfigureResource(resource =>
-            resource.AddService(serviceName: "AosAdjutantApi", serviceVersion: "0.0.1")
-        )
+        .ConfigureResource(resource => resource.AddService(serviceName: "AosAdjutantApi"))
         .WithTracing(tracing =>
             tracing
                 .AddAspNetCoreInstrumentation()
@@ -113,14 +114,11 @@ try
                 .AddOtlpExporter(
                     (exporterOptions, metricReaderOptions) =>
                     {
-                        exporterOptions.Endpoint = new Uri(
-                            builder.Configuration["Metrics:Endpoint"]!
-                        );
-                        exporterOptions.Protocol = OtlpExportProtocol.HttpProtobuf;
+                        exporterOptions.Endpoint = new Uri(builder.Configuration["OTLP:Endpoint"]!);
                         metricReaderOptions
                             .PeriodicExportingMetricReaderOptions
                             .ExportIntervalMilliseconds = builder.Configuration.GetValue<int>(
-                            "Metrics:ExportIntervalMilliseconds"
+                            "OTLP:Metrics:ExportIntervalMilliseconds"
                         );
                     }
                 )
