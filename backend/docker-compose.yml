@@ -11,29 +11,27 @@ services:
     ports:
       - 5432:5432
     healthcheck:
-      test: [ "CMD", "pg_ready", "-U", "${DATABASE_USER}" ]
+      test: [ "CMD", "pg_isready", "-U", "${DATABASE_USER}" ]
       interval: 5s
       timeout: 5s
 
   otel-collector:
     image: otel/opentelemetry-collector:0.152.1
+    environment:
+      DEPLOYMENT_ENV: development
     volumes:
       - ./observability/otel-collector/config.yaml:/etc/otelcol/config.yaml:ro
     ports:
       - 4317:4317
       - 4318:4318
-    depends_on:
-      - prometheus
-      - tempo
-      - loki
 
   loki:
     image: grafana/loki:3.7
-    command: -config.file=/etc/loki/loki-config.yaml
+    command: -config.file=/etc/loki/config.yaml
     ports:
       - 3100:3100
     volumes:
-      - ./observability/loki/loki-config.yaml:/etc/loki/loki-config.yaml
+      - ./observability/loki/config.yaml:/etc/loki/config.yaml:ro
       - loki-data:/loki
 
   prometheus:
@@ -41,20 +39,20 @@ services:
     command:
       - --web.enable-otlp-receiver
       - --enable-feature=exemplar-storage
-      - --config.file=/etc/prometheus/prometheus.yml
+      - --config.file=/etc/prometheus/config.yaml
     ports:
       - 9090:9090
     volumes:
-      - ./observability/prometheus/:/etc/prometheus/
+      - ./observability/prometheus/config.yaml:/etc/prometheus/config.yaml:ro
       - prometheus-data:/prometheus
 
   tempo:
     image: grafana/tempo:2.10.5
-    command: "-config.file=/etc/tempo.yaml"
+    command:  -config.file=/etc/config.yaml
     ports:
       - 3200:3200
     volumes:
-      - ./observability/tempo/tempo.yaml:/etc/tempo.yaml
+      - ./observability/tempo/config.yaml:/etc/config.yaml
       - tempo-data:/var/tempo
 
   grafana:

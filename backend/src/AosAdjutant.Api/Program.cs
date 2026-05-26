@@ -76,11 +76,18 @@ builder
 
 builder
     .Services.AddOpenTelemetry()
-    .ConfigureResource(resource => resource.AddService(serviceName: "AosAdjutantApi"))
+    .ConfigureResource(resource =>
+        resource.AddService(
+            serviceName: "AosAdjutantApi",
+            serviceVersion: "v0.1.0",
+            serviceInstanceId: Environment.MachineName
+        )
+    )
     .WithTracing(tracing =>
         tracing
             .AddAspNetCoreInstrumentation()
             .AddEntityFrameworkCoreInstrumentation()
+            .AddHttpClientInstrumentation()
             .AddOtlpExporter(opts =>
             {
                 opts.Endpoint = new Uri(builder.Configuration["OTLP:Endpoint"]!);
@@ -89,6 +96,8 @@ builder
     .WithMetrics(metrics =>
         metrics
             .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddRuntimeInstrumentation()
             .SetExemplarFilter(ExemplarFilterType.TraceBased)
             .AddOtlpExporter(
                 (exporterOptions, metricReaderOptions) =>

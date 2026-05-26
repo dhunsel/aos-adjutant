@@ -12,6 +12,12 @@ processors:
     limit_percentage: 80
     spike_limit_percentage: 15
 
+  resource:
+    attributes:
+      - key: deployment.environment.name
+        value: ${env:DEPLOYMENT_ENV}
+        action: upsert
+
   batch:
 
 exporters:
@@ -19,7 +25,7 @@ exporters:
     endpoint: http://prometheus:9090/api/v1/otlp
 
   otlp_grpc/tempo:
-    endpoint: http://tempo:4317
+    endpoint: tempo:4317
     tls:
       insecure: true
 
@@ -30,13 +36,13 @@ service:
   pipelines:
     traces:
       receivers: [ otlp ]
-      processors: [ memory_limiter, batch ]
+      processors: [ memory_limiter, resource, batch ]
       exporters: [ otlp_grpc/tempo ]
     metrics:
       receivers: [ otlp ]
-      processors: [ memory_limiter, batch ]
+      processors: [ memory_limiter, resource, batch ]
       exporters: [ otlp_http/prometheus ]
     logs:
       receivers: [ otlp ]
-      processors: [ memory_limiter, batch ]
+      processors: [ memory_limiter, resource, batch ]
       exporters: [ otlp_http/loki ]
