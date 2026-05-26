@@ -6,9 +6,8 @@ otlp:
   promote_resource_attributes:
     - service.instance_id
     - service.name
-    - service.namespace
     - service.version
-    - deployment.environment
+    - deployment.environment.name
 
 storage:
   tsdb:
