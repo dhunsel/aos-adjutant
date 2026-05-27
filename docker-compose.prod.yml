@@ -32,31 +32,34 @@ services:
       - APP_PASSWORD: ${APP_PASSWORD}
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
     logging:
       driver: local
     healthcheck:
-      test: [ "CMD", "pg_isready -U postgres -d aos_adjutant" ]
-      interval: 10s
+      test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "aos_adjutant" ]
+      interval: 30s
       timeout: 5s
       retries: 3
+      start_period: 30s
+      start_interval: 5s
     shm_size: 256mb
     networks:
       - private
 
   pocket-id:
-    image: ghcr.io/pocket-id/pocket-id:v2
+    image: ghcr.io/pocket-id/pocket-id:v2.7
     restart: unless-stopped
     environment:
       - APP_URL: ${AUTH_URL}
       - ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY}
-      - TRUS_PROXY: ${AUTH_TRUST_PROXY}
+      - TRUST_PROXY: ${AUTH_TRUST_PROXY}
     healthcheck:
       test: [ "CMD", "/app/pocket-id", "healthcheck"]
-      interval: 1m30s
+      interval: 30s
       timeout: 5s
-      retries: 2
-      start_period: 10s
+      retries: 3
+      start_period: 30s
+      start_interval: 5s
     volumes:
       - pocket-id-data:/app/data
     logging:
@@ -65,26 +68,38 @@ services:
       - proxy
 
   grafana:
-    image: grafana/grafana:12.4
+    image: grafana/grafana:13.0
+    restart: unless-stopped
     environment:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./observability/grafana/provisioning/:/etc/grafana/provisioning:ro
+      - ./infra/observability/grafana/provisioning/:/etc/grafana/provisioning:ro
     logging:
       driver: local
     networks:
       - private
       - proxy
 
-  loki:
-    image: grafana/loki:3
-    command: -config.file=/etc/loki/loki-config.yaml
-    ports:
-      - 3100:3100
+  otel-collector:
+    image: otel/opentelemetry-collector:0.152.1
+    restart: unless-stopped
+    environment:
+      DEPLOYMENT_ENV: production
     volumes:
-      - ./observability/loki/loki-config.yaml:/etc/loki/loki-config.yaml:ro
+      - ./infra/observability/otel-collector/config.yaml:/etc/otelcol/config.yaml:ro
+    logging:
+      driver: local
+    networks:
+      - private
+
+  loki:
+    image: grafana/loki:3.7
+    restart: unless-stopped
+    command: -config.file=/etc/loki/config.yaml
+    volumes:
+      - ./infra/observability/loki/config.yaml:/etc/loki/config.yaml:ro
       - loki-data:/loki
     logging:
       driver: local
@@ -92,15 +107,14 @@ services:
       - private
 
   prometheus:
-    image: prom/prometheus:v3
+    image: prom/prometheus:v3.11.3
+    restart: unless-stopped
     command:
       - --web.enable-otlp-receiver
       - --enable-feature=exemplar-storage
-      - --config.file=/etc/prometheus/prometheus.yml:ro
-    ports:
-      - 9090:9090
+      - --config.file=/etc/prometheus/config.yaml
     volumes:
-      - ./observability/prometheus/:/etc/prometheus:ro
+      - ./infra/observability/prometheus/config.yaml:/etc/prometheus/config.yaml:ro
       - prometheus-data:/prometheus
     logging:
       driver: local
@@ -108,15 +122,12 @@ services:
       - private
 
   tempo:
-    image: grafana/tempo:2.4.0
-    command: "-config.file=/etc/tempo.yaml"
+    image: grafana/tempo:2.10.5
+    restart: unless-stopped
+    command: -config.file=/etc/config.yaml
     volumes:
-      - ./observability/tempo/tempo.yaml:/etc/tempo.yaml:ro
+      - ./infra/observability/tempo/config.yaml:/etc/config.yaml:ro
       - tempo-data:/var/tempo
-    ports:
-      - 3200:3200
-      - 4317:4317
-      - 4318:4318
     logging:
       driver: local
     networks:

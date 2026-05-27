@@ -20,7 +20,7 @@ services:
     environment:
       DEPLOYMENT_ENV: development
     volumes:
-      - ./observability/otel-collector/config.yaml:/etc/otelcol/config.yaml:ro
+      - ./infra/observability/otel-collector/config.yaml:/etc/otelcol/config.yaml:ro
     ports:
       - 4317:4317
       - 4318:4318
@@ -31,7 +31,7 @@ services:
     ports:
       - 3100:3100
     volumes:
-      - ./observability/loki/config.yaml:/etc/loki/config.yaml:ro
+      - ./infra/observability/loki/config.yaml:/etc/loki/config.yaml:ro
       - loki-data:/loki
 
   prometheus:
@@ -43,7 +43,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./observability/prometheus/config.yaml:/etc/prometheus/config.yaml:ro
+      - ./infra/observability/prometheus/config.yaml:/etc/prometheus/config.yaml:ro
       - prometheus-data:/prometheus
 
   tempo:
@@ -52,7 +52,7 @@ services:
     ports:
       - 3200:3200
     volumes:
-      - ./observability/tempo/config.yaml:/etc/config.yaml
+      - ./infra/observability/tempo/config.yaml:/etc/config.yaml
       - tempo-data:/var/tempo
 
   grafana:
@@ -64,7 +64,7 @@ services:
       - 3000:3000
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./observability/grafana/provisioning/:/etc/grafana/provisioning/
+      - ./infra/observability/grafana/provisioning/:/etc/grafana/provisioning/
 
   pocket-id:
     image: ghcr.io/pocket-id/pocket-id:v2.7
