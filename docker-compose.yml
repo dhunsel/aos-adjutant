@@ -59,7 +59,7 @@ services:
     environment:
       DEPLOYMENT_ENV: development
     volumes:
-      - ./infra/observability/otel-collector/config.yaml:/etc/otelcol/config.yaml:ro
+      - ./infra/observability/otel-collector:/etc/otelcol:ro
     ports:
       - 4317:4317
       - 4318:4318
@@ -72,7 +72,7 @@ services:
     ports:
       - 3100:3100
     volumes:
-      - ./infra/observability/loki/config.yaml:/etc/loki/config.yaml:ro
+      - ./infra/observability/loki:/etc/loki:ro
       - loki-data:/loki
     logging:
       driver: local
@@ -86,18 +86,18 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./infra/observability/prometheus/config.yaml:/etc/prometheus/config.yaml:ro
+      - ./infra/observability/prometheus:/etc/prometheus:ro
       - prometheus-data:/prometheus
     logging:
       driver: local
 
   tempo:
     image: grafana/tempo:2.10.5
-    command: -config.file=/etc/config.yaml
+    command: -config.file=/etc/tempo/config.yaml
     ports:
       - 3200:3200
     volumes:
-      - ./infra/observability/tempo/config.yaml:/etc/config.yaml
+      - ./infra/observability/tempo:/etc/tempo:ro
       - tempo-data:/var/tempo
     logging:
       driver: local

@@ -1,15 +1,38 @@
 name: aos-adjutant
 services:
+  caddy:
+    image: ghcr.io/caddybuilds/caddy-cloudflare:2.11
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    environment:
+      ROOT_DOMAIN: ${ROOT_DOMAIN}
+      APP_DOMAIN: ${APP_DOMAIN}
+      AUTH_DOMAIN: ${AUTH_DOMAIN}
+      GRAFANA_DOMAIN: ${GRAFANA_DOMAIN}
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
+      EMAIL: ${ADMIN_EMAIL}
+    volumes:
+      - ./infra/caddy:/etc/caddy:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    logging:
+      driver: local
+    networks:
+      - proxy
+
   webapp:
     image: ghcr.io/dhunsel/aos-adjutant/webapp:${WEBAPP_VERSION}
     restart: unless-stopped
     environment:
-      - ASPNETCORE_ENVIRONMENT: Production
-      - Authentication__ClientId: ${CLIENT_ID}
-      - Authentication__ClientSecret: ${CLIENT_SECRET}
-      - Authentication__Authority: ${AUTH_URL}
-      - DbContextConnectionString: ${DB_CONNECTION_STRING}
-      - AllowedHosts: ${HOSTNAME}
+      ASPNETCORE_ENVIRONMENT: Production
+      Authentication__ClientId: ${CLIENT_ID}
+      Authentication__ClientSecret: ${CLIENT_SECRET}
+      Authentication__Authority: ${AUTH_DOMAIN}
+      DbContextConnectionString: ${DB_CONNECTION_STRING}
+      AllowedHosts: ${APP_DOMAIN}
     logging:
       driver: local
     depends_on:
@@ -25,11 +48,11 @@ services:
     image: postgres:18.1
     restart: unless-stopped
     environment:
-      - POSTGRES_DB: aos_adjutant
-      - POSTGRES_USER: postgres
-      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      - MIGRATOR_PASSWORD: ${MIGRATOR_PASSWORD}
-      - APP_PASSWORD: ${APP_PASSWORD}
+      POSTGRES_DB: aos_adjutant
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MIGRATOR_PASSWORD: ${MIGRATOR_PASSWORD}
+      APP_PASSWORD: ${APP_PASSWORD}
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
@@ -50,9 +73,9 @@ services:
     image: ghcr.io/pocket-id/pocket-id:v2.7
     restart: unless-stopped
     environment:
-      - APP_URL: ${AUTH_URL}
-      - ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY}
-      - TRUST_PROXY: ${AUTH_TRUST_PROXY}
+      APP_URL: ${AUTH_DOMAIN}
+      ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY}
+      TRUST_PROXY: ${AUTH_TRUST_PROXY}
     healthcheck:
       test: [ "CMD", "/app/pocket-id", "healthcheck"]
       interval: 30s
@@ -88,7 +111,7 @@ services:
     environment:
       DEPLOYMENT_ENV: production
     volumes:
-      - ./infra/observability/otel-collector/config.yaml:/etc/otelcol/config.yaml:ro
+      - ./infra/observability/otel-collector:/etc/otelcol:ro
     logging:
       driver: local
     networks:
@@ -99,7 +122,7 @@ services:
     restart: unless-stopped
     command: -config.file=/etc/loki/config.yaml
     volumes:
-      - ./infra/observability/loki/config.yaml:/etc/loki/config.yaml:ro
+      - ./infra/observability/loki:/etc/loki:ro
       - loki-data:/loki
     logging:
       driver: local
@@ -114,7 +137,7 @@ services:
       - --enable-feature=exemplar-storage
       - --config.file=/etc/prometheus/config.yaml
     volumes:
-      - ./infra/observability/prometheus/config.yaml:/etc/prometheus/config.yaml:ro
+      - ./infra/observability/prometheus:/etc/prometheus:ro
       - prometheus-data:/prometheus
     logging:
       driver: local
@@ -124,9 +147,9 @@ services:
   tempo:
     image: grafana/tempo:2.10.5
     restart: unless-stopped
-    command: -config.file=/etc/config.yaml
+    command: -config.file=/etc/tempo/config.yaml
     volumes:
-      - ./infra/observability/tempo/config.yaml:/etc/config.yaml:ro
+      - ./infra/observability/tempo:/etc/tempo:ro
       - tempo-data:/var/tempo
     logging:
       driver: local
@@ -134,6 +157,8 @@ services:
       - private
 
 volumes:
+  caddy-data:
+  caddy-config:
   postgres-data:
   loki-data:
   prometheus-data:
