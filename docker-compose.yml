@@ -24,9 +24,9 @@ services:
     image: ghcr.io/pocket-id/pocket-id:v2.7
     restart: unless-stopped
     environment:
-      APP_URL: ${AUTH_URL}
+      APP_URL: http://${AUTH_DOMAIN}
       ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY}
-      TRUST_PROXY: ${AUTH_TRUST_PROXY}
+      TRUST_PROXY: false
     ports:
       - 1411:1411
     healthcheck:
@@ -44,8 +44,22 @@ services:
   grafana:
     image: grafana/grafana:13.0
     environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_SERVER_ROOT_URL: http://${GRAFANA_DOMAIN}
+      GF_AUTH_DISABLE_LOGIN_FORM: true
+
+      GF_AUTH_GENERIC_OAUTH_ENABLED: true
+      GF_AUTH_GENERIC_OAUTH_NAME: Pocket ID
+      GF_AUTH_GENERIC_OAUTH_AUTO_LOGIN: true
+      GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP: true
+
+      GF_AUTH_GENERIC_OAUTH_AUTH_URL: http://${AUTH_DOMAIN}/authorize
+      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: http://pocket-id:1411/api/oidc/token
+      GF_AUTH_GENERIC_OAUTH_CLIENT_ID: ${GRAFANA_CLIENT_ID}
+      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: ${GRAFANA_CLIENT_SECRET}
+      GF_AUTH_GENERIC_OAUTH_USE_PKCE: true
+
+      GF_AUTH_GENERIC_OAUTH_SCOPES: openid email profile
+      GF_AUTH_GENERIC_OAUTH_SKIP_ORG_ROLE_SYNC: true
     ports:
       - 3000:3000
     volumes:

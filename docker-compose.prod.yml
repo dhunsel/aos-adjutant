@@ -30,7 +30,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       Authentication__ClientId: ${CLIENT_ID}
       Authentication__ClientSecret: ${CLIENT_SECRET}
-      Authentication__Authority: ${AUTH_DOMAIN}
+      Authentication__Authority: https://${AUTH_DOMAIN}
       DbContextConnectionString: ${DB_CONNECTION_STRING}
       AllowedHosts: ${APP_DOMAIN}
     logging:
@@ -73,9 +73,9 @@ services:
     image: ghcr.io/pocket-id/pocket-id:v2.7
     restart: unless-stopped
     environment:
-      APP_URL: ${AUTH_DOMAIN}
+      APP_URL: https://${AUTH_DOMAIN}
       ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY}
-      TRUST_PROXY: ${AUTH_TRUST_PROXY}
+      TRUST_PROXY: true
     healthcheck:
       test: [ "CMD", "/app/pocket-id", "healthcheck"]
       interval: 30s
@@ -94,8 +94,22 @@ services:
     image: grafana/grafana:13.0
     restart: unless-stopped
     environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_SERVER_ROOT_URL: https://${GRAFANA_DOMAIN}
+      GF_AUTH_DISABLE_LOGIN_FORM: true
+
+      GF_AUTH_GENERIC_OAUTH_ENABLED: true
+      GF_AUTH_GENERIC_OAUTH_NAME: Pocket ID
+      GF_AUTH_GENERIC_OAUTH_AUTO_LOGIN: true
+      GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP: true
+
+      GF_AUTH_GENERIC_OAUTH_AUTH_URL: https://${AUTH_DOMAIN}/authorize
+      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: https://${AUTH_DOMAIN}/api/oidc/token
+      GF_AUTH_GENERIC_OAUTH_CLIENT_ID: ${GRAFANA_CLIENT_ID}
+      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: ${GRAFANA_CLIENT_SECRET}
+      GF_AUTH_GENERIC_OAUTH_USE_PKCE: true
+
+      GF_AUTH_GENERIC_OAUTH_SCOPES: openid email profile
+      GF_AUTH_GENERIC_OAUTH_SKIP_ORG_ROLE_SYNC: true
     volumes:
       - grafana-data:/var/lib/grafana
       - ./infra/observability/grafana/provisioning/:/etc/grafana/provisioning:ro
