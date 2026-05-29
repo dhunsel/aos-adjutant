@@ -28,8 +28,8 @@ services:
     restart: unless-stopped
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      Authentication__ClientId: ${CLIENT_ID}
-      Authentication__ClientSecret: ${CLIENT_SECRET}
+      Authentication__ClientId: ${APP_CLIENT_ID}
+      Authentication__ClientSecret: ${APP_CLIENT_SECRET}
       Authentication__Authority: https://${AUTH_DOMAIN}
       DbContextConnectionString: ${DB_CONNECTION_STRING}
       AllowedHosts: ${APP_DOMAIN}
@@ -54,7 +54,7 @@ services:
       MIGRATOR_PASSWORD: ${MIGRATOR_PASSWORD}
       APP_PASSWORD: ${APP_PASSWORD}
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql
       - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
     logging:
       driver: local
@@ -184,4 +184,7 @@ networks:
   private:
     internal: true
   proxy:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
 
