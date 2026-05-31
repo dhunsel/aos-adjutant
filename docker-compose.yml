@@ -1,4 +1,4 @@
-name: aosadjutant
+name: aos-adjutant
 services:
   postgres:
     image: postgres:18.1
@@ -6,6 +6,8 @@ services:
       POSTGRES_DB: aos_adjutant
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MIGRATOR_PASSWORD: ${MIGRATOR_PASSWORD}
+      APP_PASSWORD: ${APP_PASSWORD}
     volumes:
       - postgres-data:/var/lib/postgresql
       - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
