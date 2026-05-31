@@ -69,6 +69,28 @@ services:
     networks:
       - private
 
+  migrator:
+    image: postgres:18.1
+    profiles: [ migrate ]
+    restart: no
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: aos_adjutant
+      PGUSER: migrator
+      PGPASSWORD: ${MIGRATOR_PASSWORD}
+    entrypoint: [ "bash", "/apply-migrations.sh" ]
+    volumes:
+      - ./backend/src/AosAdjutant.Api/Migrations/Sql:/migrations:ro
+      - ./infra/postgres/apply-migrations.sh:/apply-migrations.sh:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    logging:
+      driver: local
+    networks:
+      - private
+
   pocket-id:
     image: ghcr.io/pocket-id/pocket-id:v2.7
     restart: unless-stopped
