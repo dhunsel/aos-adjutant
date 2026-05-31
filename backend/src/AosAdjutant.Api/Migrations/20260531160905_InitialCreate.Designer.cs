@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AosAdjutant.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260517150259_AddAuditColumns")]
-    partial class AddAuditColumns
+    [Migration("20260531160905_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
