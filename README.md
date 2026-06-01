@@ -13,7 +13,7 @@ to manage game data, build army lists, and provide assistance during a game. Bui
 > player-facing features (list builder, play mode) are in progress.
 > [Roadmap](#roadmap).
 
-![Dashboard Faction List](docs/screenshot.png)
+![Dashboard Faction List](docs/faction-list-screenshot.png)
 
 ## Features
 
