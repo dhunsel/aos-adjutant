@@ -86,7 +86,10 @@ builder
     )
     .WithTracing(tracing =>
         tracing
-            .AddAspNetCoreInstrumentation()
+            .AddAspNetCoreInstrumentation(options =>
+                // Filter out requests for static files
+                options.Filter = httpContext => !Path.HasExtension(httpContext.Request.Path.Value)
+            )
             .AddEntityFrameworkCoreInstrumentation()
             .AddHttpClientInstrumentation()
             .AddOtlpExporter(opts =>
