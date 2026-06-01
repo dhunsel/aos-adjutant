@@ -13,7 +13,7 @@ services:
       AUTH_DOMAIN: ${AUTH_DOMAIN}
       GRAFANA_DOMAIN: ${GRAFANA_DOMAIN}
       CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
-      EMAIL: ${ADMIN_EMAIL}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
     volumes:
       - ./infra/caddy:/etc/caddy:ro
       - caddy-data:/data
@@ -154,7 +154,7 @@ services:
       GF_AUTH_GENERIC_OAUTH_USE_PKCE: true
 
       GF_AUTH_GENERIC_OAUTH_SCOPES: openid email profile
-      GF_AUTH_GENERIC_OAUTH_SKIP_ORG_ROLE_SYNC: true
+      GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "'Admin'"
     volumes:
       - grafana-data:/var/lib/grafana
       - ./infra/observability/grafana/provisioning/:/etc/grafana/provisioning:ro
