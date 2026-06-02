@@ -1,28 +1,147 @@
 # AoS Adjutant
 
 [![backend](https://github.com/dhunsel/aos-adjutant/actions/workflows/backend.yml/badge.svg)](https://github.com/dhunsel/aos-adjutant/actions/workflows/backend.yml)
+[![frontend](https://github.com/dhunsel/aos-adjutant/actions/workflows/frontend.yml/badge.svg)](https://github.com/dhunsel/aos-adjutant/actions/workflows/frontend.yml)
 [![codecov](https://codecov.io/github/dhunsel/aos-adjutant/graph/badge.svg?token=Y9Y5NO8O1Z)](https://codecov.io/github/dhunsel/aos-adjutant)
 
-Monorepo for AoS Adjutant — a tool for managing Age of Sigmar army data.
+A companion web app for **Warhammer: Age of Sigmar (4th edition)**. The goal is a fully-featured application
+to manage game data, build army lists, and provide assistance during a game. Built as a full-stack project with a
+.NET 10 API, a React 19 SPA, and a self-hosted, observable, single-VPS deployment.
 
-## Layout
+> **Status: active development.** The data-management foundation and the
+> production platform (auth, observability, deployment) are in place. The
+> completion of the dashboard, and the addition of the other modes are in progress.
+> [Roadmap](#roadmap).
 
-- [`backend/`](backend/) — .NET 10 / ASP.NET Core REST API, PostgreSQL + EF Core, Serilog + OpenTelemetry. See
-  [`backend/README.md`](backend/README.md).
-- [`frontend/`](frontend/) — React 19 + TypeScript + Vite SPA consuming the backend API.
+![Dashboard Faction List](docs/faction-list-screenshot.png)
 
-## Quick start
+## Features
 
-```bash
-# Backend
-cd backend
-docker compose up -d          # postgres + observability stack
-dotnet restore AosAdjutant.slnx
-dotnet run --project src/AosAdjutant.Api
+| Area | Description | Status |
+|------|-------------|--------|
+| **Admin dashboard** | Manage factions, units, attack profiles, weapon effects, abilities, and battle formations | 🟡 In progress |
+| **List builder** | Create, save, and validate army lists | ⚪ Planned |
+| **Play mode** | Run a game session from a saved list, with data reshaped for fast in-game reference | ⚪ Planned |
 
-# Frontend (in a second terminal)
-cd frontend
-npm install
-npm run dev
+## Tech stack
+
+**Backend** — .NET 10 / ASP.NET Core · Entity Framework Core 10 · PostgreSQL 18 ·
+OpenTelemetry · OIDC Authentication
+
+**Frontend** — React 19 · TypeScript · Vite · TanStack Query · React Router 7 ·
+Tailwind CSS 4 · shadcn/ui (on Base UI) · Zod · types generated from the API's
+OpenAPI schema
+
+**Infrastructure** — Docker Compose · Caddy (automatic TLS via Cloudflare
+DNS-01) · Pocket ID (OIDC SSO) · Grafana + Loki + Tempo + Prometheus · GitHub
+Actions
+
+## Architecture
+
+```mermaid
+flowchart TD
+    Browser(["Browser"]) -->|HTTPS| Caddy["Caddy<br/>(reverse proxy + auto-TLS)"]
+
+    Caddy --> WebApp["Web app<br/>(API + SPA)"]
+    Caddy --> PocketID["Pocket ID<br/>(OIDC / SSO)"]
+    Caddy --> Grafana["Grafana"]
+
+    WebApp <-->|OIDC| PocketID
+    Grafana <-->|SSO| PocketID
+
+    WebApp -->|EF Core| Postgres[("PostgreSQL<br/>(least-privilege)")]
+    WebApp -->|"OTLP (traces / metrics / logs)"| Collector["OTel Collector"]
+
+    Collector --> Backends["Tempo · Prometheus · Loki"]
+    Grafana -->|queries| Backends
 ```
 
+- **Backend For Frontend (BFF)**: The backend is currently designed only for the browser frontend SPA.
+  In production the SPA static files are served through the ASP.NET application.
+  For authentication the OIDC authorization code flow is handled by the backend to avoid the issue of
+  storing tokens in the browser. After successful authentication, an encrypted session cookie is set in the
+  browser which is validated by the backend. A future change might be to extract the resource API out of the
+  backend and keep the current backend as a thin proxy forwarding requests to that API.
+- **Feature-based structure**: In both backend and frontend, the code is grouped by domain feature
+  rather than by technical layer. The structure is kept relatively flat and will be refactored as real needs appear.
+- **Typed end to end**: The frontend's API types are generated from the
+  backend's OpenAPI document. On each PR, validation will confirm that all the types are in sync.
+
+## Technical Features
+
+- **Observability**: Every request is traced (ASP.NET Core, EF Core,
+  HttpClient), with metrics and structured logs exported over OTLP to a
+  Grafana stack. Traces, metrics, and logs are correlated via exemplars and a
+  per-request trace ID.
+- **Authentication**: OpenID Connect with PKCE, `__Host-`-prefixed
+  session cookies, `SameSite=Strict`, HttpOnly, and an admin-gated fallback
+  authorization policy.
+- **Versioned SQL migrations**: A single-shot migrator container defined in the docker compose
+  file applies the migrations to the database. The SQL scripts are idempotent, so the script is
+  safe to rerun at any time and will only apply the missing migrations.
+- **Production deployment**: single-VPS Docker Compose with network
+  segmentation (an internal-only network for data services, a proxy network for
+  edge), automatic TLS, and SSO shared across the app and Grafana.
+- **Quality gates**: Unit tests and Testcontainers-backed integration tests, static
+  analysis (Meziantou, SonarAnalyzer), code coverage, and CI on every push/PR.
+
+## Getting started (local development)
+
+### Prerequisites
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
+- [Node.js](https://nodejs.org/) (LTS)
+- [Docker](https://www.docker.com/) — for PostgreSQL and the observability stack
+
+### Run it
+Step 1-4 are only necessary for first-time setup.
+
+```bash
+# 1. Add local .env used by dev docker compose
+cp .env.example .env
+
+# 2. Initialize Pocket ID
+docker compose run --rm pocket-id-init  # Use the generated link to add a passkey for auth
+
+# 3. Open created file at .secrets/pocket-id.env and set app vars via dotnet user-secrets, copy Grafana vars into .env
+dotnet user-secrets set "Authentication:ClientId" "<WEBAPP_CLIENT_ID>" --project backend/src/AosAdjutant.Api
+dotnet user-secrets set "Authentication:ClientSecret" "<WEBAPP_CLIENT_SECRET>" --project backend/src/AosAdjutant.Api
+
+# 4. Run DB migrations
+docker compose run --rm migrator
+
+# 5. Deploy services
+docker compose up -d
+
+# 6. Backend
+cd backend
+dotnet run --project src/AosAdjutant.Api
+# API → http://localhost:5280   ·   API reference (Scalar) → http://localhost:5280/scalar
+
+# 7. Frontend (second terminal)
+cd frontend
+npm install
+npm run dev                   # → http://localhost:5173, proxied to the API
+```
+
+## Deployment
+
+Production runs on a single VPS via [`docker-compose.prod.yml`](docker-compose.prod.yml):
+Caddy terminates TLS (Cloudflare DNS-01) and reverse-proxies the app, Pocket ID,
+and Grafana on separate subdomains. The data services sit on an internal-only
+network, only the Caddy port is exposed. Migrations are applied by running the migrator service.
+On first-time setup the pocket-id-init service performs the setup for the Pocket ID service. 
+
+Currently a few production features are still missing. Most notably, data backups of the
+postgres database and the pocket ID database to some external platform (e.g., S3). 
+Similarly, the observability data currently lives on the VPS and is not written to some external store.
+
+## Roadmap
+
+- [ ] Complete dashboard CRUD UI for all game-data entities + Finish data API
+- [ ] List builder with army-composition validation
+- [ ] Play mode (game-optimised data view + session state)
+
+## License
+
+[MIT](LICENSE)
