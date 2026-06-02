@@ -10,7 +10,7 @@ to manage game data, build army lists, and provide assistance during a game. Bui
 
 > **Status: active development.** The data-management foundation and the
 > production platform (auth, observability, deployment) are in place. The
-> player-facing features (list builder, play mode) are in progress.
+> completion of the dashbaord, and the addition of the other modes are in progress.
 > [Roadmap](#roadmap).
 
 ![Dashboard Faction List](docs/faction-list-screenshot.png)
@@ -38,29 +38,22 @@ Actions
 
 ## Architecture
 
-```
-                          ┌───────────────────────────────────────────┐
-   Browser ──HTTPS──────▶ │      Caddy  (reverse proxy + auto-TLS)    │
-                          └────┬───────────────┬───────────────┬──────┘
-                               │               │               │
-                    ┌──────────▼───┐     ┌─────▼──────┐   ┌────▼──────┐
-                    │   Web app    │◀───▶│  Pocket ID │◀─▶│  Grafana  │
-                    │ (API + SPA)  │     │ OIDC / SSO │   │           │
-                    └─┬─────────┬──┘     └────────────┘   └─────┬─────┘
-                      │         │ EF Core                       │
-        OTLP telemetry│         ▼                               │ queries
-       (traces /      │   ┌─────────────┐                       │
-        metrics /     │   │ PostgreSQL  │                       │
-        logs)         │   │ (least-priv)│                       │
-                      │   └─────────────┘                       │
-                      ▼                                         │
-             ┌──────────────────┐                               │
-             │  OTel Collector  │                               │
-             └────────┬─────────┘                               │
-                      ▼                                         │
-            ┌──────────────────────────────┐                    │
-            │   Tempo · Prometheus · Loki  │◀───────────────────┘
-            └──────────────────────────────┘
+```mermaid
+flowchart TD
+    Browser(["Browser"]) -->|HTTPS| Caddy["Caddy<br/>(reverse proxy + auto-TLS)"]
+
+    Caddy --> WebApp["Web app<br/>(API + SPA)"]
+    Caddy --> PocketID["Pocket ID<br/>(OIDC / SSO)"]
+    Caddy --> Grafana["Grafana"]
+
+    WebApp <-->|OIDC| PocketID
+    Grafana <-->|SSO| PocketID
+
+    WebApp -->|EF Core| Postgres[("PostgreSQL<br/>(least-privilege)")]
+    WebApp -->|"OTLP (traces / metrics / logs)"| Collector["OTel Collector"]
+
+    Collector --> Backends["Tempo · Prometheus · Loki"]
+    Grafana -->|queries| Backends
 ```
 
 - **Backend For Frontend (BFF)**: The backend is currently designed only for the browser frontend SPA.
@@ -70,10 +63,9 @@ Actions
   browser which is validated by the backend. A future change might be to extract the resouce API out of the
   backend and keep the current backend as a thin proxy forwarding requests to that API.
 - **Feature-based structure**: In both backend and frontend, the code is grouped by domain feature
-  rather than by technical layer. The structure is kept relatively flat and will be
-  refactored as real needs appear.
+  rather. The structure is kept relatively flat and will be refactored as real needs appear.
 - **Typed end to end**: The frontend's API types are generated from the
-  backend's OpenAPI document, so contract drift surfaces at build time.
+  backend's OpenAPI document. On PR validations will confirm that all the types are in sync.
 
 ## Technical Features
 
@@ -84,11 +76,9 @@ Actions
 - **Authentication**: OpenID Connect with PKCE, `__Host-`-prefixed
   session cookies, `SameSite=Strict`, HttpOnly, and an admin-gated fallback
   authorization policy.
-- **Least-privilege database**: Separate PostgreSQL roles for the superuser,
-  schema migrations, and the application runtime. The app never connects with
-  rights it doesn't need.
-- **Versioned SQL migrations**: Applied by a dedicated, single-shot migrator
-  container. Schema changes are reproducible and decoupled from the running app.
+- **Versioned SQL migrations**: A single-shot migrator container defined in the docker compose
+  file applies the migrations to the database. The SQL scripts are idempotent, so the script is
+  safe to rerun at any time and will only apply the missing migrations.
 - **Production deployment**: single-VPS Docker Compose with network
   segmentation (an internal-only network for data services, a proxy network for
   edge), automatic TLS, and SSO shared across the app and Grafana.
@@ -138,10 +128,13 @@ npm run dev                   # → http://localhost:5173, proxied to the API
 
 Production runs on a single VPS via [`docker-compose.prod.yml`](docker-compose.prod.yml):
 Caddy terminates TLS (Cloudflare DNS-01) and reverse-proxies the app, Pocket ID,
-and Grafana on separate subdomains; data services sit on an internal-only
-network; schema is applied by the one-shot `migrator` profile. First-run auth
-client provisioning is bootstrapped by the `init` profile (see
-[`infra/pocket-id`](infra/pocket-id)).
+and Grafana on separate subdomains. The data services sit on an internal-only
+network, only the Caddy port is exposed. Migrations are applied by running the migrator service.
+On first-time setup the pocket-id-init service performs the setup for the Pocket ID service. 
+
+Currently a few production features are still missing. Most notably, data backups of the
+postgres database and the pocket ID database to some external platform (e.g., S3). 
+Similarly, the observability data currently lives on the VPS and is not written to some external store.
 
 ## Roadmap
 
