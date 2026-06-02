@@ -10,7 +10,7 @@ to manage game data, build army lists, and provide assistance during a game. Bui
 
 > **Status: active development.** The data-management foundation and the
 > production platform (auth, observability, deployment) are in place. The
-> completion of the dashbaord, and the addition of the other modes are in progress.
+> completion of the dashboard, and the addition of the other modes are in progress.
 > [Roadmap](#roadmap).
 
 ![Dashboard Faction List](docs/faction-list-screenshot.png)
@@ -57,15 +57,15 @@ flowchart TD
 ```
 
 - **Backend For Frontend (BFF)**: The backend is currently designed only for the browser frontend SPA.
-  In production the SPA static files are served though the ASP.NET application.
+  In production the SPA static files are served through the ASP.NET application.
   For authentication the OIDC authorization code flow is handled by the backend to avoid the issue of
   storing tokens in the browser. After successful authentication, an encrypted session cookie is set in the
-  browser which is validated by the backend. A future change might be to extract the resouce API out of the
+  browser which is validated by the backend. A future change might be to extract the resource API out of the
   backend and keep the current backend as a thin proxy forwarding requests to that API.
 - **Feature-based structure**: In both backend and frontend, the code is grouped by domain feature
-  rather. The structure is kept relatively flat and will be refactored as real needs appear.
+  rather than by technical layer. The structure is kept relatively flat and will be refactored as real needs appear.
 - **Typed end to end**: The frontend's API types are generated from the
-  backend's OpenAPI document. On PR validations will confirm that all the types are in sync.
+  backend's OpenAPI document. On each PR, validation will confirm that all the types are in sync.
 
 ## Technical Features
 
