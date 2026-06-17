@@ -1,10 +1,8 @@
 import { Spinner } from "@/components/ui/spinner";
 import { useFactions } from "../faction.queries";
 import { useIsAdmin } from "@/features/auth/auth.queries";
-import type { FactionQuery, GrandAlliance } from "@/types/api.types";
-import { Badge } from "@/components/ui/badge";
-import { useState, type ComponentProps } from "react";
-import { cn } from "@/lib/utils";
+import type { FactionQuery } from "@/types/api.types";
+import { useState } from "react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useSearchParams } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -18,38 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { CreateFaction } from "../components/create-faction";
 import { grandAllianceSchema } from "../faction.schemas";
-
-const GrandAllianceBadge = ({
-  grandAlliance,
-  className,
-  ...props
-}: { grandAlliance: GrandAlliance } & ComponentProps<typeof Badge>) => {
-  let color;
-  switch (grandAlliance) {
-    case "order": {
-      color = "bg-alliance-order text-foreground";
-      break;
-    }
-    case "chaos": {
-      color = "bg-alliance-chaos text-foreground";
-      break;
-    }
-    case "death": {
-      color = "bg-alliance-death text-foreground";
-      break;
-    }
-    case "destruction": {
-      color = "bg-alliance-destruction text-foreground";
-      break;
-    }
-  }
-
-  return (
-    <Badge className={cn(color, className)} {...props}>
-      {grandAlliance.charAt(0).toUpperCase() + grandAlliance.slice(1)}
-    </Badge>
-  );
-};
+import { GrandAllianceBadge } from "../components/grand-alliance-badge";
 
 const GRAND_ALLIANCE_KEY = "grandAlliance" satisfies keyof FactionQuery;
 

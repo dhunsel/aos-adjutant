@@ -3,6 +3,7 @@ import { FactionSidebarGroup } from "./layouts/faction-sidebar-group";
 import type { DasboardRouteHandle } from "./route-handle";
 import type { RouteObject } from "react-router";
 import { FactionListPage } from "./factions/pages/faction-list-page";
+import { FactionDetailPage } from "./factions/pages/faction-detail-page";
 
 export const dashboardRouter: RouteObject = {
   path: "/dashboard",
@@ -10,11 +11,14 @@ export const dashboardRouter: RouteObject = {
   children: [
     {
       path: "factions",
-      Component: FactionListPage,
       children: [
         {
-          path: ":factionId",
+          index: true,
           Component: FactionListPage,
+        },
+        {
+          path: ":factionId",
+          Component: FactionDetailPage,
           handle: { sidebar: FactionSidebarGroup } satisfies DasboardRouteHandle,
         },
       ],
