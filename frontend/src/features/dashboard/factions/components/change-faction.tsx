@@ -1,10 +1,15 @@
-import { createFactionSchema } from "../faction.schemas";
-import { useCreateFaction } from "../faction.queries";
 import { ApiError } from "@/lib/api-client";
+import { useFaction, useUpdateFaction } from "../faction.queries";
+import { createFactionSchema } from "../faction.schemas";
 import { FactionForm, type FactionFormErrors } from "./faction-form";
+import { useParams } from "react-router";
 
-export function CreateFaction({ onSuccess }: { onSuccess?: () => void }) {
-  const createFaction = useCreateFaction();
+export function ChangeFaction({ onSuccess }: { onSuccess?: () => void }) {
+  const changeFaction = useUpdateFaction();
+  const params = useParams();
+  const faction = useFaction(Number(params["factionId"]));
+
+  if (faction.isError || !faction.data) return <div>Empty</div>;
 
   const onSubmitAsync = async ({
     value,
@@ -13,7 +18,10 @@ export function CreateFaction({ onSuccess }: { onSuccess?: () => void }) {
   }): Promise<FactionFormErrors | null> => {
     try {
       const parsed = createFactionSchema.parse(value);
-      await createFaction.mutateAsync(parsed);
+      await changeFaction.mutateAsync({
+        factionId: faction.data.factionId,
+        data: { ...parsed, version: faction.data.version },
+      });
       return null;
     } catch (err) {
       if (err instanceof ApiError && err.status === 409) {
@@ -32,9 +40,9 @@ export function CreateFaction({ onSuccess }: { onSuccess?: () => void }) {
 
   return (
     <FactionForm
-      name=""
-      grandAlliance=""
-      submitLabel="Create"
+      name={faction.data.name}
+      grandAlliance={faction.data.grandAlliance}
+      submitLabel="Save"
       onSubmitAsync={onSubmitAsync}
       {...(onSuccess ? { onSuccess: onSuccess } : {})}
     />
