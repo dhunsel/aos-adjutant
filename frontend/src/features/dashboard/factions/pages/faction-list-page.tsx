@@ -17,6 +17,7 @@ import {
 import { CreateFaction } from "../components/create-faction";
 import { grandAllianceSchema } from "../faction.schemas";
 import { GrandAllianceBadge } from "../components/grand-alliance-badge";
+import { Link } from "react-router";
 
 const GRAND_ALLIANCE_KEY = "grandAlliance" satisfies keyof FactionQuery;
 
@@ -86,13 +87,16 @@ export function FactionListPage() {
       ) : (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3">
           {factions.data?.items.map((f) => (
-            <div
+            <Button
+              className="flex h-auto flex-col gap-2 p-2 text-nowrap"
               key={f.factionId}
-              className="flex flex-col gap-2 rounded-lg border border-border bg-card p-2 text-nowrap text-card-foreground"
+              variant="secondary"
+              nativeButton={false}
+              render={<Link to={f.factionId.toString()} />}
             >
               <span className="font-heading text-xl">{f.name}</span>
               <GrandAllianceBadge grandAlliance={f.grandAlliance} />
-            </div>
+            </Button>
           ))}
         </div>
       )}

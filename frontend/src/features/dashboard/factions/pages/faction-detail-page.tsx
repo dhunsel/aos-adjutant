@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import { useFaction } from "../faction.queries";
+import { useDeleteFaction, useFaction } from "../faction.queries";
 import { NotFound } from "@/pages/not-found";
 import { GrandAllianceBadge } from "../components/grand-alliance-badge";
 import { Button } from "@/components/ui/button";
@@ -14,12 +14,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ChangeFaction } from "../components/change-faction";
+import { Spinner } from "@/components/ui/spinner";
 
 export function FactionDetailPage() {
   const params = useParams();
   const faction = useFaction(Number(params["factionId"]));
+  const deleteFaction = useDeleteFaction();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const isAdmin = useIsAdmin();
+
+  if (faction.isLoading)
+    return (
+      <div className="pt-10">
+        <Spinner className="mx-auto" />
+      </div>
+    );
 
   if (faction.isError || !faction.data) return NotFound();
 
@@ -52,7 +61,12 @@ export function FactionDetailPage() {
             </DialogContent>
           </Dialog>
         )}
-        <Button variant="outline">
+        <Button
+          variant="destructive"
+          onClick={() => {
+            deleteFaction.mutate(faction.data.factionId);
+          }}
+        >
           <Trash2 />
           <span>Delete</span>
         </Button>
