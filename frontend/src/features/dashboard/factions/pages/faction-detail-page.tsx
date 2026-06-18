@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useDeleteFaction, useFaction } from "../faction.queries";
 import { NotFound } from "@/pages/not-found";
 import { GrandAllianceBadge } from "../components/grand-alliance-badge";
@@ -15,6 +15,17 @@ import {
 } from "@/components/ui/dialog";
 import { ChangeFaction } from "../components/change-faction";
 import { Spinner } from "@/components/ui/spinner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export function FactionDetailPage() {
   const params = useParams();
@@ -22,6 +33,7 @@ export function FactionDetailPage() {
   const deleteFaction = useDeleteFaction();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const isAdmin = useIsAdmin();
+  const navigate = useNavigate();
 
   if (faction.isLoading)
     return (
@@ -61,15 +73,38 @@ export function FactionDetailPage() {
             </DialogContent>
           </Dialog>
         )}
-        <Button
-          variant="destructive"
-          onClick={() => {
-            deleteFaction.mutate(faction.data.factionId);
-          }}
-        >
-          <Trash2 />
-          <span>Delete</span>
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger
+            render={
+              <Button variant="destructive">
+                <Trash2 />
+                <span>Delete</span>
+              </Button>
+            }
+          />
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure you want to delete this faction?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action will permanently delete this faction and all the related data.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  deleteFaction.mutate(faction.data.factionId, {
+                    onSuccess: () => {
+                      void navigate("/dashboard/factions");
+                    },
+                  });
+                }}
+              >
+                Confirm
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

@@ -66,8 +66,7 @@ export const useDeleteFaction = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (factionId: number) => api.delete(`/factions/${factionId.toString()}`),
-    onSuccess: (_, factionId) => {
-      queryClient.removeQueries({ queryKey: factionKeys.detail(factionId) });
+    onSuccess: () => {
       return queryClient.invalidateQueries({ queryKey: factionKeys.lists() });
     },
   });
