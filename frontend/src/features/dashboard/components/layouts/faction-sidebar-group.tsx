@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Book, Cloud, Component, Crown, Gem, Sparkles, Swords, Users } from "lucide-react";
 import { useParams } from "react-router";
-import { useFaction } from "../factions/faction.queries";
+import { useFaction } from "../../features/factions/faction.queries";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SidebarNavButton } from "@/components/ui/sidebar-nav-button";
 import type { ComponentProps } from "react";
@@ -26,10 +26,12 @@ export function FactionSidebarGroup({
         {faction.isLoading ? <Skeleton className="h-4 w-50" /> : faction.data?.name}
       </SidebarGroupLabel>
       <SidebarMenu>
-        <SidebarNavButton size={size} to={`factions/${factionId.toString()}/battle-traits`}>
-          <Swords />
-          Battle Traits
-        </SidebarNavButton>
+        <SidebarMenuItem>
+          <SidebarNavButton size={size} to={`factions/${factionId.toString()}/battle-traits`}>
+            <Swords />
+            Battle Traits
+          </SidebarNavButton>
+        </SidebarMenuItem>
         <SidebarMenuItem>
           <SidebarNavButton size={size} to={`factions/${factionId.toString()}/battle-formations`}>
             <Component />
