@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { CreateBattleTrait } from "../components/create-battle-trait";
+import { AbilityCard } from "@/features/dashboard/components/ui/ability-card";
 
 export function BattleTraitListPage() {
   const params = useParams();
@@ -23,6 +24,7 @@ export function BattleTraitListPage() {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between">
+        <h1 className="font-heading text-2xl">Battle Traits</h1>
         {isAdmin && (
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger
@@ -51,16 +53,9 @@ export function BattleTraitListPage() {
           <Spinner className="mx-auto" />
         </div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-3">
           {battleTraits.data?.items.map((bt) => (
-            <Button
-              className="flex h-auto flex-col gap-2 p-2 text-nowrap"
-              key={bt.abilityId}
-              variant="secondary"
-              nativeButton={false}
-            >
-              <span className="font-heading text-xl">{bt.name}</span>
-            </Button>
+            <AbilityCard ability={bt} key={bt.abilityId} />
           ))}
         </div>
       )}
