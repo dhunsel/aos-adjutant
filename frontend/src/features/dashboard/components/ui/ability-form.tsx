@@ -1,6 +1,5 @@
 import { useForm } from "@tanstack/react-form";
 import { createAbilitySchema } from "../../ability.schemas";
-//import type { Phase, Restriction, Turn } from "@/types/api.types";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import {
   Select,
@@ -61,6 +60,7 @@ export function AbilityForm({
     },
   });
 
+  // TODO get from backend instead of hardcoding
   const phases = [
     { label: "Deployment", value: "deployment" },
     { label: "Start of Battle Round", value: "start" },

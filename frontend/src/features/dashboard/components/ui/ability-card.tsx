@@ -16,7 +16,6 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -38,10 +37,12 @@ export function AbilityCard({
   ability,
   onDelete,
   onUpdate,
+  label = "ability",
 }: {
   ability: Ability;
   onDelete: () => Promise<void>;
   onUpdate: (updatedAbility: Ability) => Promise<void>;
+  label?: string;
 }) {
   const restrictionLabel = restrictions.find((r) => r.value === ability.restriction)?.label;
   const deleteAbility = useDeleteAbility({ onSuccess: onDelete });
@@ -93,7 +94,7 @@ export function AbilityCard({
             />
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Edit Ability</DialogTitle>
+                <DialogTitle>Edit {label}</DialogTitle>
               </DialogHeader>
               <ChangeAbility
                 onSuccess={() => {
@@ -115,10 +116,7 @@ export function AbilityCard({
             />
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure you want to delete this faction?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action will permanently delete this faction and all the related data.
-                </AlertDialogDescription>
+                <AlertDialogTitle>Are you sure you want to delete this {label}?</AlertDialogTitle>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>

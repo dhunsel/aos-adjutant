@@ -62,6 +62,7 @@ export function BattleTraitListPage() {
             <AbilityCard
               ability={bt}
               key={bt.abilityId}
+              label="battle trait"
               onDelete={() =>
                 queryClient.invalidateQueries({
                   queryKey: battleTraitsKeys.lists(factionId),
