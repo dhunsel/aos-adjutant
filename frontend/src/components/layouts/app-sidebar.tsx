@@ -13,7 +13,7 @@ import {
 import { SidebarNavButton } from "../ui/sidebar-nav-button";
 import { useMatch } from "react-router";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { DashboardSidebarGroups } from "@/features/dashboard/layouts/dashboard-sidebar-groups";
+import { DashboardSidebarGroups } from "@/features/dashboard/components/layouts/dashboard-sidebar-groups";
 
 export function AppSidebar() {
   const isInDashboard = useMatch({ path: "/dashboard", end: false });

@@ -6,7 +6,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Flag, List, Megaphone } from "lucide-react";
-import { hasSidebar } from "../route-handle";
+import { hasSidebar } from "../../route-handle";
 import { useMatches } from "react-router";
 import type { ComponentProps } from "react";
 

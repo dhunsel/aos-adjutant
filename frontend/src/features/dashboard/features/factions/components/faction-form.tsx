@@ -18,27 +18,26 @@ export interface FactionFormErrors {
   fields?: Partial<{ name: { message: string } }>;
 }
 
+export interface FactionFormFields {
+  name: string;
+  grandAlliance: string;
+}
+
 export function FactionForm({
-  name,
-  grandAlliance,
+  defaultValues,
   submitLabel,
   onSubmitAsync,
   onSuccess,
 }: {
-  name: string;
-  grandAlliance: string;
+  defaultValues: FactionFormFields;
   submitLabel: string;
-  onSubmitAsync: ({
-    value,
-  }: {
-    value: { name: string; grandAlliance: string };
-  }) => Promise<FactionFormErrors | null>;
+  onSubmitAsync: ({ value }: { value: FactionFormFields }) => Promise<FactionFormErrors | null>;
   onSuccess?: () => void;
 }) {
   const form = useForm({
     defaultValues: {
-      name: name,
-      grandAlliance: grandAlliance,
+      name: defaultValues.name,
+      grandAlliance: defaultValues.grandAlliance,
     },
     validators: {
       onChange: createFactionSchema,

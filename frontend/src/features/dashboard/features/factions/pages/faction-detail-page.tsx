@@ -50,8 +50,8 @@ export function FactionDetailPage() {
         <h1 className="font-heading text-2xl">{faction.data.name}</h1>
         <GrandAllianceBadge grandAlliance={faction.data.grandAlliance} />
       </div>
-      <div className="flex gap-2">
-        {isAdmin && (
+      {isAdmin && (
+        <div className="flex gap-2">
           <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
             <DialogTrigger
               render={
@@ -63,7 +63,7 @@ export function FactionDetailPage() {
             />
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Add Faction</DialogTitle>
+                <DialogTitle>Edit Faction</DialogTitle>
               </DialogHeader>
               <ChangeFaction
                 onSuccess={() => {
@@ -72,40 +72,40 @@ export function FactionDetailPage() {
               />
             </DialogContent>
           </Dialog>
-        )}
-        <AlertDialog>
-          <AlertDialogTrigger
-            render={
-              <Button variant="destructive">
-                <Trash2 />
-                <span>Delete</span>
-              </Button>
-            }
-          />
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure you want to delete this faction?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action will permanently delete this faction and all the related data.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => {
-                  deleteFaction.mutate(faction.data.factionId, {
-                    onSuccess: () => {
-                      void navigate("/dashboard/factions");
-                    },
-                  });
-                }}
-              >
-                Confirm
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
+          <AlertDialog>
+            <AlertDialogTrigger
+              render={
+                <Button variant="destructive">
+                  <Trash2 />
+                  <span className="hidden md:inline">Delete</span>
+                </Button>
+              }
+            />
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure you want to delete this faction?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action will permanently delete this faction and all the related data.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    deleteFaction.mutate(faction.data.factionId, {
+                      onSuccess: () => {
+                        void navigate("/dashboard/factions");
+                      },
+                    });
+                  }}
+                >
+                  Confirm
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      )}
     </div>
   );
 }

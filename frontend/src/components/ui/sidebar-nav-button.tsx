@@ -21,6 +21,9 @@ export function SidebarNavButton({
   children,
   ...props
 }: SidebarNavButtonProps) {
+  // Use React Router base Link component with manual path matching instead of NavLink component
+  // We need to provide the active state to SidebarMenuButton which is parent component of Link
+  //const path = useResolvedPath(to);
   const isActive = !!useMatch({ path: to, end: false });
   const { isMobile, openMobile, toggleSidebar } = useSidebar();
 
