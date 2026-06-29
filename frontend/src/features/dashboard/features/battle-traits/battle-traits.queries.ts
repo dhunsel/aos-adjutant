@@ -7,7 +7,7 @@ import {
 } from "@/types/api.types";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-const battleTraitsKeys = {
+export const battleTraitsKeys = {
   all: (factionId: number) => ["battleTraits", factionId] as const,
   lists: (factionId: number) => [...battleTraitsKeys.all(factionId), "list"] as const,
   list: (factionId: number, filters: AbilityQuery) =>

@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import { useBattleTraits } from "../battle-traits.queries";
+import { battleTraitsKeys, useBattleTraits } from "../battle-traits.queries";
 import { Spinner } from "@/components/ui/spinner";
 import { useState } from "react";
 import { useIsAdmin } from "@/features/auth/auth.queries";
@@ -14,12 +14,16 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { CreateBattleTrait } from "../components/create-battle-trait";
 import { AbilityCard } from "@/features/dashboard/components/ui/ability-card";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function BattleTraitListPage() {
   const params = useParams();
-  const battleTraits = useBattleTraits(Number(params["factionId"]));
+  const factionId = Number(params["factionId"]);
+
+  const battleTraits = useBattleTraits(factionId);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const isAdmin = useIsAdmin();
+  const queryClient = useQueryClient();
 
   return (
     <div className="flex flex-col gap-2">
@@ -55,7 +59,24 @@ export function BattleTraitListPage() {
       ) : (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-3">
           {battleTraits.data?.items.map((bt) => (
-            <AbilityCard ability={bt} key={bt.abilityId} />
+            <AbilityCard
+              ability={bt}
+              key={bt.abilityId}
+              onDelete={() =>
+                queryClient.invalidateQueries({
+                  queryKey: battleTraitsKeys.lists(factionId),
+                })
+              }
+              onUpdate={(updatedAbility) => {
+                queryClient.setQueryData(
+                  battleTraitsKeys.detail(factionId, bt.abilityId),
+                  updatedAbility,
+                );
+                return queryClient.invalidateQueries({
+                  queryKey: battleTraitsKeys.lists(factionId),
+                });
+              }}
+            />
           ))}
         </div>
       )}

@@ -33,12 +33,12 @@ export const createAbilitySchema = z.object({
     .string()
     .trim()
     .max(100, "Reaction field too long")
-    .transform((r) => (r === "" ? undefined : r)),
+    .transform((r) => (r === "" ? null : r)),
   declaration: z
     .string()
     .trim()
     .max(100, "Declaration field too long")
-    .transform((d) => (d === "" ? undefined : d)),
+    .transform((d) => (d === "" ? null : d)),
   effect: z.string().min(1, "Effect is required").max(100, "Effect field too long"),
   phase: phaseSchema,
   restriction: restrictionSchema,
