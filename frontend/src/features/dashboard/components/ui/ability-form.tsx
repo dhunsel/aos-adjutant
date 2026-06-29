@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export interface AbilityFormErrors {
   form?: { message: string };
@@ -82,7 +83,7 @@ export function AbilityForm({
 
   const turns = [
     { label: "Your Turn", value: "yourTurn" },
-    { label: "Opponent's Turn", value: "enemyTurn" },
+    { label: "Enemy Turn", value: "enemyTurn" },
     { label: "Any Turn", value: "anyTurn" },
   ];
 
@@ -117,117 +118,87 @@ export function AbilityForm({
             );
           }}
         />
-        <form.Field
-          name="reaction"
-          children={(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Reaction</FieldLabel>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => {
-                    field.handleChange(e.target.value);
-                  }}
-                  aria-invalid={isInvalid}
-                  autoComplete="off"
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-        <form.Field
-          name="declaration"
-          children={(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Declaration</FieldLabel>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => {
-                    field.handleChange(e.target.value);
-                  }}
-                  aria-invalid={isInvalid}
-                  autoComplete="off"
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-        <form.Field
-          name="effect"
-          children={(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Effect</FieldLabel>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => {
-                    field.handleChange(e.target.value);
-                  }}
-                  aria-invalid={isInvalid}
-                  autoComplete="off"
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-        <form.Field
-          name="phase"
-          children={(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid} className="max-w-40">
-                <FieldLabel htmlFor={field.name}>Phase</FieldLabel>
-                <Select
-                  name={field.name}
-                  items={phases}
-                  onOpenChange={(isOpen) => {
-                    if (!isOpen) field.handleBlur();
-                  }}
-                  onValueChange={(value) => {
-                    field.handleChange(value ?? "");
-                  }}
-                  value={field.state.value}
-                >
-                  <SelectTrigger id={field.name} aria-invalid={isInvalid}>
-                    <SelectValue placeholder="Phase" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {phases.map((ga) => (
-                        <SelectItem key={ga.value} value={ga.value}>
-                          {ga.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
+        <div className="flex flex-col gap-3 md:flex-row">
+          <form.Field
+            name="turn"
+            children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid} className="flex-2">
+                  <FieldLabel htmlFor={field.name}>Turn</FieldLabel>
+                  <Select
+                    name={field.name}
+                    items={turns}
+                    onOpenChange={(isOpen) => {
+                      if (!isOpen) field.handleBlur();
+                    }}
+                    onValueChange={(value) => {
+                      field.handleChange(value ?? "");
+                    }}
+                    value={field.state.value}
+                  >
+                    <SelectTrigger id={field.name} aria-invalid={isInvalid}>
+                      <SelectValue placeholder="Turn" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {turns.map((ga) => (
+                          <SelectItem key={ga.value} value={ga.value}>
+                            {ga.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+          <form.Field
+            name="phase"
+            children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid} className="flex-3">
+                  <FieldLabel htmlFor={field.name}>Phase</FieldLabel>
+                  <Select
+                    modal={true}
+                    name={field.name}
+                    items={phases}
+                    onOpenChange={(isOpen) => {
+                      if (!isOpen) field.handleBlur();
+                    }}
+                    onValueChange={(value) => {
+                      field.handleChange(value ?? "");
+                    }}
+                    value={field.state.value}
+                  >
+                    <SelectTrigger id={field.name} aria-invalid={isInvalid}>
+                      <SelectValue placeholder="Phase" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {phases.map((ga) => (
+                          <SelectItem key={ga.value} value={ga.value}>
+                            {ga.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+        </div>
         <form.Field
           name="restriction"
           children={(field) => {
             const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
             return (
-              <Field data-invalid={isInvalid} className="max-w-40">
+              <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Restriction</FieldLabel>
                 <Select
                   name={field.name}
@@ -259,36 +230,72 @@ export function AbilityForm({
           }}
         />
         <form.Field
-          name="turn"
+          name="reaction"
           children={(field) => {
             const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
             return (
-              <Field data-invalid={isInvalid} className="max-w-40">
-                <FieldLabel htmlFor={field.name}>Turn</FieldLabel>
-                <Select
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>Reaction</FieldLabel>
+                <Textarea
+                  id={field.name}
                   name={field.name}
-                  items={turns}
-                  onOpenChange={(isOpen) => {
-                    if (!isOpen) field.handleBlur();
-                  }}
-                  onValueChange={(value) => {
-                    field.handleChange(value ?? "");
-                  }}
                   value={field.state.value}
-                >
-                  <SelectTrigger id={field.name} aria-invalid={isInvalid}>
-                    <SelectValue placeholder="Turn" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {turns.map((ga) => (
-                        <SelectItem key={ga.value} value={ga.value}>
-                          {ga.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                  onBlur={field.handleBlur}
+                  onChange={(e) => {
+                    field.handleChange(e.target.value);
+                  }}
+                  aria-invalid={isInvalid}
+                  autoComplete="off"
+                  className="resize-none"
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
+        <form.Field
+          name="declaration"
+          children={(field) => {
+            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>Declaration</FieldLabel>
+                <Textarea
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => {
+                    field.handleChange(e.target.value);
+                  }}
+                  aria-invalid={isInvalid}
+                  autoComplete="off"
+                  className="resize-none"
+                />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
+              </Field>
+            );
+          }}
+        />
+        <form.Field
+          name="effect"
+          children={(field) => {
+            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>Effect</FieldLabel>
+                <Textarea
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => {
+                    field.handleChange(e.target.value);
+                  }}
+                  aria-invalid={isInvalid}
+                  autoComplete="off"
+                  className="resize-none"
+                />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
             );
